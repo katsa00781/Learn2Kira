@@ -54,7 +54,7 @@
 
 ### Képernyők (sorrendben)
 - [x] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
-- [ ] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
+- [x] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
 - [ ] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
 - [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
 - [ ] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Tantárgyválasztó
+
+**Mit:** A `design-prompts.md` 2. promptja szerint, de a CLAUDE.md-nek megfelelően **4 kártya 2×2-es rácsban** (a prompt még 3 kártyát ír, lásd feladat a Design szakaszban): felül kerek vissza gomb, középen „Válassz tantárgyat!", jobbra kis maskot. Kártyánként színes kör (Nyelvtan: barack „Aa", Helyesírás: rózsa „ly", Matek: türkiz „12", Környezet: zsálya levél), cím, haladássáv és „N témakör". A haladás a kipróbált feladatok aránya (`lib/progress.ts` `seenRatio`, 5 teszt). Mind a négy kártya éles, nincs „hamarosan" állapot. A kártya a `/subject/[id]` útra visz.
+**Fájlok:** `app/subjects.tsx`, `app/subject/[id].tsx` (ÁTMENETI), `components/ui/SubjectCard.tsx`, `components/ui/BackButton.tsx`, `components/ui/Icons.tsx` (+BackIcon, LeafIcon), `constants/subjects.ts`, `lib/progress.ts`, `lib/progress.test.ts`
+**Tesztelve:** `npm test` 42/42, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg; mockup-kép nem volt, az arányok közelítések.
+**Nyitva maradt:** a `/subject/[id]` ÁTMENETI (következő feladat: Témaválasztó); a `subjects[].available` mező nincs használva (mind éles); a haladás „kipróbált" és nem „elsajátított" — lásd D-026.
+**Commit:** `feat: tantárgyválasztó`
 
 ## 2026-10-12 – Kezdőlap (+ tabok)
 
@@ -459,5 +467,12 @@ a másik szóba jöhető opció.
 **Miért:** A gyakorlás közben nem szabad tabbar (figyelemelterelés, véletlen kilépés). Ikonkönyvtár (expo-symbols, vector-icons) új függőség lett volna néhány alakzatért.
 **Alternatíva:** A tantárgykártyák a kezdőlapon, külön képernyő nélkül. Elvetve: a prompt külön képernyőt ír le, és a kezdőlap így nyugodt marad.
 **Visszavonható?** Igen.
+
+## D-026 – Haladás = kipróbált feladatok aránya
+**Dátum:** 2026-10-12
+**Döntés:** A tantárgy- és (a következő feladatban) a témakör-haladásjelző azt mutatja, hogy a feladatok hányadára válaszolt Kira legalább egyszer (van Leitner-kártyája). Nem azt, hogy mennyit tud biztosan.
+**Miért:** A CLAUDE.md haladásjelzőt kér, hogy a nagy témakörök (legfeljebb 75 feladat) ne tűnjenek végtelennek; ehhez a sáv folyamatos, gyors mozgása számít, és minden körrel látszik előrelépés. Egy „elsajátított" mérték (pl. 4–5. doboz) lassan és ugrálva mozogna, és a rontás visszavenne belőle, ami a motivációnak árt.
+**Alternatíva:** Elsajátítottsági arány (doboz ≥ 3). Pedagógiailag pontosabb, de demotiváló. Később egy második, halvány réteggel kiegészíthető.
+**Visszavonható?** Igen, a `seenRatio` cseréjével.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

@@ -26,3 +26,19 @@ export function HomeIcon({ size = 24, color }: IconProps) {
     </Svg>
   );
 }
+
+export function BackIcon({ size = 24, color }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <Path d="M15 5l-7 7 7 7" fill="none" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
+export function LeafIcon({ size = 24, color }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <Path fill={color} d="M5 19C5 10 10 4 20 4c0 10-6 15-15 15z" />
+    </Svg>
+  );
+}
