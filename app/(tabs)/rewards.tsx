@@ -10,6 +10,8 @@ import { toDay } from "@/lib/leitner";
 import { currentStreak } from "@/lib/streak";
 import { useProgressStore } from "@/store/progressStore";
 
+const BADGE_COLUMNS = 3;
+
 const screen = { flex: 1, backgroundColor: colors.background };
 
 export default function RewardsScreen() {
@@ -21,10 +23,14 @@ export default function RewardsScreen() {
   const calendar = <StreakCalendar streak={currentStreak(streak, lastPracticeDate, today)} today={today} practiceDays={practiceDays} />;
   const grid = (
     <View className="gap-4">
-      {chunk(badges, 3).map((row) => (
+      {chunk(badges, BADGE_COLUMNS).map((row) => (
         <View key={row.map((b) => b.id).join()} className="flex-row gap-4">
           {row.map((badge) => (
             <BadgeCard key={badge.id} badge={badge} unlocked={unlockedBadges.includes(badge.id)} />
+          ))}
+          {/* A csonka utolsó sor kártyái ne nyúljanak szét: üres helykitöltők */}
+          {Array.from({ length: BADGE_COLUMNS - row.length }, (_, i) => (
+            <View key={`pad-${i}`} className="flex-1" />
           ))}
         </View>
       ))}

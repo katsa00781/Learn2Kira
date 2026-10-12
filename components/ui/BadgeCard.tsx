@@ -5,6 +5,7 @@ import type { Badge, BadgeIconName } from "@/constants/badges";
 import {
   BoltIcon,
   BookIcon,
+  ClockIcon,
   CrownIcon,
   FlagIcon,
   FlameIcon,
@@ -25,6 +26,7 @@ const iconByName: Record<BadgeIconName, typeof StarIcon> = {
   pencil: PencilIcon,
   target: TargetIcon,
   leaf: LeafIcon,
+  clock: ClockIcon,
 };
 
 // A zárolt jelvény halvány szürke; a szöveg ne legyen tiszta fekete (lásd design tokenek)
