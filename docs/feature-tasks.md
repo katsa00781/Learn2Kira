@@ -22,7 +22,7 @@
 ### Alapok
 - [x] `lib/leitner.ts` – `nextBox()`, `dueDate()`, `selectSessionExercises()` + unit tesztek
 - [x] `store/progressStore.ts` – XP, streak, jelvények, AsyncStorage perzisztencia
-- [ ] `store/reviewStore.ts` – Leitner kártyaállapotok, perzisztencia
+- [x] `store/reviewStore.ts` – Leitner kártyaállapotok, perzisztencia
 - [ ] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
 
 ### Tartalom – KÉSZ (2026-10-12)
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `reviewStore` (Leitner kártyák)
+
+**Mit:** Zustand store AsyncStorage perzisztenciával: `cards: Record<exerciseId, { box, dueAt }>` és `recordAnswer(exerciseId, correct, today)`, ami a `lib/leitner.ts` `answerCard()`-ját hívja. A kör összeállításához a `cards` közvetlenül átadható a `selectSessionExercises`-nek.
+**Fájlok:** `store/reviewStore.ts`
+**Tesztelve:** `typecheck`, `lint`. A perzisztenciát eszközön NEM próbáltam.
+**Nyitva maradt:** `sessionStore` (az aktuális kör, nem perzisztált) a gyakorló képernyő feladatánál jön; nincs "adatok törlése" művelet (szülői beállítás, v1-ben nem kell).
+**Commit:** `feat: reviewStore`
 
 ## 2026-10-12 – `progressStore` (XP, sorozat, jelvények)
 
