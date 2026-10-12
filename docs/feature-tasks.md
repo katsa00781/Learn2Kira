@@ -58,7 +58,7 @@
 - [x] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
 - [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
 - [x] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
-- [ ] Jutalmak – jelvények, matricák, streak-naptár
+- [x] Jutalmak – jelvények, streak-naptár (matricák: lásd D-030)
 
 ### Motivációs réteg
 - [x] Maskot komponens 4 állapottal, válaszra reagál
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Jutalmak
+
+**Mit:** A PDF 6. képernyője szerint (`app/(tabs)/rewards.tsx`): „Jutalmaid" cím az ünneplő maskottal; a sorozatkártya a nagy számmal és az aktuális hónap naptárával (hétfővel kezdődő hetek; gyakorolt nap zöld pipás, kimaradt nap szürke, ma rózsaszín keretes, a többi körvonalas); a jelvények 3 oszlopos rácsban, a megszerzett színesen, a zárolt szürkén lakattal. Fekvő iPaden a naptár balra, a rács jobbra; telefonon egymás alatt, „Jelvények N / 9" fejléccel. A naptárhoz a `progressStore` új `practiceDays` mezőt kapott (a kör végén kerül bele a mai nap). Új tiszta függvény `monthGrid` (`lib/calendar.ts`, 4 teszt). A jelvények jegyzéke a `constants/badges.ts`-ben van.
+**Fájlok:** `app/(tabs)/rewards.tsx`, `components/ui/{StreakCalendar,BadgeCard,Icons}.tsx`, `constants/badges.ts`, `lib/calendar.ts`, `lib/calendar.test.ts`, `store/progressStore.ts`
+**Tesztelve:** `npm test` 60/60, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg (nincs iPad-szimulátor).
+**Nyitva maradt:** **minden jelvény zárolt marad, amíg a „Jelvényrendszer" feladat el nem készül** (a feloldás ott lesz: `unlockBadge` hívások a kör végén). A korábbi gyakorlásokról nincs napi előzmény (a `practiceDays` az első új körtől gyűlik); a „mentőöv" nap a naptárban még nem látszik (Streak logika feladat). Matricák nincsenek (D-030).
+**Commit:** `feat: jutalmak képernyő`
 
 ## 2026-10-12 – Eredmény képernyő
 
@@ -555,5 +563,12 @@ a másik szóba jöhető opció.
 **Miért:** A szintnek nincs más forrása a tervben, és a progressStore alakját sem akartam bővíteni: a szint az XP-ből számolható, így nincs mit szinkronban tartani. Egy kör ~100 XP-ig tart (10 feladat × 10), tehát nagyjából kétnaponta lép szintet, ami motiváló. A `resultStore` nem perzisztált: a következő indításkor az eredményképernyőnek nincs mit mutatnia.
 **Alternatíva:** Növekvő szintküszöbök (bonyolultabb, nincs rá igény); az eredmény route-paraméterekben (a feladatlista nem fér bele).
 **Visszavonható?** Igen, `lib/level.ts` egy helyen tartja.
+
+## D-030 – Kilenc jelvény, nincsenek matricák, `practiceDays` a store-ban
+**Dátum:** 2026-10-12
+**Döntés:** A PDF 12 jelvényéből kilenc marad: Első kör, 3/7/30 napos sorozat, Hibátlan kör, és tantárgyanként egy „téma befejezése" jelvény (Nyelvtan-felfedező, Helyesírás-bajnok, Matekzseni, Természetbúvár). Kimaradt a „Korán kelő", a „Jószívű" és az „Éjszakai bagoly". A matricák (CLAUDE.md motivációs réteg) kimaradnak a v1-ből. A naptárhoz a `progressStore` `practiceDays: string[]` mezőt kapott.
+**Miért:** A kimaradt háromhoz nincs mérhető feltétel, vagy rossz szokást ösztönözne (késő esti gyakorlás gyereknél); a jelvényeket úgy választottam, hogy mind a négy tantárgy kapjon egyet, és a feladatlista jelvényei (első kör, 7 nap, 100%, téma befejezése) mind benne legyenek. A PDF-ben sincsenek matricák, és a CLAUDE.md az első verziótól a legkisebb működő változatot kéri. A `practiceDays` a legegyszerűbb forrás a naptárnak; a régi mentésben hiányzó mező üres listával indul, nincs migráció.
+**Alternatíva:** Mind a 12 jelvény (három feloldhatatlan lenne); a naptár a sorozatból visszaszámolva (kimaradt napokat nem tudná mutatni).
+**Visszavonható?** Igen, a jegyzék egy fájl.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

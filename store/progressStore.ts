@@ -9,6 +9,8 @@ type ProgressState = {
   lastPracticeDate: string | null;
   unlockedBadges: string[];
   dailyGoalDone: boolean;
+  /** A gyakorlással töltött napok ("ÉÉÉÉ-HH-NN"), a jutalmak naptárához. */
+  practiceDays: string[];
   /** Kör végén: XP jóváírás, sorozat és napi cél frissítése. */
   completeSession: (xpGained: number, today: string) => void;
   /** Új napon a napi cél újra nyitott. Induláskor hívandó. */
@@ -24,6 +26,7 @@ export const useProgressStore = create<ProgressState>()(
       lastPracticeDate: null,
       unlockedBadges: [],
       dailyGoalDone: false,
+      practiceDays: [],
 
       completeSession: (xpGained, today) =>
         set((s) => ({
@@ -31,6 +34,7 @@ export const useProgressStore = create<ProgressState>()(
           streak: nextStreak(s.streak, s.lastPracticeDate, today),
           lastPracticeDate: today,
           dailyGoalDone: true,
+          practiceDays: s.practiceDays.includes(today) ? s.practiceDays : [...s.practiceDays, today],
         })),
 
       startDay: (today) =>
