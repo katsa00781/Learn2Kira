@@ -71,7 +71,7 @@
 ### Design
 - [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
 - [x] Tantárgyválasztó igazítása a PDF-hez
-- [ ] Témaválasztó igazítása a PDF-hez
+- [x] Témaválasztó igazítása a PDF-hez
 - [ ] Gyakorló képernyő igazítása a PDF-hez
 - [ ] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
 - [ ] Maskot `thinking`, `celebrate`, `encourage` állapotok generálása a `base` referenciával
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Témaválasztó igazítása a PDF-hez
+
+**Mit:** Nagyobb, középre igazított cím (44pt) a tantárgy körével; az összegző kártya fekvőben egy sorban (felirat, sáv, százalék rózsaszín sötét árnyalatban), telefonon felirat + százalék egy sorban, alatta a sáv. A témakörkártyák körei halvány hátteret és sötét számot kaptak, négy színt váltogatva (barack, türkiz, rózsa, zöld). A kész témakör sávja zöld, a folyamatban lévőé rózsa. Fekvőben a **gondolkodó** maskot áll jobb alul, telefonon a fejlécben van, a kártyákat nem takarja. Az összegző kártya és a témakörkártyák lágy árnyékot kaptak, a sávok vékonyabbak.
+**Fájlok:** `app/subject/[id].tsx`, `components/ui/TopicCard.tsx` (a `color` prop megszűnt)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Képernyőképes összevetés NEM történt (nincs iPad-szimulátor).
+**Nyitva maradt:** a PDF a köröket szakkifejezés-rövidítéssel jelöli (Aa, ba, N, V…), nálunk a tankönyvi sorszám áll bennük, mert a témakörökhöz nincs ilyen adat, és a PDF rövidítései szófaji szakszavak (D-008). A körök színe a sorszámtól függ, nem a témától.
+**Commit:** `feat: témaválasztó igazítása a PDF mockuphoz`
 
 ## 2026-10-12 – Tantárgyválasztó igazítása a PDF-hez
 

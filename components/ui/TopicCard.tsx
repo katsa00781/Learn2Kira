@@ -1,15 +1,21 @@
 import { Pressable, Text, View } from "react-native";
-import { colors } from "@/constants/colors";
+import { colors, darkTones } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
 import { CheckIcon } from "./Icons";
 import { ProgressBar } from "./ProgressBar";
+
+// A körök halvány háttere és sötét jele négy színt váltogat, a PDF szerint
+const circleTones = [
+  { bg: colors.accent, text: darkTones.accent },
+  { bg: colors.secondary, text: darkTones.secondary },
+  { bg: colors.primary, text: darkTones.primary },
+  { bg: colors.success, text: darkTones.success },
+] as const;
 
 type Props = {
   /** A témakör sorszáma a tankönyvi sorrendben (1-től). */
   number: number;
   title: string;
-  /** Szín a tantárgyból. */
-  color: string;
   /** A kipróbált feladatok aránya, 0–1. */
   progress: number;
   /** Esedékes ismétlések száma. */
@@ -37,20 +43,23 @@ function Status({ progress, due }: Pick<Props, "progress" | "due">) {
   return null;
 }
 
-export function TopicCard({ number, title, color, progress, due, onPress }: Props) {
+export function TopicCard({ number, title, progress, due, onPress }: Props) {
+  const tone = circleTones[(number - 1) % circleTones.length] ?? circleTones[0];
   return (
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
-      className="min-h-[88px] flex-1 flex-row items-center gap-4 rounded-card bg-surface px-5 py-4"
+      className="min-h-[92px] flex-1 flex-row items-center gap-4 rounded-card bg-surface px-5 py-4"
       style={({ pressed }) => [softShadow, { transform: [{ scale: pressed ? 0.98 : 1 }] }]}
     >
-      <View className="h-[48px] w-[48px] items-center justify-center rounded-full" style={{ backgroundColor: color }}>
-        <Text className="font-title text-[22px] text-surface">{number}</Text>
+      <View className="h-[52px] w-[52px] items-center justify-center rounded-full" style={{ backgroundColor: `${tone.bg}33` }}>
+        <Text className="font-title text-[22px]" style={{ color: tone.text }}>
+          {number}
+        </Text>
       </View>
       <View className="flex-1 gap-2">
         <Text className="font-title text-[20px] leading-6 text-text">{title}</Text>
-        <ProgressBar value={progress} />
+        <ProgressBar tone={progress >= 1 ? "success" : "primary"} value={progress} />
       </View>
       <View className="w-[40px] items-center">
         <Status progress={progress} due={due} />
