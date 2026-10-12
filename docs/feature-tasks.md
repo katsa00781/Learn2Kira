@@ -66,6 +66,7 @@
 - [ ] Hangeffektek + kikapcsolási lehetőség
 - [ ] Streak logika + „mentőöv" nap havonta
 - [x] Jelvényrendszer: első kör, 3/7/14/30 napos sorozat, 100% egy körben (min. 8 feladat), téma befejezése
+- [x] Jelvényképek (10 db) bekötése a Jutalmak képernyőre és az Eredmény képernyőre
 - [ ] Napi cél megjelenítése és teljesítés visszajelzése
 
 ### Design
@@ -109,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Jelvényképek bekötése
+
+**Mit:** A tíz jelvénykép (PNG) bekerült az appba. A `BadgeCard` az SVG-ikon helyett a képet rajzolja (zárolt állapotban halvány és szürkített, lakattal), ugyanez látszik az Eredmény képernyő „Új jelvényt szereztél!" sorában. A képek a `constants/images.ts`-ben vannak (`badgeImages`, a jelvény-azonosítók szerint); a `constants/badges.ts` jegyzékéből kikerült az `icon` és a `color` mező, a `Badge.id` típusa a képek kulcsa (új jelvény kép nélkül nem fordul). A felesleges SVG-ikonok (zászló, villám, korona, könyv, ceruza, célkereszt) törölve. A sorrend: első kör, sorozatok, hibátlan kör, tantárgyak. A kapott képek átnézése: a tíz kép egységes stílusú, de **kilenc nem volt átlátszó**: a „sakktábla" átlátszóság-minta valódi pixelekként volt a kör körül, ami az app krémszínű hátterén szürke négyzetekként látszott volna. Ezért körbevágtam őket (a kör szélén 1px-es lágy éllel), és 512×512 pontra kicsinyítettem (~330 KB/db, az eredeti ~2 MB), a megjelenítési méret (108pt, 3x = 324 px) így is bőven fedett. D-033.
+**Fájlok:** `assets/images/badges/{first-lesson,streak-3,streak-7,streak-14,streak-30,perfect-round,topic-nyelvtan,topic-helyesiras,topic-matek,topic-kornyezet}.png`, `constants/images.ts`, `constants/badges.ts`, `components/ui/BadgeCard.tsx`, `components/ui/Icons.tsx`
+**Tesztelve:** `npm test` 69/69, `typecheck`, `lint`, `expo export --platform ios`. Gyűjtőkép krémszínű háttéren: mind a tíz tiszta. Eszközön NEM néztem meg; a zárolt állapot `filter: grayscale` stílusa iOS-en ellenőrizendő.
+**Nyitva maradt:** a `streak-3`, `streak-7`, `streak-14`, `streak-30` fájlok az eredeti (1254 px, sakktáblás) változatot **felülírták** a körbevágott 512 px-esekkel (azonos fájlnév, az én hibám); a többi eredeti (`first-session`, `perfect-session`, `subject-*`) érintetlen és nincs commitolva. A `first-lesson.png` széle (a csillag kilóg a körből) enyhén szálkás, a kép alfa-csatornás volt, ezt nem vágtam. A `docs/badge-prompts.md` „Bekötés" szakasza elavult (require-térkép helyett importok vannak).
+**Commit:** `feat: jelvényképek bekötése`
 
 ## 2026-10-12 – `SortIntoGroups` komponens
 
@@ -608,5 +617,12 @@ a másik szóba jöhető opció.
 **Miért:** A D-021 érvei itt is állnak (pontos gyerekujjnak, elérhető VoiceOverrel, nincs félrecsúszó elem), és az érintés tökéletesen működik: a szó kijelölése után a csoportok kiemelődnek. A húzáshoz célzónák mérése és gesztus-kezelés kellene, amit szimulátor nélkül nem tudnék eszközön ellenőrizni; ugyanazt a tanulási eredményt adja, mint az érintés. Egységes marad a `MatchPairs`-szal és az `OrderItems`-szel.
 **Alternatíva:** Húzás Reanimated + Gesture Handlerrel (a feladatlista eredeti terve). Ha Kira unalmasnak találja, később cserélhető, a szerződés (`exercise`, `onAnswer`) nem változik.
 **Visszavonható?** Igen.
+
+## D-033 – Jelvényképek körbevágva, 512 px, a képtérkép a jegyzék kulcsa
+**Dátum:** 2026-10-12
+**Döntés:** A jelvényképek kör alakú alfa-maszkkal, 512×512 pontra kicsinyítve kerülnek az appba, id-nevű fájlokban. A `constants/badges.ts` az `icon`/`color` helyett csak az azonosítót, a címet és a leírást tartja; az azonosító típusa a `badgeImages` kulcsa. Zárolt állapot: ugyanaz a kép, halványítva és szürkítve (`filter: grayscale`), külön szürke fájl nincs.
+**Miért:** A képek valódi pixelként tartalmazták az átlátszóság-mintát, a kör alakú jelvényhez a körvágás a legegyszerűbb tiszta megoldás, és nem torzít. A 512 px 108pt-nél 4,7×-es (3x kijelzőn is bőven éles), és fájlonként 6×-kisebb, így a bundle ~3,3 MB, nem ~20 MB. A típus-kapcsolat miatt új jelvény képe nélkül a fordító hibát ad.
+**Alternatíva:** Eredeti 1254 px-es képek (20 MB az appban, a minta kivágása nélkül szürke négyzetekkel); a háttér színalapú kivágása (a minta és a kép színei keverednének, szálkás szél); külön szürke képek a zároltakhoz (felesleges asset).
+**Visszavonható?** Igen: a képek cserélhetők, a térkép egy blokk.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

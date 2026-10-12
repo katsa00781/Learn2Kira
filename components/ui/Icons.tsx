@@ -101,67 +101,10 @@ export function ClockIcon({ size = 24, color }: IconProps) {
   );
 }
 
-const stroke = (color: ColorValue, width = 2) => ({
-  fill: "none" as const,
-  stroke: color,
-  strokeWidth: width,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-});
-
-export function FlagIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M6 21V4M6 4h11l-2.5 4L17 12H6" {...stroke(color)} />
-    </Svg>
-  );
-}
-
-export function BoltIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M13 3L5 13.5h6L10 21l9-11h-6z" {...stroke(color)} />
-    </Svg>
-  );
-}
-
-export function CrownIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M4 18L3 7l5 4 4-6 4 6 5-4-1 11zM4 21h16" {...stroke(color)} />
-    </Svg>
-  );
-}
-
-export function BookIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2zM12 6v14" {...stroke(color)} />
-    </Svg>
-  );
-}
-
-export function PencilIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M4 20l1-5L16 4l4 4L9 19zM14 6l4 4" {...stroke(color)} />
-    </Svg>
-  );
-}
-
-export function TargetIcon({ size = 24, color }: IconProps) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Circle cx={12} cy={12} r={9} {...stroke(color)} />
-      <Circle cx={12} cy={12} r={4.5} {...stroke(color)} />
-    </Svg>
-  );
-}
-
 export function LockIcon({ size = 24, color }: IconProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3" {...stroke(color)} />
+      <Path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 }
