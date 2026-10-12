@@ -46,7 +46,7 @@
 - [x] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
 - [x] `components/exercise/MissingLetter.tsx` — 70 feladat
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
-- [ ] `components/exercise/OrderItems.tsx` — 42 feladat
+- [x] `components/exercise/OrderItems.tsx` — 42 feladat
 - [ ] `components/exercise/MatchPairs.tsx` — 32 feladat
 - [x] `components/exercise/Punctuation.tsx` — 15 feladat
 - [ ] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `OrderItems` komponens
+
+**Mit:** Sorbarendezés érintéssel: a gyerek a sorrendben megérinti az elemeket, azok a sorszámozott helyekre kerülnek; egy betett elemre érintve visszakerül. Ha minden hely tele van, a „Kész" gomb élesedik. Ellenőrzés után a helyek pozíciónként zöldek/terrakottaszínűek, hibánál „Helyes sorrend: a → b → c". A `hint` itt utasítás (27 feladatnál van, pl. ábécésorrend), a kártya tetején jelenik meg; ha nincs, „Tedd sorrendbe az elemeket!". Az ellenőrzés `lib/answers.ts` `isOrderCorrect()`, 3 teszttel.
+**Fájlok:** `components/exercise/OrderItems.tsx`, `lib/answers.ts`, `lib/answers.test.ts`, `app/index.tsx` (próbaoldal)
+**Tesztelve:** `npm test` 31/31, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg. Adat: 42 feladat, 3–5 elemmel, egyik sem érkezik már rendezetten, nincs ismétlődő elem (így az elemek szövege egyértelműen azonosít).
+**Nyitva maradt:** Nincs húzás (drag), csak érintés – lásd D-021.
+**Commit:** `feat: OrderItems feladatkomponens`
 
 ## 2026-10-12 – `Punctuation` komponens
 
@@ -383,6 +391,13 @@ a másik szóba jöhető opció.
 **Döntés:** Minden feladattípus-komponens `{ exercise, onAnswer(correct) }` propokat kap. A komponens egyszer hívja az `onAnswer`-t, utána lezár, és csak a saját válaszkijelzését (zöld/terrakotta, helyes válasz mutatása) intézi. Haptika, hang, maskot, visszajelző szöveg és a „Tovább" a gyakorló képernyő dolga. Új feladatnál a szülő `key={exercise.id}`-t ad, hogy a belső állapot nullázódjon.
 **Miért:** Hét komponens ugyanazt a visszajelzést nem másolhatja; egy helyen (szülő) a motivációs réteg egységes marad, a komponensek pedig egyszerűek és külön próbálhatók.
 **Alternatíva:** Mindegyik komponens maga hívja a haptikát és a maskotot. Elvetve: hétszeres ismétlés.
+**Visszavonható?** Igen.
+
+## D-021 – Sorbarendezés érintéssel, nem húzással
+**Dátum:** 2026-10-12
+**Döntés:** Az `OrderItems` nem drag & drop, hanem „érintsd sorban az elemeket" jellegű. A betett elemet érintéssel lehet visszavenni. Húzás csak a `SortIntoGroups`-hoz készül (ott nincs jó érintéses megoldás).
+**Miért:** Az érintés pontosabb gyerekujjnak, nem igényel Gesture Handlert és Reanimated animációt, nincs „félrecsúszó" elem, és elérhetőbb (VoiceOver). A feladat tárgya a sorrend ismerete, nem a mozgatás ügyessége. A CLAUDE.md a komponens módját nem rögzíti.
+**Alternatíva:** Húzással átrendezhető lista. Elvetve: több kód és több hibalehetőség ugyanazért a tanulási eredményért. Ha Kira unalmasnak találja, később cserélhető, a szerződés (`exercise`, `onAnswer`) nem változik.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

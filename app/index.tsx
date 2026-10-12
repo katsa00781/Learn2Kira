@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
 import { MissingLetter } from "@/components/exercise/MissingLetter";
 import { MultipleChoice } from "@/components/exercise/MultipleChoice";
+import { OrderItems } from "@/components/exercise/OrderItems";
 import { Punctuation } from "@/components/exercise/Punctuation";
 import { NumericInput } from "@/components/exercise/NumericInput";
 import { allExercises } from "@/data";
@@ -11,6 +12,7 @@ const samples = [
   ...allExercises.filter((e) => e.type === "multiple-choice").filter((_, i) => i % 40 === 0),
   ...allExercises.filter((e) => e.type === "missing-letter").filter((_, i) => i % 10 === 0),
   ...allExercises.filter((e) => e.type === "punctuation").filter((_, i) => i % 4 === 0),
+  ...allExercises.filter((e) => e.type === "order-items").filter((_, i) => i % 6 === 0),
   ...allExercises.filter((e) => e.type === "numeric-input").filter((_, i) => i % 25 === 0),
 ];
 
@@ -25,6 +27,7 @@ export default function HomeScreen() {
       {exercise.type === "multiple-choice" && <MultipleChoice key={exercise.id} exercise={exercise} onAnswer={setResult} />}
       {exercise.type === "missing-letter" && <MissingLetter key={exercise.id} exercise={exercise} onAnswer={setResult} />}
       {exercise.type === "punctuation" && <Punctuation key={exercise.id} exercise={exercise} onAnswer={setResult} />}
+      {exercise.type === "order-items" && <OrderItems key={exercise.id} exercise={exercise} onAnswer={setResult} />}
       {exercise.type === "numeric-input" && <NumericInput key={exercise.id} exercise={exercise} onAnswer={setResult} />}
       {result !== null && (
         <>

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isNumericCorrect } from "./answers";
+import { isNumericCorrect, isOrderCorrect } from "./answers";
 
 describe("isNumericCorrect", () => {
   it("pontos egyezés helyes", () => {
@@ -24,5 +24,17 @@ describe("isNumericCorrect", () => {
   });
   it("tűrés nélkül csak a pontos szám jó", () => {
     assert.equal(isNumericCorrect("99", 100), false);
+  });
+});
+
+describe("isOrderCorrect", () => {
+  it("azonos sorrend helyes", () => {
+    assert.equal(isOrderCorrect(["a", "b", "c"], ["a", "b", "c"]), true);
+  });
+  it("felcserélt elemek hibásak", () => {
+    assert.equal(isOrderCorrect(["b", "a", "c"], ["a", "b", "c"]), false);
+  });
+  it("hiányos sorrend hibás", () => {
+    assert.equal(isOrderCorrect(["a", "b"], ["a", "b", "c"]), false);
   });
 });
