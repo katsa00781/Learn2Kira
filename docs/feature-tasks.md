@@ -111,6 +111,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-12 – Dependency-limit: a platformalap sem számít
+
+**Mit:** A CLAUDE.md limit-szabálya kiegészült: a `react`, `react-native`, `react-native-safe-area-context`, `react-native-screens` és `react-native-worklets` sem számít (az Expo Router, illetve a Reanimated kötelező társai). Így 8 számolt fő dependency van, a limit alatt; a CLAUDE.md felsorolja őket. A D-034 ennek megfelelően átírva (a korábbi „túllépve" állapot megszűnt). A `react-native-gesture-handler` nincs használva, de a döntés szerint egyelőre marad.
+**Fájlok:** `CLAUDE.md`, `docs/feature-tasks.md`
+**Tesztelve:** nem kódváltozás; a számot a `package.json`-ból számoltam.
+**Nyitva maradt:** a `gesture-handler` sorsa.
+**Commit:** `docs: dependency-limit pontosítása`
+
 ## 2026-10-12 – Dependency-limit szabálya
 
 **Mit:** A CLAUDE.md „Maximum 10 fő dependency" sora kiegészült: az Expo-csomagok (`expo`, `expo-*`, `@expo-google-fonts/*`) nem számítanak, a `devDependencies` sem. A tényleges állapot is bekerült: 23 fő dependency, ebből 10 Expo, **13 nem Expo-s**, tehát a limit így is túllépve. A tizenhármat felsorolja a CLAUDE.md. A `react-native-gesture-handler` kódban sehol nincs használva (a `SortIntoGroups` érintéses lett, D-032).
@@ -649,11 +657,11 @@ a másik szóba jöhető opció.
 **Alternatíva:** Eredeti 1254 px-es képek (20 MB az appban, a minta kivágása nélkül szürke négyzetekkel); a háttér színalapú kivágása (a minta és a kép színei keverednének, szálkás szél); külön szürke képek a zároltakhoz (felesleges asset).
 **Visszavonható?** Igen: a képek cserélhetők, a térkép egy blokk.
 
-## D-034 – Dependency-limit: az Expo-csomagok nem számítanak
+## D-034 – Dependency-limit: az Expo-csomagok és a platformalap nem számít
 **Dátum:** 2026-10-12
-**Döntés:** A „maximum 10 fő dependency" limitbe nem számítanak bele az Expo-csomagok (`expo`, `expo-*`, `@expo-google-fonts/*`) és a `devDependencies`. Így is 13 nem Expo-s csomag van, a limit túllépve; a feloldás még nyitott.
-**Miért:** Az Expo-csomagok az SDK-val együtt frissülnek, egy Expo-projekt eleve tucatnyit tartalmaz, és nem a mi választásunk; a limit célja, hogy a saját, karbantartandó függőségek száma kicsi maradjon.
-**Alternatíva:** Mindent számolni (23, a limit értelmetlen); a React/React Native alapot és az Expo Router kötelező társait (`safe-area-context`, `screens`, `worklets`) is kivenni a számolásból (8); a nem használt `gesture-handler` eltávolítása (12-re csökkenti).
-**Visszavonható?** Igen.
+**Döntés:** A „maximum 10 fő dependency" limitbe nem számítanak bele az Expo-csomagok (`expo`, `expo-*`, `@expo-google-fonts/*`), a platformalap és kötelező társai (`react`, `react-native`, `react-native-safe-area-context`, `react-native-screens`, `react-native-worklets`) és a `devDependencies`. Így 8 számolt csomag van. A `react-native-gesture-handler` kódban nincs használva (D-032 óta), de egyelőre marad.
+**Miért:** Ezek nem a mi választásaink: az Expo-csomagok az SDK-val együtt frissülnek, a platformalapot és a társait az Expo Router és a Reanimated kéri. A limit célja, hogy a saját, karbantartandó függőségek száma kicsi maradjon.
+**Alternatíva:** Mindent számolni (23, a limit értelmetlen); csak az Expo-csomagokat kivenni (13, így is túllépve); a nem használt `gesture-handler` eltávolítása (vele 7).
+**Visszavonható?** Igen. A `gesture-handler` eltávolítása külön, később eldöntendő.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

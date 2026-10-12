@@ -57,9 +57,12 @@ A **digitális kultúra** harmadikban önálló tantárgy, de nincs a scope-ban:
 - **Adatbázis:** nincs. A tartalom típusos TypeScript a `data/` mappában, a haladás AsyncStorage-ban.
 
 Új könyvtárat ne adj hozzá engedély nélkül. Ha indokolt lenne, javasold és kérdezz rá.
-Maximum 10 fő dependency. **Az Expo-csomagokat nem számoljuk** (`expo`, `expo-*`, `@expo-google-fonts/*`), mert az Expo SDK verziójához kötött, együtt frissülő ökoszisztéma; a `devDependencies` sem számít.
+Maximum 10 fő dependency. **Nem számoljuk:**
+- az Expo-csomagokat (`expo`, `expo-*`, `@expo-google-fonts/*`): az Expo SDK verziójához kötött, együtt frissülő ökoszisztéma;
+- a platformalapot és kötelező társait: `react`, `react-native`, `react-native-safe-area-context`, `react-native-screens` (az Expo Router igényli), `react-native-worklets` (a Reanimated igényli);
+- a `devDependencies`-t.
 
-Állapot (2026-10-12): 13 nem Expo-s fő dependency van, tehát a limit túllépve (lásd D-034): `react`, `react-native`, `react-native-safe-area-context`, `react-native-screens`, `react-native-reanimated`, `react-native-worklets`, `react-native-gesture-handler`, `react-native-svg`, `react-native-svg-transformer`, `@react-native-async-storage/async-storage`, `nativewind`, `tailwindcss`, `zustand`.
+Állapot (2026-10-12): 8 számolt fő dependency van, a limit alatt (lásd D-034): `react-native-reanimated`, `react-native-gesture-handler`, `react-native-svg`, `react-native-svg-transformer`, `@react-native-async-storage/async-storage`, `nativewind`, `tailwindcss`, `zustand`. A `react-native-gesture-handler` jelenleg nincs használva; egyelőre marad.
 
 ---
 
