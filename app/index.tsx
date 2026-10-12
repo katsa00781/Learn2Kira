@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
 import { MultipleChoice } from "@/components/exercise/MultipleChoice";
+import { NumericInput } from "@/components/exercise/NumericInput";
 import { allExercises } from "@/data";
-import type { Exercise } from "@/types/exercise";
-
-type MultipleChoiceExercise = Extract<Exercise, { type: "multiple-choice" }>;
-const samples = allExercises.filter((e): e is MultipleChoiceExercise => e.type === "multiple-choice");
 
 // ÁTMENETI: a feladatkomponensek próbája. A Kezdőlap feladat cseréli le.
+const samples = [
+  ...allExercises.filter((e) => e.type === "multiple-choice").filter((_, i) => i % 40 === 0),
+  ...allExercises.filter((e) => e.type === "numeric-input").filter((_, i) => i % 25 === 0),
+];
+
 export default function HomeScreen() {
   const [index, setIndex] = useState(0);
   const [result, setResult] = useState<boolean | null>(null);
@@ -16,7 +18,8 @@ export default function HomeScreen() {
 
   return (
     <ScrollView className="flex-1 bg-background" contentContainerClassName="items-center gap-6 p-6 pt-20">
-      <MultipleChoice key={exercise.id} exercise={exercise} onAnswer={setResult} />
+      {exercise.type === "multiple-choice" && <MultipleChoice key={exercise.id} exercise={exercise} onAnswer={setResult} />}
+      {exercise.type === "numeric-input" && <NumericInput key={exercise.id} exercise={exercise} onAnswer={setResult} />}
       {result !== null && (
         <>
           <Text className="font-title text-2xl text-text">{result ? "Ügyes vagy, Kira!" : `Majdnem! ${exercise.hint ?? ""}`}</Text>

@@ -43,7 +43,7 @@
 
 ### Feladattípus komponensek
 - [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
-- [ ] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
+- [x] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
 - [ ] `components/exercise/MissingLetter.tsx` — 70 feladat
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
 - [ ] `components/exercise/OrderItems.tsx` — 42 feladat
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `NumericInput` és `NumberPad`
+
+**Mit:** Számbeírásos feladat saját számbillentyűzettel (1–9, törlés, 0, „Kész"; 68pt magas gombok, nincs rendszerbillentyűzet). A kérdés alatt nagy kijelző mutatja a beírtat a mértékegységgel; „Kész" után zöld/terrakotta lesz, hibánál kiírja: „Helyes válasz: …". Fekvő iPaden bal oldalt a feladat, jobb oldalt a billentyűzet. A javítás tiszta függvény: `lib/answers.ts` `isNumericCorrect()` (tűréssel), 6 teszttel. A próbaoldal már vegyesen mutat feleletválasztós és számbeírós feladatokat.
+**Fájlok:** `components/exercise/NumericInput.tsx`, `components/ui/NumberPad.tsx`, `lib/answers.ts`, `lib/answers.test.ts`, `app/index.tsx`
+**Tesztelve:** `npm test` 28/28, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg. Adatelemzés: mind a 756 válasz nemnegatív egész, legfeljebb 4 számjegyű, 7-nek van tűrése, 125-nek mértékegysége, 133 `paper`.
+**Nyitva maradt:** a 133 `paper: true` feladat ugyanezt a komponenst kapja, amíg el nem készül a füzetes mód képernyője („Vedd elő a füzeted!", nincs időnyomás); nincs tizedes- és negatív szám támogatás (az adatban nincs ilyen). A „⌫" jel rendszerbetűvel jelenik meg (a Nunito nem tartalmazza), eszközön ellenőrizendő.
+**Commit:** `feat: NumericInput és NumberPad`
 
 ## 2026-10-12 – `MultipleChoice` komponens
 
