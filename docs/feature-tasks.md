@@ -23,7 +23,7 @@
 - [x] `lib/leitner.ts` – `nextBox()`, `dueDate()`, `selectSessionExercises()` + unit tesztek
 - [x] `store/progressStore.ts` – XP, streak, jelvények, AsyncStorage perzisztencia
 - [x] `store/reviewStore.ts` – Leitner kártyaállapotok, perzisztencia
-- [ ] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
+- [x] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
 
 ### Tartalom – KÉSZ (2026-10-12)
 **1574 feladat, 66 témakör, négy tantárgy.** A négy tankönyv fejezetei szerint,
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Alap UI komponensek
+
+**Mit:** `Card` (surface, 24px sarok, lágy árnyék), `AnswerButton` (min. 60pt, 22pt Nunito 600, `idle` / `correct` zsálya / `wrong` terrakotta állapot, lenyomáskor kicsit összenyomódik), `ProgressBar` (0–1 érték, rózsa kitöltés). Az árnyék közös: `constants/shadows.ts`. Az `app/index.tsx` ideiglenes próbaoldal a három komponenssel.
+**Fájlok:** `components/ui/Card.tsx`, `AnswerButton.tsx`, `ProgressBar.tsx`, `constants/shadows.ts`, `app/index.tsx`
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Eszközön a megjelenést még NEM néztem meg.
+**Nyitva maradt:** az `app/index.tsx` próbaoldalt a Kezdőlap feladat cseréli le (ne maradjon ship előtt). A hibás válasz „helyes válasz mutatása" a feladatkomponensek dolga. A `ProgressBar` nem animált, a gyakorló képernyőnél érdemes Reanimated-re cserélni.
+**Commit:** `feat: alap UI komponensek`
 
 ## 2026-10-12 – Nunito betűtípus
 
