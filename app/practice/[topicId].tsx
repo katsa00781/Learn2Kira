@@ -1,11 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ExerciseMascotContext } from "@/components/exercise/ExerciseCard";
 import { ExerciseRenderer } from "@/components/exercise/ExerciseRenderer";
 import { Mascot, type MascotState } from "@/components/mascot/Mascot";
 import { CloseIcon } from "@/components/ui/Icons";
-import { Card } from "@/components/ui/Card";
 import { SegmentedProgress } from "@/components/ui/SegmentedProgress";
 import { colors } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
@@ -33,6 +33,10 @@ export default function PracticeScreen() {
   const practice = usePracticeSession(topicId);
   const leave = () => router.back();
 
+  useEffect(() => {
+    if (practice.finished) router.replace("/result");
+  }, [practice.finished, router]);
+
   if (!practice.ready) return <SafeAreaView style={screen} />;
 
   if (practice.total === 0) {
@@ -49,24 +53,8 @@ export default function PracticeScreen() {
     );
   }
 
-  // ÁTMENETI összegzés: az Eredmény képernyő feladat cseréli le
-  if (practice.finished) {
-    return (
-      <SafeAreaView style={screen}>
-        <View className="flex-1 items-center justify-center gap-6 p-6">
-          <Mascot state="celebrate" size={200} />
-          <Text className="font-title text-[32px] text-text">Kész, Kira!</Text>
-          <Card className="items-center gap-2">
-            <Text className="font-task text-[24px] text-text">
-              {practice.correctCount} / {practice.total} helyes
-            </Text>
-            <Text className="font-title text-[24px] text-primary">+{practice.xpEarned} XP</Text>
-          </Card>
-          <PrimaryButton label="Vissza" onPress={leave} />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  // A kör végén az Eredmény képernyő jön
+  if (practice.finished) return <SafeAreaView style={screen} />;
 
   const { exercise } = practice;
   if (!exercise) return null;

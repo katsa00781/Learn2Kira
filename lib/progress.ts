@@ -13,3 +13,32 @@ export function dueCount(exercises: { id: string }[], cards: Record<string, Card
     return card !== undefined && card.dueAt <= today;
   }).length;
 }
+
+function dayNumber(day: string): number {
+  const [y, m, d] = day.split("-").map(Number);
+  return Date.UTC(y ?? 0, (m ?? 1) - 1, d ?? 1) / 86_400_000;
+}
+
+/**
+ * Mi vár a kör feladataira: hány esedékes `today`-en vagy korábban (a rontottak ide kerülnek,
+ * mert az 1. doboz még aznap visszahozza őket), és ha egy sem, hány nap múlva jön az első.
+ */
+export function reviewOutlook(
+  exerciseIds: string[],
+  cards: Record<string, Card>,
+  today: string,
+): { dueToday: number; nextInDays: number | null } {
+  let dueToday = 0;
+  let nextInDays: number | null = null;
+  for (const id of exerciseIds) {
+    const card = cards[id];
+    if (!card) continue;
+    if (card.dueAt <= today) {
+      dueToday += 1;
+      continue;
+    }
+    const days = dayNumber(card.dueAt) - dayNumber(today);
+    if (nextInDays === null || days < nextInDays) nextInDays = days;
+  }
+  return { dueToday, nextInDays };
+}

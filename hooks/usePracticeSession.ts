@@ -4,6 +4,7 @@ import { exercisesByTopic } from "@/data";
 import { useStoresHydrated } from "@/hooks/useStoresHydrated";
 import { selectSessionExercises, toDay } from "@/lib/leitner";
 import { useProgressStore } from "@/store/progressStore";
+import { useResultStore } from "@/store/resultStore";
 import { useReviewStore } from "@/store/reviewStore";
 import { useSessionStore } from "@/store/sessionStore";
 
@@ -43,7 +44,16 @@ export function usePracticeSession(topicId: string) {
   const next = () => {
     if (!answered) return;
     if (session.index === total - 1) {
-      useProgressStore.getState().completeSession(correctCount * XP_PER_CORRECT, today);
+      const xpEarned = correctCount * XP_PER_CORRECT;
+      useResultStore.getState().set({
+        topicId,
+        correct: correctCount,
+        total,
+        xpEarned,
+        xpBefore: useProgressStore.getState().xp,
+        exerciseIds: session.exercises.map((e) => e.id),
+      });
+      useProgressStore.getState().completeSession(xpEarned, today);
     }
     session.next();
   };

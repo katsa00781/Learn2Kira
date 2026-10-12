@@ -57,7 +57,7 @@
 - [x] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
 - [x] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
 - [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
-- [ ] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
+- [x] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
 - [ ] Jutalmak – jelvények, matricák, streak-naptár
 
 ### Motivációs réteg
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Eredmény képernyő
+
+**Mit:** A PDF 5. képernyője szerint (`app/result.tsx`): ünneplő maskot, „Szép munka!" (hibátlan körnél „Hibátlan, Kira!"), három csempe (helyes/összes, szerzett XP, napos sorozat), szintsáv, türkiz szélű sáv „mi jön vissza" üzenettel, „Még egy kör" és „Kész" gomb. XP-animáció: az XP-csempe rugósan beúszik, a szintsávban a most szerzett rész halvány barackként kinő (Reanimated). A gyakorló képernyő a kör végén ide vált (`router.replace`), az átmeneti „Kész, Kira!" összegzés megszűnt. Az üzenet a kör feladatainak Leitner-állapotából jön: „N feladat még ma visszajön…" (a rontottak az 1. dobozban aznapra esedékesek), ha nincs ilyen, „A következő ismétlés N nap múlva vár rád." Új tiszta függvények tesztekkel: `levelOf`/`levelBar` (`lib/level.ts`), `reviewOutlook` (`lib/progress.ts`).
+**Fájlok:** `app/result.tsx`, `app/practice/[topicId].tsx`, `hooks/usePracticeSession.ts`, `store/resultStore.ts`, `components/ui/{LevelBar,ResultStat,Icons}.tsx`, `lib/level.ts`, `lib/level.test.ts`, `lib/progress.ts`, `lib/progress.test.ts`
+**Tesztelve:** `npm test` 56/56, `typecheck`, `lint`, `expo export --platform ios`. Eszközön és a teljes úton (kezdőlap → gyakorlás → eredmény → „Még egy kör" / „Kész") NEM próbáltam; az animáció időzítése és a három csempe szélessége álló telefonon ellenőrizendő.
+**Nyitva maradt:** jelvény a kör végén (a „Jelvényrendszer" feladat); az XP-szám nem számol fel (csak a csempe és a sáv animál); a „Még egy kör" gomb akkor is él, ha a témakörből nincs több feladat (a gyakorló képernyő ilyenkor a „mindent átnéztél" üzenetet mutatja). A „Kész" a témaválasztóra lép vissza.
+**Commit:** `feat: eredmény képernyő`
 
 ## 2026-10-12 – Javítás: a statisztika-pirulák számai kilógtak
 
@@ -540,5 +548,12 @@ a másik szóba jöhető opció.
 **Miért:** A D-020 szerint a maskot a szülő dolga, a komponensek ne ismerjék; a kontextus ezt megtartja, és nem kell mind a hét komponensnek `mascot` propot kapnia. A két interaktív típusnál a sarokban álló maskot az elemekre lógna.
 **Alternatíva:** `mascot` prop minden feladatkomponensnek (sok átadás); a maskot abszolút pozícióval a képernyőn (a kártya magassága típusonként más, ráfedne a tartalomra).
 **Visszavonható?** Igen.
+
+## D-029 – Szint: 100 XP / szint; a kör eredménye külön, nem perzisztált store-ban
+**Dátum:** 2026-10-12
+**Döntés:** A PDF „Level" sávjához a szint `floor(xp / 100) + 1`, a sáv az aktuális szinten belüli XP-t mutatja. Ha egy kör szintet lépett, a sáv az új szint elejéről indul, és „Új szint: N." feliratot kap. A kör összegzése (`correct`, `total`, `xpEarned`, `xpBefore`, feladat-azonosítók) a `resultStore`-ba kerül, mert a `sessionStore` a gyakorló képernyő elhagyásakor törlődik.
+**Miért:** A szintnek nincs más forrása a tervben, és a progressStore alakját sem akartam bővíteni: a szint az XP-ből számolható, így nincs mit szinkronban tartani. Egy kör ~100 XP-ig tart (10 feladat × 10), tehát nagyjából kétnaponta lép szintet, ami motiváló. A `resultStore` nem perzisztált: a következő indításkor az eredményképernyőnek nincs mit mutatnia.
+**Alternatíva:** Növekvő szintküszöbök (bonyolultabb, nincs rá igény); az eredmény route-paraméterekben (a feladatlista nem fér bele).
+**Visszavonható?** Igen, `lib/level.ts` egy helyen tartja.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
