@@ -56,13 +56,13 @@
 - [ ] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
 - [ ] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
 - [ ] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
-- [ ] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
+- [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
 - [ ] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
 - [ ] Jutalmak – jelvények, matricák, streak-naptár
 
 ### Motivációs réteg
-- [ ] Maskot komponens 4 állapottal, válaszra reagál
-- [ ] Haptika bekötése (helyes / hibás)
+- [x] Maskot komponens 4 állapottal, válaszra reagál
+- [x] Haptika bekötése (helyes / hibás)
 - [ ] Hangeffektek + kikapcsolási lehetőség
 - [ ] Streak logika + „mentőöv" nap havonta
 - [ ] Jelvényrendszer: első kör, 7 napos sorozat, 100% egy körben, téma befejezése
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Gyakorló képernyő (+ maskot, haptika)
+
+**Mit:** `app/practice/[topicId].tsx`: felül kilépés + haladássáv + számláló, középen az `ExerciseRenderer`, alul sáv a maskottal, üzenettel és „Tovább" / „Befejezés" gombbal. Válasz után: haptika (siker / figyelmeztetés), a maskot `celebrate` / `encourage` állapotra vált, a válasz a `reviewStore`-ba kerül (Leitner), hibánál „Majdnem! Nézd meg így:" terrakotta felirattal. A kör az esedékes ismétlésekből + újakból áll (max. 10). Kör végén XP jóváírás és sorozat frissítés (`progressStore`). Üres eset: „Ebből a témából ma már mindent átnéztél." Az üzleti logika a `hooks/usePracticeSession.ts`-ben van, a kör állapota a `sessionStore`-ban (nem perzisztált). Új: `components/mascot/Mascot.tsx` (4 állapot), `hooks/useStoresHydrated.ts`. A próbaoldalon (`app/index.tsx`) négy gomb indít gyakorlókört, tantárgyanként az első témakörben.
+**Fájlok:** `app/practice/[topicId].tsx`, `hooks/usePracticeSession.ts`, `hooks/useStoresHydrated.ts`, `store/sessionStore.ts`, `components/mascot/Mascot.tsx`, `app/index.tsx`, `eslint.config.js` (`.expo/` kiszedve a lintből)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Adatellenőrzés: nincs üres témakör a `sort-into-groups` kiszűrése után sem. Eszközön, AsyncStorage-perzisztenciával és a teljes körrel NEM próbáltam.
+**Nyitva maradt:** (1) az ÁTMENETI kör végi összegzés az Eredmény képernyő feladatra vár (a kilépés ✕-szel XP nélkül zár; a már megválaszolt feladatok a Leitnerben megmaradnak); (2) három témakör rövidebb 8 feladatnál, amíg a `SortIntoGroups` nincs kész: `nyelvtan-mit-fejeznek-ki` (1), `matek-valogatas` (4), `kornyezet-allatok` (7); (3) füzetes mód (`paper`) még nincs; (4) hangeffektek még nincsenek, a Haptika viszont kész; (5) a maskot nem animált.
+**Commit:** `feat: gyakorló képernyő maskottal és haptikával`
 
 ## 2026-10-12 – `ExerciseRenderer`
 
@@ -421,6 +429,20 @@ a másik szóba jöhető opció.
 **Döntés:** A `MatchPairs` rossz párosításnál nem fejezi be a feladatot és nem mutatja meg a megoldást: a gyerek újra próbálhat. A Leitner-motornak adott eredmény `mistakes === 0`, tehát egy rossz próbálkozás is „hibásnak" számít, és a feladat visszakerül az 1. dobozba.
 **Miért:** Párosításnál a kizárásos módszer eleve működik (az utolsó pár adott), ezért egy hibázás utáni „vége, itt a megoldás" csak büntetne. A Leitner-jelzés ugyanakkor őszinte marad: amit elsőre nem tudott, azt gyakorolnia kell.
 **Alternatíva:** Az első hibánál lezárni és mutatni a helyes párosítást (mint a többi típusnál). Elvetve: frusztráló egy 5 párosnál, és nem tanít többet.
+**Visszavonható?** Igen.
+
+## D-023 – XP: 10 pont helyes válaszonként, a kör végén jóváírva
+**Dátum:** 2026-10-12
+**Döntés:** Egy helyes válasz 10 XP, hibás 0. Az XP csak a kör befejezésekor kerül a `progressStore`-ba, a sorozattal együtt. Ha a gyerek kilép a kör közepén, nem kap XP-t és nem nő a sorozat, de a megválaszolt feladatok Leitner-állapota mentve marad.
+**Miért:** A CLAUDE.md a kör végére teszi az XP-animációt és a sorozatot („legalább egy kört befejezett"). Fél kör jóváírása kiskaput nyitna a sorozatra. A Leitner-állapotot viszont azonnal menteni kell, mert az a tanulás valódi eredménye, és a kilépés ne dobja el.
+**Alternatíva:** Válaszonkénti azonnali XP. Elvetve: a sorozat szabályával ütközik, és a kör végi animáció elveszti a lényegét. A 10 pont kezdő érték, a jelvényrendszernél finomítható.
+**Visszavonható?** Igen.
+
+## D-024 – A kör csak a store-ok betöltése után áll össze
+**Dátum:** 2026-10-12
+**Döntés:** A `usePracticeSession` megvárja, hogy a `progressStore` és a `reviewStore` betöltődjön az AsyncStorage-ból (`useStoresHydrated`), és csak utána hívja a `selectSessionExercises`-t. A kör egyszer áll össze, belépéskor; a kilépéskor a `sessionStore` törlődik.
+**Miért:** A perzisztált store-ok betöltése aszinkron. Üres `cards`-szal az esedékes ismétlések kimaradnának, és a gyerek „új" feladatként kapná újra, amit már rontott: a Leitner-ismétlés csendben nem működne, hibaüzenet nélkül.
+**Alternatíva:** Splash-en várni a betöltésre az egész appban. Elvetve: a többi képernyő nem függ tőle, és a hook helyi, egyszerű megoldás.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
