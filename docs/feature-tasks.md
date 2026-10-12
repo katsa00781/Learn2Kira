@@ -49,7 +49,7 @@
 - [x] `components/exercise/OrderItems.tsx` — 42 feladat
 - [x] `components/exercise/MatchPairs.tsx` — 32 feladat
 - [x] `components/exercise/Punctuation.tsx` — 15 feladat
-- [ ] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
+- [x] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
 - [ ] **Füzetes mód** (`paper: true`): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
 
 ### Képernyők (sorrendben)
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `ExerciseRenderer`
+
+**Mit:** Egy belépési pont a feladatok megjelenítéséhez: a `type` alapján választ komponenst, kimerítő `switch`-csel (új feladattípusnál a fordító szól, ha nincs lekezelve). A próbaoldal már csak ezt használja, típusonként 3 feladattal.
+**Fájlok:** `components/exercise/ExerciseRenderer.tsx`, `app/index.tsx` (próbaoldal)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg.
+**Nyitva maradt:** a `sort-into-groups` ágon ÁTMENETI helyettesítő szöveg van („hamarosan érkezik"), mert a `SortIntoGroups` még nincs kész – a gyakorló képernyő összeállításánál ezt a típust addig ki kell szűrni, különben 96 feladat zsákutcába vezet. A füzetes mód (`paper`) szintén nincs bekötve: a 133 füzetes számbeírós feladat most a sima `NumericInput`-ot kapja.
+**Commit:** `feat: ExerciseRenderer`
 
 ## 2026-10-12 – `MatchPairs` komponens
 
