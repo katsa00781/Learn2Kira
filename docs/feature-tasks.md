@@ -42,7 +42,7 @@
 - [ ] Közmondások, szólások (`match-pairs`) – Szövegalkotás 3., 23. oldal
 
 ### Feladattípus komponensek
-- [ ] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
+- [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
 - [ ] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
 - [ ] `components/exercise/MissingLetter.tsx` — 70 feladat
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `MultipleChoice` komponens
+
+**Mit:** Feleletválasztós feladat. Fekvő iPaden (szélesebb mint magas, ≥700pt) bal oldalt a kérdés, jobb oldalt a válaszok; álló módban és telefonon egymás alatt (`useWindowDimensions`). Válasz után zár: a választott gomb zöld/terrakotta, hibánál a helyes is zöldre vált. Közös szerződés minden típusnak: `components/exercise/types.ts` (`ExerciseProps<T>`). Az `app/index.tsx` ideiglenes próbaoldala az összes valódi feleletválasztós feladaton végigmegy, „Tovább" gombbal.
+**Fájlok:** `components/exercise/types.ts`, `components/exercise/MultipleChoice.tsx`, `app/index.tsx`
+**Tesztelve:** `typecheck`, `lint`, `validate`, `expo export --platform ios` (a `data/` bundle-be kerül). Eszközön NEM néztem meg, iPad fekvő elrendezést sem.
+**Nyitva maradt:** haptika, hang és maskot reakció (a Motivációs réteg sorai, a szülő képernyő dolga); a visszajelző szöveg és a „Tovább" gomb a gyakorló képernyőre kerül; a válaszok sorrendje fix (az adatban megadott), nincs keverés. A próbaoldalt a Kezdőlap feladat cseréli le.
+**Commit:** `feat: MultipleChoice feladatkomponens`
 
 ## 2026-10-12 – Alap UI komponensek
 
@@ -344,6 +352,13 @@ a másik szóba jöhető opció.
 **Döntés:** A tesztek `node:test`-tel futnak `tsx` alatt (nincs új függőség). A `dueAt` és a „ma" helyi nap, "ÉÉÉÉ-HH-NN" szövegként; a függvények a mát paraméterként kapják, nem hívják a `new Date()`-et. A dobozok típusa `Box = 1|2|3|4|5`. Az 1. doboz intervalluma 0 nap, tehát a rontott feladat még aznap (következő körben) visszajöhet. Az új feladatok keverése `random` paraméterrel cserélhető.
 **Miért:** A CLAUDE.md szerint a modul tiszta, UI és storage nélkül; a dátum átadásával determinisztikusan tesztelhető. A szöveges nap AsyncStorage-ban JSON-barát és időzónaproblémát nem okoz (a Date-alapú dueAt éjfél körül elcsúszna). A `jest` Expo-s beállítása több függőség és konfiguráció egyetlen tiszta modulért.
 **Alternatíva:** `jest` + `jest-expo`. Elvetve a fenti okból; ha később komponenseket is tesztelünk, érdemes újragondolni.
+**Visszavonható?** Igen.
+
+## D-020 – Feladatkomponens-szerződés: `onAnswer(correct)`, a visszajelzés a szülőé
+**Dátum:** 2026-10-12
+**Döntés:** Minden feladattípus-komponens `{ exercise, onAnswer(correct) }` propokat kap. A komponens egyszer hívja az `onAnswer`-t, utána lezár, és csak a saját válaszkijelzését (zöld/terrakotta, helyes válasz mutatása) intézi. Haptika, hang, maskot, visszajelző szöveg és a „Tovább" a gyakorló képernyő dolga. Új feladatnál a szülő `key={exercise.id}`-t ad, hogy a belső állapot nullázódjon.
+**Miért:** Hét komponens ugyanazt a visszajelzést nem másolhatja; egy helyen (szülő) a motivációs réteg egységes marad, a komponensek pedig egyszerűek és külön próbálhatók.
+**Alternatíva:** Mindegyik komponens maga hívja a haptikát és a maskotot. Elvetve: hétszeres ismétlés.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
