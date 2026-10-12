@@ -5,18 +5,18 @@
 > A részletes szabályok a `CLAUDE.md` „Munkanapló és commitok" szakaszában vannak.
 
 ### Setup (egyszeri)
-- [ ] Expo projekt létrehozása (`npx create-expo-app@latest learning2kira --template`)
-- [ ] Git init, első commit: "init"
-- [ ] `app.json`: `supportsTablet: true`, `requireFullScreen: true`, iPad orientáció
-- [ ] NativeWind telepítése és konfigurálása, színek a `tailwind.config.js`-be
-- [ ] Nunito betűtípus betöltése (`expo-font`)
-- [ ] `react-native-svg` + `react-native-svg-transformer` beállítása (metro config)
-- [ ] Maskot assetek elhelyezése: `assets/images/mascot/mascot-base.png`
-- [ ] `constants/colors.ts` és `constants/images.ts` létrehozása
-- [ ] Lint és typecheck parancsok bekötése
-- [ ] `validate` npm script bekötése (`tsx scripts/validate.ts`)
-- [ ] Feladatbank bemásolása a csomagból (`types/`, `data/`, `scripts/`)
-- [ ] CLAUDE.md a projekt gyökerébe, ez a fájl a `docs/` mappába
+- [x] Expo projekt létrehozása (`npx create-expo-app@latest learning2kira --template`)
+- [x] Git init, első commit: "init"
+- [x] `app.json`: `supportsTablet: true`, `requireFullScreen: true`, iPad orientáció
+- [x] NativeWind telepítése és konfigurálása, színek a `tailwind.config.js`-be
+- [ ] Nunito betűtípus betöltése (`expo-font`) — **függ D-017-től (jóváhagyás kell)**
+- [x] `react-native-svg` + `react-native-svg-transformer` beállítása (metro config)
+- [x] Maskot assetek elhelyezése: `assets/images/mascot/mascot-base.png`
+- [x] `constants/colors.ts` és `constants/images.ts` létrehozása
+- [x] Lint és typecheck parancsok bekötése
+- [x] `validate` npm script bekötése (`tsx scripts/validate.ts`)
+- [x] Feladatbank bemásolása a csomagból (`types/`, `data/`, `scripts/`)
+- [x] CLAUDE.md a projekt gyökerébe, ez a fájl a `docs/` mappába
 - [ ] Push GitHub-ra
 
 ### Alapok
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Projekt setup (Expo SDK 57 + NativeWind)
+
+**Mit:** Az Expo váz felépítve a meglévő tartalom mellé (a `create-expo-app` ideiglenes mappában futott, hogy ne írjon felül semmit). Git init + "init" commit a meglévő tartalommal. Telepítve: expo-router, NativeWind 4 (+ tailwind 3), reanimated + worklets, gesture-handler, svg + svg-transformer, haptics, async-storage, zustand. Színtokenek egy helyen (`constants/colors.ts`), a Tailwind config ebből olvas. Minimális `app/_layout.tsx` + `app/index.tsx` (maskot + „Szia Kira!") bizonyítja, hogy a NativeWind osztályok és a központi képimport működnek.
+**Fájlok:** `app.json`, `package.json`, `tsconfig.json`, `babel.config.js`, `metro.config.js`, `tailwind.config.ts`, `global.css`, `app-env.d.ts`, `svg.d.ts`, `eslint.config.js`, `constants/colors.ts`, `constants/images.ts`, `app/_layout.tsx`, `app/index.tsx`, ikon/splash assetek
+**Tesztelve:** `npm run typecheck`, `npm run lint`, `npm run validate` (1574 feladat, 66 témakör, hiba nélkül), `expo export --platform ios` lefut. Eszközön/szimulátoron még NEM futtattam.
+**Nyitva maradt:** Nunito betűtípus (D-017), hangeffektek könyvtára (D-017), GitHub push (kérésre), a `(tabs)` struktúra (a kezdőlap feladatnál jön), `GestureHandlerRootView` a drag & drop feladatnál, szimulátoros próba.
+**Commit:** `setup: Expo, NativeWind, svg, színtokenek, lint és typecheck`
 
 ## 2026-10-12 – Matek és környezet feladatbank, hetedik feladattípus
 
@@ -261,5 +269,32 @@ a másik szóba jöhető opció.
 **Miért:** Egy elgépelt eredmény így build-time derül ki, nem Kira előtt. Jelenleg 506 feladat esik ellenőrzés alá. A maradék szöveges vagy mértékegység-váltás — azoknál a kézi gondosság az egyetlen védelem, és ezt tudni kell.
 **Figyelmeztetés:** az ellenőrzőt is ellenőrizni kell. Az első verzió csendben átugrott minden zárójelre végződő kifejezést, mert a `(hányados)` utótagot levágó regex a `6 × (10 − 4)` zárójelét is levágta. Szándékos hibákkal tesztelve derült ki. Ha bővíted a validátort, teszteld szándékos hibával.
 **Visszavonható?** Nem.
+
+## D-015 – Expo SDK 57, gyökér `app/` mappa
+**Dátum:** 2026-10-12
+**Döntés:** A `create-expo-app` jelenlegi sablonja SDK 57-et ad `src/app` elrendezéssel; mi a CLAUDE.md szerinti gyökér `app/`, `components/` stb. struktúrát tartjuk, a sablon demó kódját nem vettük át. Az `app.json`-ban `orientation: "default"` (fekvő és álló is), `userInterfaceStyle: "light"` (a paletta csak világos), `typedRoutes` be.
+**Miért:** A CLAUDE.md mappastruktúrája a forrás; a demó komponensek (themed-text, tabs, web badge) nem kellenek.
+**Alternatíva:** `src/` elrendezés a sablon szerint. Elvetve: eltér a dokumentált struktúrától.
+**Visszavonható?** Igen.
+
+## D-016 – NativeWind 4 + Tailwind 3, a config TypeScript
+**Dátum:** 2026-10-12
+**Döntés:** A stabil NativeWind 4.2.7-et használjuk Tailwind 3.4-gyel (az 5-ös csak rc). A `tailwind.config.ts` a `constants/colors.ts`-ből olvas, így a tokenek egyetlen helyen élnek. A `nativewind/preset` importja `@ts-expect-error`-t kap, mert a csomag nem exportál típust. A `lint` script `eslint .` (az `expo lint` elhasalt a még üres `components/` mappán).
+**Miért:** CLAUDE.md: a színek legyenek `constants/colors.ts`-ben és a NativeWind themeben is; kettős karbantartás helyett egy forrás. Stabil verzió egy gyerekappnál.
+**Alternatíva:** `tailwind.config.js` másolt hex értékekkel. Elvetve: a két lista előbb-utóbb eltérne.
+**Visszavonható?** Igen.
+
+## D-017 – Nyitott: hang- és betűtípus-könyvtár (jóváhagyásra vár)
+**Dátum:** 2026-10-12
+**Döntés:** Még nincs. Az `expo-av` utolsó kiadása a 16.x, ami nem az SDK 57-hez készült; az SDK 57-hez az `expo-audio` (57.0.x) tartozik. A Nunito-hoz vagy a `@expo-google-fonts/nunito` csomag, vagy kézzel bemásolt .ttf fájlok kellenek (`expo-font` már fent van). A CLAUDE.md szerint új könyvtárhoz engedély kell, ezért egyiket sem telepítettem.
+**Javaslat:** `expo-audio` az `expo-av` helyett (ugyanaz a cél, támogatott); Nunito .ttf fájlok az `assets/fonts/`-ba, plusz függőség nélkül.
+**Alternatíva:** `expo-av` 16.x erőltetése SDK 57 alatt (összeférhetetlenség kockázata), vagy `@expo-google-fonts/nunito` (egy plusz csomag, de kényelmes).
+
+## D-018 – `react-dom` pin és TypeScript 6
+**Dátum:** 2026-10-12
+**Döntés:** `react-dom@19.2.3` devDependency-ként rögzítve, `typescript@~6.0.3` (az Expo ezt várja).
+**Miért:** Pin nélkül az npm `react-dom@19.3`-at próbált húzni, ami `react@19.3`-at kér, és minden további `npm i` ERESOLVE hibával elhasalt. Nem fő függőség (nem számít a 10-es limitbe), az app nem használ webet.
+**Alternatíva:** `legacy-peer-deps` az `.npmrc`-ben. Elvetve: elfedne valódi konfliktusokat is.
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
