@@ -42,3 +42,11 @@ export function LeafIcon({ size = 24, color }: IconProps) {
     </Svg>
   );
 }
+
+export function CheckIcon({ size = 24, color }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <Path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={color} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}

@@ -6,15 +6,11 @@ import { BackButton } from "@/components/ui/BackButton";
 import { SubjectCard } from "@/components/ui/SubjectCard";
 import { colors } from "@/constants/colors";
 import { exercisesByTopic, subjects, topicsBySubject } from "@/data";
+import { chunk } from "@/lib/chunk";
 import { seenRatio } from "@/lib/progress";
 import { useReviewStore } from "@/store/reviewStore";
 
 const screen = { flex: 1, backgroundColor: colors.background };
-
-/** Két kártya soronként: iPaden és telefonon is rácsban marad. */
-function inRows<T>(items: T[], perRow: number): T[][] {
-  return Array.from({ length: Math.ceil(items.length / perRow) }, (_, i) => items.slice(i * perRow, (i + 1) * perRow));
-}
 
 export default function SubjectsScreen() {
   const router = useRouter();
@@ -28,7 +24,7 @@ export default function SubjectsScreen() {
         <Mascot state="base" size={72} />
       </View>
       <ScrollView contentContainerClassName="w-full max-w-[900px] gap-5 self-center p-6">
-        {inRows(subjects, 2).map((row) => (
+        {chunk(subjects, 2).map((row) => (
           <View key={row.map((s) => s.id).join()} className="flex-row gap-5">
             {row.map((subject) => {
               const topics = topicsBySubject(subject.id);

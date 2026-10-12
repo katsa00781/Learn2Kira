@@ -55,7 +55,7 @@
 ### Képernyők (sorrendben)
 - [x] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
 - [x] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
-- [ ] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
+- [x] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
 - [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
 - [ ] Eredmény képernyő – pontszám, XP-animáció, mi jön vissza legközelebb
 - [ ] Jutalmak – jelvények, matricák, streak-naptár
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Témaválasztó
+
+**Mit:** A `design-prompts.md` 3. promptja szerint: felül vissza gomb és a tantárgy neve a színes jelével; alatta összegző sáv („X / Y témakör kész" + sáv); alatta a témakörök kétoszlopos rácsban, tankönyvi sorrendben (`Topic.order`). Kártyánként sorszámozott színes kör, cím, vékony haladássáv és jobbra egy jelzés: **esedékes ismétlések száma** (rózsa kör) > **kész** (zöld pipa) > **még nem kezdett** (halvány pont); a folyamatban lévő, de nem esedékes témakörnek nincs jelzése. A kártya a `/practice/[topicId]` gyakorlókört indítja. Jobb alsó sarokban kis maskot (nem fogja el a kattintásokat). Az eddig tantárgykártyán lévő kör-jel közös komponens lett (`SubjectIcon`), a sorokra bontás pedig `lib/chunk.ts` (3 teszt).
+**Fájlok:** `app/subject/[id].tsx`, `components/ui/TopicCard.tsx`, `components/ui/SubjectIcon.tsx`, `components/ui/SubjectCard.tsx`, `components/ui/Icons.tsx` (+CheckIcon), `lib/progress.ts` (+`dueCount`, 2 teszt), `lib/chunk.ts`, `lib/chunk.test.ts`, `app/subjects.tsx`
+**Tesztelve:** `npm test` 47/47, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg; mockup-kép nem volt. A teljes út (Kezdőlap → tantárgy → témakör → gyakorlás) kézzel még nincs végigpróbálva.
+**Nyitva maradt:** a témakör „kész" állapota a kipróbált arányon alapul (D-026), nem az elsajátításon; a témakör sorszáma a tankönyvi sorrendben a listabeli hely, nem a tankönyvi fejezetszám (az `Topic.book` oldalszám nem jelenik meg); kicsi képernyőn a jobb alsó maskot ráfedhet az utolsó sorra (alsó térköz 140pt).
+**Commit:** `feat: témaválasztó`
 
 ## 2026-10-12 – Tantárgyválasztó
 
