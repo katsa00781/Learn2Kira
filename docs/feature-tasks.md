@@ -70,7 +70,7 @@
 
 ### Design
 - [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
-- [ ] Tantárgyválasztó igazítása a PDF-hez
+- [x] Tantárgyválasztó igazítása a PDF-hez
 - [ ] Témaválasztó igazítása a PDF-hez
 - [ ] Gyakorló képernyő igazítása a PDF-hez
 - [ ] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Tantárgyválasztó igazítása a PDF-hez
+
+**Mit:** Fekvő iPaden (szélesség ≥ 700) magas kártyák 2×2-es rácsban: nagy színes kör, 36pt-os cím, haladássáv, „N témakör"; telefonon vízszintes kártyák egymás alatt (kör balra, cím + sáv + szám jobbra), a PDF álló nézete szerint. A cím fekvőben középen (44pt), telefonon balra, két sorban. A jobb felső sarokban az ünneplő maskot (`celebrate`) a kártyák fölé lóg, nem fogja el az érintést. A már elkezdett tantárgy rózsaszín keretet és rózsaszínes árnyékot kap (a PDF-ben az első kártya ilyen).
+**Fájlok:** `app/subjects.tsx`, `components/ui/SubjectCard.tsx` (`layout` prop)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Képernyőképes összevetés NEM történt (nincs iPad-szimulátor).
+**Nyitva maradt:** a PDF-ben a kiemelt kártya jelentése nem volt megadva; én „már elkezdett tantárgy"-ként értelmeztem (haladás > 0). A PDF „Coming soon" és lakat állapota nincs, mert mind a négy tantárgy éles.
+**Commit:** `feat: tantárgyválasztó igazítása a PDF mockuphoz`
 
 ## 2026-10-12 – Kezdőlap igazítása a PDF-hez
 
