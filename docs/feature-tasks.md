@@ -65,7 +65,7 @@
 - [x] Haptika bekötése (helyes / hibás)
 - [ ] Hangeffektek + kikapcsolási lehetőség
 - [ ] Streak logika + „mentőöv" nap havonta
-- [ ] Jelvényrendszer: első kör, 7 napos sorozat, 100% egy körben, téma befejezése
+- [x] Jelvényrendszer: első kör, 3/7/30 napos sorozat, 100% egy körben, téma befejezése
 - [ ] Napi cél megjelenítése és teljesítés visszajelzése
 
 ### Design
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Jelvényrendszer
+
+**Mit:** A kör végén a rendszer kiértékeli a jelvényeket (`lib/badges.ts`, `newBadges`, 7 teszt): Első kör, 3/7/30 napos sorozat (a kör utáni sorozat alapján), Hibátlan kör (minden válasz jó), és a „téma befejezése" tantárgyanként (a kör témaköre kész = minden feladatára válaszolt legalább egyszer, D-026). A feloldás a `usePracticeSession.next()`-ben történik, a `progressStore.unlockBadge`-gyel; a megszerzett jelvények a `resultStore`-ba kerülnek, és az Eredmény képernyőn „Új jelvényt szereztél!" felirattal, rugós beúszással jelennek meg. A Jutalmak képernyőn a feloldott jelvények innentől színesek.
+**Fájlok:** `lib/badges.ts`, `lib/badges.test.ts`, `hooks/usePracticeSession.ts`, `store/resultStore.ts`, `app/result.tsx`
+**Tesztelve:** `npm test` 67/67, `typecheck`, `lint`, `expo export --platform ios`. Eszközön és a teljes úton NEM próbáltam.
+**Nyitva maradt:** a „téma befejezése" jelvény csak olyan témakörben jár, amelyben nincs `sort-into-groups` feladat, mert azokat a gyakorló kör még nem adja (a `SortIntoGroups` komponens hiányzik), így a témakör „kész" aránya nem érheti el az 1-et. A korábban (a jelvényrendszer előtt) abszolvált körök jelvényei nem járnak vissza. A „mentőöv" nap és a streak-szabály külön feladat.
+**Commit:** `feat: jelvényrendszer`
 
 ## 2026-10-12 – Jutalmak
 

@@ -1,8 +1,10 @@
 import * as Haptics from "expo-haptics";
 import { useEffect, useMemo } from "react";
-import { exercisesByTopic } from "@/data";
+import { exercisesByTopic, topicById } from "@/data";
 import { useStoresHydrated } from "@/hooks/useStoresHydrated";
+import { newBadges } from "@/lib/badges";
 import { selectSessionExercises, toDay } from "@/lib/leitner";
+import { seenRatio } from "@/lib/progress";
 import { useProgressStore } from "@/store/progressStore";
 import { useResultStore } from "@/store/resultStore";
 import { useReviewStore } from "@/store/reviewStore";
@@ -45,15 +47,29 @@ export function usePracticeSession(topicId: string) {
     if (!answered) return;
     if (session.index === total - 1) {
       const xpEarned = correctCount * XP_PER_CORRECT;
+      const progress = useProgressStore.getState();
+      const xpBefore = progress.xp;
+      progress.completeSession(xpEarned, today);
+
+      // A kör utolsó válasza már a reviewStore-ban van, így a témakör „kész” állapota friss
+      const topicDone = seenRatio(exercisesByTopic(topicId), useReviewStore.getState().cards) >= 1;
+      const earned = newBadges(progress.unlockedBadges, {
+        streak: useProgressStore.getState().streak,
+        correct: correctCount,
+        total,
+        topicSubject: topicDone ? (topicById(topicId)?.subject ?? null) : null,
+      });
+      earned.forEach((id) => useProgressStore.getState().unlockBadge(id));
+
       useResultStore.getState().set({
         topicId,
         correct: correctCount,
         total,
         xpEarned,
-        xpBefore: useProgressStore.getState().xp,
+        xpBefore,
         exerciseIds: session.exercises.map((e) => e.id),
+        newBadges: earned,
       });
-      useProgressStore.getState().completeSession(xpEarned, today);
     }
     session.next();
   };

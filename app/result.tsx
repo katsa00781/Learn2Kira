@@ -5,8 +5,10 @@ import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } fro
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Mascot } from "@/components/mascot/Mascot";
 import { ClockIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
+import { BadgeCard } from "@/components/ui/BadgeCard";
 import { LevelBar } from "@/components/ui/LevelBar";
 import { ResultStat } from "@/components/ui/ResultStat";
+import { badges } from "@/constants/badges";
 import { colors, darkTones } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
 import { toDay } from "@/lib/leitner";
@@ -41,6 +43,7 @@ export default function ResultScreen() {
   if (!last) return <Redirect href="/" />;
 
   const { correct, total, xpEarned, xpBefore, exerciseIds, topicId } = last;
+  const earnedBadges = badges.filter((b) => last.newBadges.includes(b.id));
   const bar = levelBar(xpBefore, xpBefore + xpEarned);
   const outlook = reviewOutlook(exerciseIds, cards, toDay(new Date()));
   const perfect = correct === total;
@@ -59,6 +62,19 @@ export default function ResultScreen() {
             </Animated.View>
             <ResultStat value={String(streak)} label="napos sorozat" icon={<FlameIcon size={30} color={colors.error} outline />} />
           </View>
+
+          {earnedBadges.length > 0 && (
+            <View className="w-full gap-3">
+              <Text className="text-center font-title text-[24px] text-primary">{earnedBadges.length === 1 ? "Új jelvényt szereztél!" : "Új jelvényeket szereztél!"}</Text>
+              <Animated.View style={popStyle} className="flex-row flex-wrap justify-center gap-4">
+                {earnedBadges.map((badge) => (
+                  <View key={badge.id} className="w-[150px] flex-row">
+                    <BadgeCard badge={badge} unlocked />
+                  </View>
+                ))}
+              </Animated.View>
+            </View>
+          )}
 
           <View className="w-full">
             <LevelBar {...bar} />

@@ -8,6 +8,8 @@ export type LastResult = {
   xpEarned: number;
   xpBefore: number;
   exerciseIds: string[];
+  /** A körben most megszerzett jelvények azonosítói. */
+  newBadges: string[];
 };
 
 type ResultState = {
