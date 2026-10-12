@@ -21,7 +21,7 @@
 
 ### Alapok
 - [x] `lib/leitner.ts` – `nextBox()`, `dueDate()`, `selectSessionExercises()` + unit tesztek
-- [ ] `store/progressStore.ts` – XP, streak, jelvények, AsyncStorage perzisztencia
+- [x] `store/progressStore.ts` – XP, streak, jelvények, AsyncStorage perzisztencia
 - [ ] `store/reviewStore.ts` – Leitner kártyaállapotok, perzisztencia
 - [ ] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
 
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `progressStore` (XP, sorozat, jelvények)
+
+**Mit:** Zustand store AsyncStorage perzisztenciával: `xp`, `streak`, `lastPracticeDate`, `unlockedBadges`, `dailyGoalDone`. Akciók: `completeSession(xp, today)`, `startDay(today)` (új napon nyitja a napi célt), `unlockBadge(id)`. A sorozatszámítás tiszta függvény a `lib/streak.ts`-ben, 5 teszttel.
+**Fájlok:** `store/progressStore.ts`, `lib/streak.ts`, `lib/streak.test.ts`, `lib/leitner.ts` (az `addDays` exportálva)
+**Tesztelve:** `npm test` 22/22, `typecheck`, `lint`. A store perzisztenciáját eszközön NEM próbáltam.
+**Nyitva maradt:** a „mentőöv" nap havonta (külön sor a Motivációs rétegben, a `nextStreak` bővítendő); a `startDay` hívása az app indulásakor még nincs bekötve; a jelvények feltételei.
+**Commit:** `feat: progressStore és sorozatszámítás`
 
 ## 2026-10-12 – Leitner-ismétlés (`lib/leitner.ts`)
 

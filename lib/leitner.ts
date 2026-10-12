@@ -25,7 +25,7 @@ export function toDay(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-function addDays(day: string, days: number): string {
+export function addDays(day: string, days: number): string {
   const [y, m, d] = day.split("-").map(Number);
   // UTC-ben számolunk, hogy a nyári időszámítás ne csússzon el napot
   const date = new Date(Date.UTC(y ?? 0, (m ?? 1) - 1, (d ?? 1) + days));
