@@ -1,82 +1,49 @@
-# Learning2Kira – indulás
+# Learning2Kira – fejlesztői indulás
 
-A feladatbank (`types/`, `data/`, `scripts/`) és a dokumentáció kész. Az Expo
-projekt még nincs inicializálva — ez a mappa a tartalom és a kontextus.
+Az Expo projekt él, a feladatbank és az alkalmazás képernyői készen vannak; a
+hátralévő munka a `docs/feature-tasks.md`-ben van.
 
-## 1. Expo projekt rátelepítése
-
-Ebben a mappában, a meglévő fájlok megtartásával:
+## Indítás
 
 ```bash
-cd ~/Developer/Projektek/learn2kira
-npx create-expo-app@latest . --template default
+npm install
+npm run ios        # natív build és indítás (Xcode és iOS szimulátor/eszköz kell)
+npm start          # csak a Metro szerver
 ```
 
-A parancs rákérdez, ha nem üres a mappa. A meglévő `package.json`-t felül fogja
-írni — előtte mentsd el a `scripts` blokkot belőle, és utána írd vissza:
+Az app iPad-first: fejlesztéskor fekvő iPad-szimulátoron nézd, aztán állóban
+és iPhone-on is. A `requireFullScreen: true` miatt Slide Over nem lehetséges.
 
-```json
-"validate": "tsx scripts/validate.ts",
-"typecheck": "tsc --noEmit"
-```
+## Parancsok
 
-A `tsconfig.json`-ba vissza kell tenni a `"strict": true`,
-`"noUncheckedIndexedAccess": true` és `"paths": { "@/*": ["./*"] }` sorokat.
+| Parancs | Mire jó |
+|---|---|
+| `npm test` | A `lib/*.test.ts` unit tesztjei (`tsx --test`) |
+| `npm run typecheck` | TypeScript ellenőrzés (az app) |
+| `npm run typecheck:content` | TypeScript ellenőrzés (a feladatbank, `tsconfig.content.json`) |
+| `npm run lint` | ESLint |
+| `npm run validate` | Feladatbank-ellenőrzés; **minden tartalombővítés után kötelező**, 1574 feladatot és 66 témakört kell kiírnia, hibák nélkül |
 
-## 2. Függőségek
+Új útvonal (`app/` fájl) hozzáadása után egyszer le kell futnia az Expo
+exportnak vagy az `npm start`-nak, hogy a típusos útvonalak újragenerálódjanak:
 
 ```bash
-npx expo install nativewind tailwindcss react-native-reanimated \
-  expo-haptics expo-av expo-font react-native-svg \
-  react-native-gesture-handler @react-native-async-storage/async-storage
-npm i -D tsx @types/node
-npm i zustand
+npx expo export --platform ios
 ```
 
-## 3. app.json
-
-```json
-{
-  "expo": {
-    "ios": {
-      "supportsTablet": true,
-      "requireFullScreen": true
-    }
-  }
-}
-```
-
-## 4. Feladatbank ellenőrzése
-
-```bash
-npm run validate
-```
-
-1574 feladatot és 66 témakört kell kiírnia, hibák nélkül. Ha az Expo tsconfig
-miatt a validátor nem fordul, használd a mellékelt `tsconfig.content.json`-t:
-
-```bash
-npx tsc --noEmit -p tsconfig.content.json
-```
-
-## 5. Első feladat
-
-A `docs/feature-tasks.md` Setup szakaszától indulj. A munkamenet elején
-mindig olvasd el a `CLAUDE.md`-t és a `docs/feature-tasks.md` munkanaplóját
-és döntésnaplóját.
-
-## Mi van már itt
+## Mi hol van
 
 ```
-CLAUDE.md                  fejlesztési szabályok — ez a forrás
-docs/feature-tasks.md      feladatlista + munkanapló + döntésnapló (D-001…D-014)
+CLAUDE.md                  fejlesztési szabályok — ez a forrás (mappastruktúra is itt)
+docs/feature-tasks.md      feladatlista + munkanapló + döntésnapló
 docs/design-prompts.md     képernyőnkénti AI mockup promptok
+docs/badge-prompts.md      jelvényképek promptjai és a képek feldolgozása
+docs/Learning2Kira.pdf     a jóváhagyott mockupok (6 képernyő, fekvő + álló)
 README.md                  a feladatbank leírása
-types/exercise.ts          Exercise (7 típus), Topic, SubjectId, SZOCSOPORT
-data/                      1574 feladat, 66 témakör, 4 tantárgy
-scripts/validate.ts        integritás-ellenőrző + számtani kiértékelő
-assets/images/mascot/      mascot-base.png (a stílusreferencia)
 ```
 
-A `components/`, `lib/`, `store/`, `constants/`, `hooks/` mappák üresen állnak,
-a CLAUDE.md mappastruktúrája szerint.
+## Munkamenet
+
+A munkamenet elején mindig olvasd el a `CLAUDE.md`-t és a
+`docs/feature-tasks.md` munkanaplóját és döntésnaplóját. Feladat végén:
+pipa, munkanapló-bejegyzés, (ha kell) döntésnapló, commit.

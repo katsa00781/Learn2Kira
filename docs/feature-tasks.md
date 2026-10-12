@@ -74,8 +74,8 @@
 - [x] Tantárgyválasztó igazítása a PDF-hez
 - [x] Témaválasztó igazítása a PDF-hez
 - [x] Gyakorló képernyő igazítása a PDF-hez
-- [ ] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
-- [ ] Maskot `thinking`, `celebrate`, `encourage` állapotok generálása a `base` referenciával
+- [x] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
+- [x] Maskot `thinking`, `celebrate`, `encourage` állapotok generálása a `base` referenciával
 - [ ] Füzetes mód képernyőjéhez prompt (nyugodt, váró hangulat)
 
 ### Ship előtt
@@ -110,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Dokumentáció naprakésszé tétele
+
+**Mit:** Átnéztem az összes doksit az aktuális állapottal szemben. `CLAUDE.md`: a hangkönyvtár `expo-audio` (D-017, az `expo-av` helyett) és a Nunito-csomag a tech stackben; a mappastruktúra (`subjects.tsx`, `constants/`, `lib/`, `hooks/`, `store/`); a store-ok (`practiceDays`, `resultStore`); a tantárgyválasztó-megjegyzés; új szabály a mockup-PDF-ről és arról, hogy eltérésnél a CLAUDE.md a mérvadó. `SETUP.md`: teljesen átírva (még azt állította, hogy az Expo projekt nincs inicializálva, `expo-av`-t telepíttetett, a mappákat üresnek írta): indítás, parancsok, a típusos útvonalak újragenerálása. `README.md`: builderek (`ni`, `nip`), a „Matek, környezetismeret nincs kész" sor, a már bekötött `validate` script. `docs/design-prompts.md`: a 2. prompt négy kártyás rács, és a fejlécben a PDF a jóváhagyott mockup. `docs/feature-tasks.md`: két elavult pipa (a 2. prompt átírása, a maskot-állapotok megvannak). A `docs/Learning2Kira.pdf` is bekerült a repóba, mert a doksik hivatkoznak rá.
+**Fájlok:** `CLAUDE.md`, `SETUP.md`, `README.md`, `docs/design-prompts.md`, `docs/feature-tasks.md`, `docs/Learning2Kira.pdf`
+**Tesztelve:** nem kódváltozás; a hivatkozott fájlok és parancsok létezését ellenőriztem (`package.json` scriptek, fájlfa).
+**Nyitva maradt:** a régebbi munkanapló-bejegyzések „ÁTMENETI" és „mockup nem volt" megjegyzései történeti állapotot írnak, szándékosan nem írtam át őket. A „Füzetes mód képernyőjéhez prompt" és a „Push GitHub-ra" sor nyitva. A CLAUDE.md „max. 10 fő dependency" sora ma 22 csomaggal nem teljesül (Expo-ökoszisztéma), ezt neked kell eldöntened, hogy a limitet vagy a számolást igazítsuk.
+**Commit:** `docs: dokumentáció naprakésszé tétele`
 
 ## 2026-10-12 – Jelvényképek bekötésének leírása
 

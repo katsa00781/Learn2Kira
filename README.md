@@ -6,7 +6,7 @@
 
 ```
 types/exercise.ts          Exercise, Topic, SubjectId és a SZOCSOPORT elnevezések
-data/builders.ts           rövidítő builderek (ml, mc, sg, oi, pu, mp)
+data/builders.ts           rövidítő builderek (ml, mc, sg, oi, pu, mp, ni, nip)
 data/nyelvtan/*.ts         16 témakör, a tankönyv fejezetei szerint
 data/helyesiras/*.ts       3 témakör, spirálisan visszatérő anyag
 data/matek/*.ts            28 témakör, a Matematika 3. fejezetei szerint
@@ -15,8 +15,8 @@ data/index.ts              subjects, allTopics, allExercises, lekérdezők
 scripts/validate.ts        integritás-ellenőrző
 ```
 
-Másold be az Expo projekt gyökerébe. A `@/` alias a CLAUDE.md szerinti
-elrendezésre hivatkozik.
+A `@/` alias a CLAUDE.md szerinti elrendezésre hivatkozik. Az app indítása és a
+parancsok: `SETUP.md`.
 
 ## A négy tantárgy
 
@@ -86,11 +86,7 @@ az opciókkal egy témakörön belül hiba. (A „Melyik írásmód helyes?" tí
 jogosan ismétlődik más opciókkal, ezért az opciók is a kulcs részei.)
 Figyelmeztet, ha egy témakörben 10-nél kevesebb feladat van.
 
-Vedd fel npm scriptként, és futtasd minden tartalombővítés után:
-
-```json
-"scripts": { "validate": "tsx scripts/validate.ts" }
-```
+Az `npm run validate` be van kötve; futtasd minden tartalombővítés után.
 
 ## Ami a matekból kimarad
 
@@ -111,8 +107,9 @@ jelzővel mennek: füzetben oldja meg, csak az eredményt írja be, nincs időny
 - **Közmondások, szólások.** A Szövegalkotás 3. 23. oldalán van, és
   `match-pairs`-re alkalmas lenne. Ez az egyetlen szövegalkotási rész, amit
   érdemes később behozni.
-- **Matek, környezetismeret, digitális kultúra.** A kártyájuk látszik,
-  tartalom nincs.
+- **Digitális kultúra.** Harmadikban önálló tantárgy, de a témái (robotika,
+  kódolás alapjai, információszerzés) csinálós anyagok, nem drillezhetők jól.
+  Szándékosan kimarad.
 
 ## Forrás
 

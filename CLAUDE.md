@@ -35,7 +35,7 @@ Négy tantárgykártya van, ebben a sorrendben. **Mind a négy élesben van**, a
 
 Összesen 1574 feladat, 66 témakör.
 
-A tantárgyválasztó **rácsban** rendezi a kártyákat, nem egy sorban. A `design-prompts.md` 2. promptja még három kártyát ír; ha mockupot generálsz, azt előbb írd át.
+A tantárgyválasztó **rácsban** rendezi a kártyákat, nem egy sorban. A `design-prompts.md` 2. promptja is négy kártyás rácsot ír. A `docs/Learning2Kira.pdf` mockupján még három kártya van (Matek és Természet „Coming soon" állapotban); a kód a négy éles kártyát követi.
 
 A **digitális kultúra** harmadikban önálló tantárgy, de nincs a scope-ban: a témakörei (robotika, kódolás alapjai, információszerzés) csinálós anyagok, nem drillezhetők jól.
 
@@ -50,7 +50,8 @@ A **digitális kultúra** harmadikban önálló tantárgy, de nincs a scope-ban:
 - AsyncStorage (perzisztencia)
 - react-native-reanimated (animációk)
 - expo-haptics (haptikus visszajelzés)
-- expo-av (hangeffektek)
+- expo-audio (hangeffektek; az `expo-av` helyett, lásd D-017; a hangfeladatnál kerül telepítésre)
+- Nunito betűtípus (`@expo-google-fonts/nunito`, lásd D-017)
 - react-native-svg + react-native-svg-transformer (vektoros illusztrációk)
 - **Auth:** nincs
 - **Adatbázis:** nincs. A tartalom típusos TypeScript a `data/` mappában, a haladás AsyncStorage-ban.
@@ -155,6 +156,7 @@ app/
   (tabs)/
     index.tsx          # kezdőlap
     rewards.tsx        # jutalmak
+  subjects.tsx         # tantárgyválasztó
   subject/[id].tsx     # témaválasztó
   practice/[topicId].tsx
   result.tsx
@@ -164,7 +166,10 @@ components/
   ui/
 constants/
   colors.ts
-  images.ts
+  images.ts            # minden kép központi importja (maskot, jelvények)
+  badges.ts            # a jelvények jegyzéke
+  subjects.ts          # tantárgykártyák színe és jele
+  shadows.ts
 data/
   builders.ts          # ml, mc, sg, oi, pu, mp, ni, nip
   index.ts             # subjects, allTopics, allExercises, lekérdezők
@@ -172,12 +177,13 @@ data/
   helyesiras/
   matek/
   kornyezet/
-hooks/
-lib/
-  leitner.ts
+hooks/                 # usePracticeSession, useStoresHydrated
+lib/                   # tiszta függvények, mind tesztelt (npm test)
+  leitner.ts           # ismétlés
+  badges.ts, level.ts, streak.ts, calendar.ts, progress.ts, answers.ts, shuffle.ts, chunk.ts
 scripts/
   validate.ts
-store/
+store/                 # progress, review, session, result
 types/
 assets/
   images/
@@ -369,9 +375,10 @@ A `lib/leitner.ts` tiszta függvényeket exportál: `nextBox()`, `dueDate()`, `s
 - **AsyncStorage** – perzisztencia
 
 Store-ok és fő state mezők:
-- `progressStore`: `xp`, `streak`, `lastPracticeDate`, `unlockedBadges`, `dailyGoalDone`
+- `progressStore`: `xp`, `streak`, `lastPracticeDate`, `unlockedBadges`, `dailyGoalDone`, `practiceDays`
 - `reviewStore`: `cards: Record<exerciseId, { box: number; dueAt: string }>`
 - `sessionStore`: az aktuális kör állapota (nem perzisztált)
+- `resultStore`: a legutóbbi kör összegzése az Eredmény képernyőnek (nem perzisztált)
 
 **Streak szabály:** a sorozat akkor nő, ha aznap legalább egy kört befejezett. Ha kimarad egy nap, nullázódik — de a v1-ben legyen egy „mentőöv" nap havonta, hogy egy elmaradt nap ne vegye el a kedvét.
 
@@ -435,6 +442,7 @@ A hangot lehessen kikapcsolni (beállítás), a haptikát ne.
 - A megadott designt pontosan replikáld
 - Layout, spacing, padding, betűméret, hierarchia, színek, border-radius, árnyékok, igazítás és arányok mind egyezzenek
 - Ne approximálj, ne egyszerűsíts engedély nélkül
+- A jóváhagyott mockupok a `docs/Learning2Kira.pdf`-ben vannak (6 képernyő, fekvő iPad + álló iPhone). A PDF angol szövegű, és néhány helyen eltér a CLAUDE.md-től (3 tantárgykártya, szófaji szakszavak a témakörökben, 60%-os napi cél): ilyenkor a CLAUDE.md a mérvadó, az eltérést a Döntésnaplóban rögzítjük
 
 ---
 

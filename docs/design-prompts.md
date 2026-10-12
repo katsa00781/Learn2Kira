@@ -2,6 +2,8 @@
 
 Képernyőnkénti promptok AI mockup generáláshoz (Nano Banana / Midjourney / Ideogram).
 
+**A jóváhagyott mockupok a `docs/Learning2Kira.pdf`-ben vannak** (6 képernyő, fekvő iPad + álló iPhone); az app ezek alapján készült. A promptok a mockupok eredetijei, új képernyőhöz vagy változathoz használd őket. A PDF angol szövegű, és a tantárgyválasztón még három kártya van (Matek és Természet „Coming soon" állapotban): az app négy éles kártyát mutat, lásd a 2. promptot.
+
 ## Használat
 
 1. Generáld le először a **Kezdőlapot** (1. prompt)
@@ -85,20 +87,25 @@ SCREEN: Subject selection screen, landscape iPad.
 LAYOUT:
 - Top left: small back arrow in a circular white button.
 - Top center: bold heading "Choose a subject"
-- Top right: small mascot peeking, half-size, cheerful.
-- Center: three large cards side by side, equal width, tall, 24px radius,
-  white background with soft shadow:
-  - Card 1 (ACTIVE): peach circular icon with a book/letter symbol.
-    Title "Grammar". Below it a thin progress bar, 30% filled in dusty rose,
-    and small grey text "8 topics".
-  - Card 2 (LOCKED): teal circular icon with numbers symbol. Title "Math".
-    Whole card at 40% opacity, small grey lock badge in the top-right corner
-    and a tiny pill label "Coming soon".
-  - Card 3 (LOCKED): sage green circular icon with a leaf symbol.
-    Title "Nature". Same locked treatment as card 2.
+- Top right: small mascot cheering, half-size, overlapping the top edge of the cards.
+- Center: FOUR large cards in a 2x2 grid, equal size, tall, 24px radius,
+  white background with soft shadow. ALL cards are active, none is locked:
+  - Card 1: peach circular icon with the letters "Aa". Title "Grammar".
+    Below it a thin progress bar, 30% filled in dusty rose, and small grey
+    text "16 topics". This card has a thin dusty rose border and a soft
+    rose-tinted shadow, because it has already been started.
+  - Card 2: dusty rose circular icon with the letters "ly". Title "Spelling".
+    Thin progress bar, empty, small grey text "3 topics".
+  - Card 3: teal circular icon with the digits "12". Title "Math".
+    Thin progress bar, empty, small grey text "28 topics".
+  - Card 4: sage green circular icon with a leaf symbol. Title "Nature".
+    Thin progress bar, empty, small grey text "19 topics".
 
-IMPORTANT: the two locked cards must look clearly dimmed and inactive,
-but still friendly — not greyed-out ugly.
+IMPORTANT: no lock icons, no dimmed cards, no "Coming soon" labels.
+The four cards must look equally inviting.
+
+PORTRAIT / PHONE VARIANT: the four cards stack vertically as wide horizontal
+cards: icon on the left, title + progress bar + topic count on the right.
 ```
 
 ---
