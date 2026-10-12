@@ -9,7 +9,7 @@
 - [x] Git init, első commit: "init"
 - [x] `app.json`: `supportsTablet: true`, `requireFullScreen: true`, iPad orientáció
 - [x] NativeWind telepítése és konfigurálása, színek a `tailwind.config.js`-be
-- [ ] Nunito betűtípus betöltése (`expo-font`) — **függ D-017-től (jóváhagyás kell)**
+- [x] Nunito betűtípus betöltése (`expo-font`)
 - [x] `react-native-svg` + `react-native-svg-transformer` beállítása (metro config)
 - [x] Maskot assetek elhelyezése: `assets/images/mascot/mascot-base.png`
 - [x] `constants/colors.ts` és `constants/images.ts` létrehozása
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Nunito betűtípus
+
+**Mit:** `@expo-google-fonts/nunito` + `expo-font` telepítve. A gyökér layout betölti a 400/600/700 súlyt, és a splash addig marad, amíg kész (hiba esetén is továbbindul). A Tailwindben `font-title` (700), `font-task` (600), `font-body` (400) osztályok. A kezdőlap próbaszövege `font-title`-t használ.
+**Fájlok:** `app/_layout.tsx`, `tailwind.config.ts`, `app/index.tsx`, `package.json`, `app.json` (az `expo install` felvette az `expo-font` plugint)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`: a bundle csak a három .ttf-et tartalmazza. Eszközön a megjelenést még NEM néztem meg.
+**Nyitva maradt:** `expo-audio` jóváhagyva, de még nincs telepítve (a hangeffektek feladatánál jön).
+**Commit:** `feat: Nunito betűtípus betöltése`
 
 ## 2026-10-12 – `reviewStore` (Leitner kártyák)
 
@@ -308,11 +316,13 @@ a másik szóba jöhető opció.
 **Alternatíva:** `tailwind.config.js` másolt hex értékekkel. Elvetve: a két lista előbb-utóbb eltérne.
 **Visszavonható?** Igen.
 
-## D-017 – Nyitott: hang- és betűtípus-könyvtár (jóváhagyásra vár)
+## D-017 – Hang- és betűtípus-könyvtár: `expo-audio`, `@expo-google-fonts/nunito`
 **Dátum:** 2026-10-12
-**Döntés:** Még nincs. Az `expo-av` utolsó kiadása a 16.x, ami nem az SDK 57-hez készült; az SDK 57-hez az `expo-audio` (57.0.x) tartozik. A Nunito-hoz vagy a `@expo-google-fonts/nunito` csomag, vagy kézzel bemásolt .ttf fájlok kellenek (`expo-font` már fent van). A CLAUDE.md szerint új könyvtárhoz engedély kell, ezért egyiket sem telepítettem.
-**Javaslat:** `expo-audio` az `expo-av` helyett (ugyanaz a cél, támogatott); Nunito .ttf fájlok az `assets/fonts/`-ba, plusz függőség nélkül.
-**Alternatíva:** `expo-av` 16.x erőltetése SDK 57 alatt (összeférhetetlenség kockázata), vagy `@expo-google-fonts/nunito` (egy plusz csomag, de kényelmes).
+**Döntés:** Hanghoz `expo-audio` az `expo-av` helyett (jóváhagyva, telepítés a hangfeladatnál). Nunito-hoz a `@expo-google-fonts/nunito` csomag (telepítve), súlyonkénti importtal, hogy csak a 400/600/700 kerüljön a bundle-be.
+**Miért:** Az `expo-av` utolsó kiadása (16.x) nem az SDK 57-hez készült, az `expo-audio` a támogatott utód. A betűcsomag kényelmesebb, mint a kézzel bemásolt .ttf-ek, és a verziót az `expo install` kezeli.
+**Alternatíva:** Kézzel bemásolt .ttf fájlok az `assets/fonts/`-ba (nincs extra csomag, de karbantartandó fájlok); `expo-av` 16.x erőltetése (összeférhetetlenségi kockázat).
+**Megjegyzés:** a CLAUDE.md tech stack szakasza még `expo-av`-t említ, ezt érdemes `expo-audio`-ra átírni.
+**Visszavonható?** Igen.
 
 ## D-018 – `react-dom` pin és TypeScript 6
 **Dátum:** 2026-10-12

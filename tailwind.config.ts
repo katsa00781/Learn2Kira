@@ -10,6 +10,12 @@ export default {
     extend: {
       colors,
       borderRadius: { card: "24px" },
+      // RN-en súlyonként külön betűcsalád kell: font-title / font-task / font-body
+      fontFamily: {
+        title: ["Nunito_700Bold"],
+        task: ["Nunito_600SemiBold"],
+        body: ["Nunito_400Regular"],
+      },
     },
   },
   plugins: [],
