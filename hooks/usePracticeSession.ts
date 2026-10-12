@@ -20,9 +20,7 @@ export function usePracticeSession(topicId: string) {
 
   useEffect(() => {
     if (!hydrated) return;
-    // A SortIntoGroups még nincs kész, addig nem kerülhet körbe
-    const playable = exercisesByTopic(topicId).filter((e) => e.type !== "sort-into-groups");
-    const exercises = selectSessionExercises({ exercises: playable, cards: useReviewStore.getState().cards, today });
+    const exercises = selectSessionExercises({ exercises: exercisesByTopic(topicId), cards: useReviewStore.getState().cards, today });
     useSessionStore.getState().start(topicId, exercises);
     return () => useSessionStore.getState().reset();
   }, [hydrated, topicId, today]);

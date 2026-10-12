@@ -1,5 +1,3 @@
-import { Text } from "react-native";
-import { Card } from "@/components/ui/Card";
 import type { Exercise } from "@/types/exercise";
 import { MatchPairs } from "./MatchPairs";
 import { MissingLetter } from "./MissingLetter";
@@ -7,6 +5,7 @@ import { MultipleChoice } from "./MultipleChoice";
 import { NumericInput } from "./NumericInput";
 import { OrderItems } from "./OrderItems";
 import { Punctuation } from "./Punctuation";
+import { SortIntoGroups } from "./SortIntoGroups";
 
 type Props = {
   exercise: Exercise;
@@ -29,12 +28,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: Props) {
     case "match-pairs":
       return <MatchPairs exercise={exercise} onAnswer={onAnswer} />;
     case "sort-into-groups":
-      // ÁTMENETI: a SortIntoGroups még nincs kész, a gyakorló kör addig ne válassza ezt a típust
-      return (
-        <Card className="w-full">
-          <Text className="font-task text-[22px] text-text">Ez a feladattípus hamarosan érkezik.</Text>
-        </Card>
-      );
+      return <SortIntoGroups exercise={exercise} onAnswer={onAnswer} />;
     default:
       return assertNever(exercise);
   }

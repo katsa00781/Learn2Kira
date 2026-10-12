@@ -15,7 +15,7 @@ import { usePracticeSession } from "@/hooks/usePracticeSession";
 const screen = { flex: 1, backgroundColor: colors.background };
 
 // Ezeken a típusokon a maskot a kártyán kívül (alul) áll, mert a kártya maga a kezelőfelület
-const MASCOT_IN_BAR = ["match-pairs", "order-items"];
+const MASCOT_IN_BAR = ["match-pairs", "order-items", "sort-into-groups"];
 
 const PRAISE = ["Ügyes vagy, Kira!", "Szuper!", "Pontosan!", "Úgy van!"];
 

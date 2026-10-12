@@ -45,7 +45,7 @@
 - [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
 - [x] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
 - [x] `components/exercise/MissingLetter.tsx` — 70 feladat
-- [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
+- [x] `components/exercise/SortIntoGroups.tsx` (érintéses, lásd D-032) — 96 feladat
 - [x] `components/exercise/OrderItems.tsx` — 42 feladat
 - [x] `components/exercise/MatchPairs.tsx` — 32 feladat
 - [x] `components/exercise/Punctuation.tsx` — 15 feladat
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `SortIntoGroups` komponens
+
+**Mit:** Csoportosítás érintéssel (`components/exercise/SortIntoGroups.tsx`): felül a kevert szavak készlete, alatta a csoportok (fekvőben egymás mellett, telefonon egymás alatt). A gyerek megérinti a szót (kiemelődik), aztán a csoportot; a csoportok ilyenkor szaggatott rózsaszín keretet kapnak. Jó csoport: a szó zölden bekerül. Rossz csoport: a csoport 0,7 mp-re terrakotta, a szó visszakerül a készletbe, a tévedés számít. A feladat akkor helyes, ha egyetlen tévedés nélkül sikerült (mint a `MatchPairs`, D-022). Az utasítás fix („Válogasd csoportokba a szavakat!"), a `hint` „Tipp" gombra nyílik. A gyakorló kör innentől a `sort-into-groups` feladatokat is adja (a szűrés megszűnt), így a három rövid témakör (`nyelvtan-mit-fejeznek-ki`, `matek-valogatas`, `kornyezet-allatok`) is eléri a 8-10 feladatot, és a témakör-„kész" állapot is elérhető. A maskot az alsó sávban marad (D-028).
+**Fájlok:** `components/exercise/SortIntoGroups.tsx`, `components/exercise/ExerciseRenderer.tsx` (az ÁTMENETI helyettesítő törölve), `hooks/usePracticeSession.ts`, `app/practice/[topicId].tsx`
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Adat: 96 feladat, 2–4 csoport, 4–6 elem, a leghosszabb elem 28, a leghosszabb csoportnév 26 karakter. Eszközön NEM próbáltam; a hosszú csoportnevek 4 csoportnál fekvő iPaden (szűk oszlop) tördelődnek, ellenőrizendő.
+**Nyitva maradt:** nincs húzás (D-032). Tévedés után a gyerek addig próbálkozik, amíg ki nem jön, helyes megoldást nem mutatunk (D-022 szerint).
+**Commit:** `feat: SortIntoGroups feladatkomponens`
 
 ## 2026-10-12 – Jelvényrendszer
 
@@ -578,5 +586,12 @@ a másik szóba jöhető opció.
 **Miért:** A kimaradt háromhoz nincs mérhető feltétel, vagy rossz szokást ösztönözne (késő esti gyakorlás gyereknél); a jelvényeket úgy választottam, hogy mind a négy tantárgy kapjon egyet, és a feladatlista jelvényei (első kör, 7 nap, 100%, téma befejezése) mind benne legyenek. A PDF-ben sincsenek matricák, és a CLAUDE.md az első verziótól a legkisebb működő változatot kéri. A `practiceDays` a legegyszerűbb forrás a naptárnak; a régi mentésben hiányzó mező üres listával indul, nincs migráció.
 **Alternatíva:** Mind a 12 jelvény (három feloldhatatlan lenne); a naptár a sorozatból visszaszámolva (kimaradt napokat nem tudná mutatni).
 **Visszavonható?** Igen, a jegyzék egy fájl.
+
+## D-032 – Csoportosítás érintéssel, nem húzással
+**Dátum:** 2026-10-12
+**Döntés:** A `SortIntoGroups` érintéses („szó, aztán csoport"), nem drag & drop. Ez felülírja a D-021 megjegyzését, hogy a húzás a `SortIntoGroups`-hoz készül. Gesture Handler és Reanimated nem kell hozzá.
+**Miért:** A D-021 érvei itt is állnak (pontos gyerekujjnak, elérhető VoiceOverrel, nincs félrecsúszó elem), és az érintés tökéletesen működik: a szó kijelölése után a csoportok kiemelődnek. A húzáshoz célzónák mérése és gesztus-kezelés kellene, amit szimulátor nélkül nem tudnék eszközön ellenőrizni; ugyanazt a tanulási eredményt adja, mint az érintés. Egységes marad a `MatchPairs`-szal és az `OrderItems`-szel.
+**Alternatíva:** Húzás Reanimated + Gesture Handlerrel (a feladatlista eredeti terve). Ha Kira unalmasnak találja, később cserélhető, a szerződés (`exercise`, `onAnswer`) nem változik.
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
