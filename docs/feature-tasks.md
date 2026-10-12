@@ -69,6 +69,10 @@
 - [ ] Napi cél megjelenítése és teljesítés visszajelzése
 
 ### Design
+- [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
+- [ ] Tantárgyválasztó igazítása a PDF-hez
+- [ ] Témaválasztó igazítása a PDF-hez
+- [ ] Gyakorló képernyő igazítása a PDF-hez
 - [ ] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
 - [ ] Maskot `thinking`, `celebrate`, `encourage` állapotok generálása a `base` referenciával
 - [ ] Füzetes mód képernyőjéhez prompt (nyugodt, váró hangulat)
@@ -105,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Kezdőlap igazítása a PDF-hez
+
+**Mit:** Az eddigi képernyők szöveges prompt alapján készültek, mockup nélkül; most a `docs/Learning2Kira.pdf` a mérték. Kezdőlapon: a statisztika-pirulák tartalom-szélesek (fekvőben), körvonalas láng- és csillag-ikonnal; a „Mai cél" fehér kártyába került, cím + százalék egy sorban, vastag zöld sáv bézs sávhátteren; a „Kezdjük" gomb nyilat kapott és rózsaszín árnyékot; a maskot rózsás, kétrétegű talapzaton áll, szétszórt színes pöttyökkel és csillagokkal. Álló módban a sorrend: üdvözlés, maskot, pirulák, cél, a gomb alul. A `ProgressBar` sávháttere tónusfüggő lett (rózsás / bézs), `size="lg"` vastag változattal; ez az összes képernyőn érvényes.
+**Fájlok:** `app/(tabs)/index.tsx`, `components/ui/Icons.tsx` (+`outline`, +ArrowRightIcon), `components/ui/ProgressBar.tsx`, `components/ui/StatPill.tsx`, `constants/colors.ts` (+`darkTones`)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Képernyőképes összevetés NEM történt: nincs elérhető iPad-szimulátor ezen a gépen, az arányok a PDF-ből mért értékek (px ÷ 1,39) alapján készültek.
+**Nyitva maradt:** a mai cél most csak 0% vagy 100% (egy kör = a cél); a PDF 60%-ot mutat, ahhoz a napi cél több körből álljon (lásd „Napi cél" feladat). A pöttyök és csillagok helye közelítés.
+**Commit:** `feat: kezdőlap igazítása a PDF mockuphoz`
 
 ## 2026-10-12 – Témaválasztó
 
@@ -482,5 +494,12 @@ a másik szóba jöhető opció.
 **Miért:** A CLAUDE.md haladásjelzőt kér, hogy a nagy témakörök (legfeljebb 75 feladat) ne tűnjenek végtelennek; ehhez a sáv folyamatos, gyors mozgása számít, és minden körrel látszik előrelépés. Egy „elsajátított" mérték (pl. 4–5. doboz) lassan és ugrálva mozogna, és a rontás visszavenne belőle, ami a motivációnak árt.
 **Alternatíva:** Elsajátítottsági arány (doboz ≥ 3). Pedagógiailag pontosabb, de demotiváló. Később egy második, halvány réteggel kiegészíthető.
 **Visszavonható?** Igen, a `seenRatio` cseréjével.
+
+## D-027 – Származtatott sötét árnyalatok a design tokeneken túl
+**Dátum:** 2026-10-12
+**Döntés:** A `constants/colors.ts`-ben külön `darkTones` (primary, secondary, accent, success sötétebb változata) szerepel, szövegekhez halvány kör- vagy sávhátteren (pl. a „0%" felirat, később a témakör-körök betűi).
+**Miért:** A PDF-ben a százalékok és a körökben lévő jelek a tokenszínek sötétebb árnyalatai; a tokenszín (pl. #7FB069) fehér/halvány háttéren olvashatatlanul világos lenne, a gyerek pedig nehezen olvas. Nem kerültek a Tailwind témába, hogy a fő tokenlista változatlan maradjon.
+**Alternatíva:** Csak a tokenszínek használata (rosszabb kontraszt); átlátszóság-trükk (nem ad sötétebb színt).
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

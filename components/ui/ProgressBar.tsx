@@ -3,20 +3,25 @@ import { View } from "react-native";
 type Props = {
   /** 0 és 1 közötti érték. */
   value: number;
-  /** A kitöltés színe: alapból poros rózsa, a napi célnál zsálya zöld. */
+  /** A kitöltés színe: alapból poros rózsa (rózsaszínes sávon), zsálya zöld (bézs sávon). */
   tone?: "primary" | "success";
+  /** `lg`: a kezdőlapi napi cél vastag sávja. */
+  size?: "md" | "lg";
   className?: string;
 };
 
-export function ProgressBar({ value, tone = "primary", className = "" }: Props) {
+const trackByTone = { primary: "bg-primary/15", success: "bg-text/10" };
+const fillByTone = { primary: "bg-primary", success: "bg-success" };
+
+export function ProgressBar({ value, tone = "primary", size = "md", className = "" }: Props) {
   const percent = Math.round(Math.min(Math.max(value, 0), 1) * 100);
   return (
     <View
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: 100, now: percent }}
-      className={`h-3 overflow-hidden rounded-full bg-secondary/25 ${className}`}
+      className={`overflow-hidden rounded-full ${size === "lg" ? "h-[18px]" : "h-[10px]"} ${trackByTone[tone]} ${className}`}
     >
-      <View className={`h-full rounded-full ${tone === "success" ? "bg-success" : "bg-primary"}`} style={{ width: `${percent}%` }} />
+      <View className={`h-full rounded-full ${fillByTone[tone]}`} style={{ width: `${percent}%` }} />
     </View>
   );
 }

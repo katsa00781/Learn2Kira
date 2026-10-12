@@ -3,16 +3,18 @@ import { useEffect } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Mascot } from "@/components/mascot/Mascot";
-import { FlameIcon, StarIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatPill } from "@/components/ui/StatPill";
-import { colors } from "@/constants/colors";
+import { colors, darkTones } from "@/constants/colors";
+import { softShadow } from "@/constants/shadows";
 import { useStoresHydrated } from "@/hooks/useStoresHydrated";
 import { toDay } from "@/lib/leitner";
 import { currentStreak } from "@/lib/streak";
 import { useProgressStore } from "@/store/progressStore";
 
 const screen = { flex: 1, backgroundColor: colors.background };
+const startShadow = { ...softShadow, shadowColor: colors.primary, shadowOpacity: 0.3, shadowOffset: { width: 0, height: 8 }, shadowRadius: 16 };
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -27,44 +29,99 @@ export default function HomeScreen() {
     if (hydrated) useProgressStore.getState().startDay(toDay(new Date()));
   }, [hydrated]);
 
+  const greeting = (
+    <View className="gap-1">
+      <Text className="font-title text-[56px] leading-[64px] text-primary">Szia Kira!</Text>
+      <Text className="font-task text-[24px] text-textMuted">Készen állsz a gyakorlásra?</Text>
+    </View>
+  );
+
+  const mascot = (
+    <View className={`items-center justify-center ${landscape ? "flex-1 self-stretch" : "py-4"}`}>
+      <View className="absolute left-[6%] top-[8%] h-[44px] w-[44px] rounded-full bg-accent/40" />
+      <View className="absolute right-[8%] top-[4%] h-[20px] w-[20px] rounded-full bg-secondary/50" />
+      <View className="absolute bottom-[14%] left-[4%] h-[26px] w-[26px] rounded-full bg-secondary/40" />
+      <View className="absolute bottom-[26%] right-[6%] h-[14px] w-[14px] rounded-full bg-accent/50" />
+      <View className="absolute left-[20%] top-[26%]">
+        <StarIcon size={20} color={colors.secondary} />
+      </View>
+      <View className="absolute right-[22%] top-[10%]">
+        <StarIcon size={30} color={colors.accent} />
+      </View>
+      <View className="absolute right-[10%] top-[36%]">
+        <StarIcon size={18} color={colors.primary} />
+      </View>
+      {/* Puha talapzat a maskot alatt */}
+      <View className="absolute bottom-[4%] h-[64px] w-[84%] items-center justify-center rounded-full bg-primary/15">
+        <View className="h-[40px] w-[70%] rounded-full bg-primary/10" />
+      </View>
+      <Mascot state="base" size={landscape ? 340 : 220} />
+      <View className="h-[20px]" />
+    </View>
+  );
+
+  const stats = (
+    <View className="flex-row gap-3">
+      <StatPill
+        className={landscape ? "" : "flex-1"}
+        icon={<FlameIcon size={30} color={colors.error} outline />}
+        value={currentStreak(streak, lastPracticeDate, today)}
+        label="napos sorozat"
+      />
+      <StatPill className={landscape ? "" : "flex-1"} icon={<StarIcon size={30} color={colors.accent} outline />} value={xp} label="XP" />
+    </View>
+  );
+
+  const goal = (
+    <View className="gap-3 rounded-card bg-surface px-6 py-5" style={softShadow}>
+      <View className="flex-row items-center justify-between">
+        <Text className="font-title text-[20px] text-text">Mai cél</Text>
+        <Text className="font-title text-[20px]" style={{ color: darkTones.success }}>
+          {dailyGoalDone ? "100%" : "0%"}
+        </Text>
+      </View>
+      <ProgressBar tone="success" size="lg" value={dailyGoalDone ? 1 : 0} />
+    </View>
+  );
+
+  const start = (
+    <Pressable
+      accessibilityRole="button"
+      onPress={() => router.push("/subjects")}
+      className="min-h-[76px] flex-row items-center justify-center gap-3 rounded-card bg-primary"
+      style={({ pressed }) => [startShadow, { transform: [{ scale: pressed ? 0.98 : 1 }] }]}
+    >
+      <Text className="font-title text-[30px] text-surface">Kezdjük</Text>
+      <ArrowRightIcon size={30} color={colors.surface} />
+    </Pressable>
+  );
+
+  if (landscape) {
+    return (
+      <SafeAreaView style={screen}>
+        <ScrollView contentContainerClassName="flex-grow flex-row items-center justify-center gap-10 p-8">
+          {mascot}
+          <View className="w-full max-w-[460px] flex-1 gap-6">
+            {greeting}
+            {stats}
+            {goal}
+            {start}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={screen}>
-      <ScrollView contentContainerClassName={`flex-grow items-center justify-center gap-10 p-8 ${landscape ? "flex-row" : ""}`}>
-        <View className={`items-center justify-center ${landscape ? "flex-1" : ""}`}>
-          <View className="absolute left-[8%] top-[6%] h-6 w-6 rounded-full bg-accent/60" />
-          <View className="absolute right-[10%] top-[18%] h-4 w-4 rounded-full bg-secondary/60" />
-          <View className="absolute right-[18%] top-[2%]">
-            <StarIcon size={28} color={colors.accent} />
-          </View>
-          <Mascot state="base" size={landscape ? 340 : 200} />
-          <View className="-mt-3 h-[36px] w-[70%] rounded-full bg-secondary/25" />
+      <ScrollView contentContainerClassName="flex-grow justify-between gap-5 p-6">
+        <View className="gap-2">
+          {greeting}
+          {mascot}
+          {stats}
+          {goal}
         </View>
-
-        <View className={`w-full max-w-[520px] gap-6 ${landscape ? "flex-1" : ""}`}>
-          <View className="gap-1">
-            <Text className="font-title text-[48px] leading-[56px] text-primary">Szia Kira!</Text>
-            <Text className="font-body text-[22px] text-textMuted">Készen állsz a gyakorlásra?</Text>
-          </View>
-
-          <View className="flex-row gap-4">
-            <StatPill icon={<FlameIcon size={32} color={colors.accent} />} value={currentStreak(streak, lastPracticeDate, today)} label="napos sorozat" />
-            <StatPill icon={<StarIcon size={32} color={colors.accent} />} value={xp} label="XP" />
-          </View>
-
-          <View className="gap-2">
-            <Text className="font-task text-[18px] text-text">{dailyGoalDone ? "Mai cél: kész! 🎉" : "Mai cél: 1 gyakorlókör"}</Text>
-            <ProgressBar tone="success" value={dailyGoalDone ? 1 : 0} />
-          </View>
-
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => router.push("/subjects")}
-            className="min-h-[72px] items-center justify-center rounded-card bg-primary"
-            style={({ pressed }) => ({ transform: [{ scale: pressed ? 0.98 : 1 }] })}
-          >
-            <Text className="font-title text-[28px] text-surface">Kezdjük!</Text>
-          </Pressable>
-        </View>
+        {start}
       </ScrollView>
     </SafeAreaView>
   );
