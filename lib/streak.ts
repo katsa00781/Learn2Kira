@@ -9,3 +9,12 @@ export function nextStreak(streak: number, lastPracticeDate: string | null, toda
   if (lastPracticeDate === addDays(today, -1)) return streak + 1;
   return 1;
 }
+
+/**
+ * A kijelzett sorozat: ha tegnap óta nem gyakorolt, a tárolt szám már elveszett,
+ * akkor is, ha az új kör még nem írta át a tárolt értéket.
+ */
+export function currentStreak(streak: number, lastPracticeDate: string | null, today: string): number {
+  if (lastPracticeDate === today || lastPracticeDate === addDays(today, -1)) return streak;
+  return 0;
+}

@@ -53,7 +53,7 @@
 - [ ] **Füzetes mód** (`paper: true`): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
 
 ### Képernyők (sorrendben)
-- [ ] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
+- [x] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
 - [ ] Tantárgyválasztó – **4 kártya rácsban**, mind élesben
 - [ ] Témaválasztó – témakörök haladásjelzővel, tankönyvi sorrendben
 - [x] Gyakorló képernyő – 8-10 feladat, azonnali visszajelzés, haladássáv
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Kezdőlap (+ tabok)
+
+**Mit:** A `design-prompts.md` 1. promptja szerint: bal oldalt a maskot puha talapzaton, kis lebegő díszekkel; jobb oldalt „Szia Kira!" (poros rózsa), almondat, két statisztika-pirula (napos sorozat, XP), mai cél sáv (zsálya zöld) és a nagy „Kezdjük!" gomb. Álló módban és telefonon egymás alatt. Alul két tab: Kezdőlap és Jutalmak. A kijelzett sorozat `currentStreak()` (3 teszt): ha tegnap óta nem gyakorolt, 0-t mutat, nem a régi számot. A `startDay()` induláskor lefut (betöltés után). A „Kezdjük!" a `/subjects` útra visz. Az ideiglenes próbaoldal (feladat-galéria) törölve, a gyakorló kör innentől a valódi útvonalon érhető el.
+**Fájlok:** `app/(tabs)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/rewards.tsx` (ÁTMENETI), `app/subjects.tsx` (ÁTMENETI), `app/index.tsx` (törölve), `components/ui/Icons.tsx`, `components/ui/StatPill.tsx`, `components/ui/ProgressBar.tsx` (`tone`), `lib/streak.ts`, `lib/streak.test.ts`
+**Tesztelve:** `npm test` 37/37, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg; mockup-kép nem volt, a prompt szöveges leírása alapján készült, ezért az arányok közelítések.
+**Nyitva maradt:** a Jutalmak és a Tantárgyválasztó ÁTMENETI helyettesítő (utóbbi a következő feladat); a mai cél egyelőre „1 gyakorlókör" (a Motivációs rétegben lévő napi cél sor még nyitott); ha lesz mockup, az arányokat egyeztetni kell.
+**Commit:** `feat: kezdőlap és tabok`
 
 ## 2026-10-12 – Gyakorló képernyő (+ maskot, haptika)
 
@@ -443,6 +451,13 @@ a másik szóba jöhető opció.
 **Döntés:** A `usePracticeSession` megvárja, hogy a `progressStore` és a `reviewStore` betöltődjön az AsyncStorage-ból (`useStoresHydrated`), és csak utána hívja a `selectSessionExercises`-t. A kör egyszer áll össze, belépéskor; a kilépéskor a `sessionStore` törlődik.
 **Miért:** A perzisztált store-ok betöltése aszinkron. Üres `cards`-szal az esedékes ismétlések kimaradnának, és a gyerek „új" feladatként kapná újra, amit már rontott: a Leitner-ismétlés csendben nem működne, hibaüzenet nélkül.
 **Alternatíva:** Splash-en várni a betöltésre az egész appban. Elvetve: a többi képernyő nem függ tőle, és a hook helyi, egyszerű megoldás.
+**Visszavonható?** Igen.
+
+## D-025 – Útvonalak: `/subjects` önálló képernyő, két tab
+**Dátum:** 2026-10-12
+**Döntés:** A tantárgyválasztó külön útvonal (`app/subjects.tsx`), a kezdőlapról a „Kezdjük!" nyitja meg; a CLAUDE.md mappastruktúrájához ez az egy fájl került hozzá. A tabbar csak a két fő helyen van (Kezdőlap, Jutalmak), a gyakorló és a választó képernyők a tabokon kívül, teljes képernyősek. A tabikonok egyszerű SVG-k (`components/ui/Icons.tsx`), nincs ikonkönyvtár.
+**Miért:** A gyakorlás közben nem szabad tabbar (figyelemelterelés, véletlen kilépés). Ikonkönyvtár (expo-symbols, vector-icons) új függőség lett volna néhány alakzatért.
+**Alternatíva:** A tantárgykártyák a kezdőlapon, külön képernyő nélkül. Elvetve: a prompt külön képernyőt ír le, és a kezdőlap így nyugodt marad.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
