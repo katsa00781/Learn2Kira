@@ -1,4 +1,5 @@
 import type { Exercise } from "@/types/exercise";
+import { shuffle } from "./shuffle";
 
 export type Box = 1 | 2 | 3 | 4 | 5;
 
@@ -81,13 +82,4 @@ export function selectSessionExercises({
   });
 
   return [...due, ...shuffle(fresh, random)].slice(0, size);
-}
-
-function shuffle<T>(items: T[], random: () => number): T[] {
-  const result = [...items];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [result[i], result[j]] = [result[j] as T, result[i] as T];
-  }
-  return result;
 }

@@ -47,7 +47,7 @@
 - [x] `components/exercise/MissingLetter.tsx` — 70 feladat
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
 - [x] `components/exercise/OrderItems.tsx` — 42 feladat
-- [ ] `components/exercise/MatchPairs.tsx` — 32 feladat
+- [x] `components/exercise/MatchPairs.tsx` — 32 feladat
 - [x] `components/exercise/Punctuation.tsx` — 15 feladat
 - [ ] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
 - [ ] **Füzetes mód** (`paper: true`): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `MatchPairs` komponens
+
+**Mit:** Párosítás érintéssel, két oszlopban: előbb a bal oldali elemet kell megérinteni (kiemelődik), aztán a hozzá tartozó jobb oldalit. Jó pár: mindkettő zöld és zárolódik. Rossz pár: a két elem rövid ideig (0,7 mp) terrakottára vált, a kijelölés megszűnik, újra lehet próbálni. A jobb oldal kevert, de sosem egyezik a bal oldali sorrenddel. A feladat akkor számít helyesnek, ha egyetlen rossz párosítás nélkül sikerült (`onAnswer` az utolsó pár után hívódik). Az `AnswerButton` új `selected` állapotot kapott. A keverés közös: `lib/shuffle.ts` (3 teszt), a `lib/leitner.ts` is ezt használja.
+**Fájlok:** `components/exercise/MatchPairs.tsx`, `lib/shuffle.ts`, `lib/shuffle.test.ts`, `lib/leitner.ts`, `components/ui/AnswerButton.tsx`, `app/index.tsx` (próbaoldal)
+**Tesztelve:** `npm test` 34/34, `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg. Adat: 32 feladat, 4 vagy 5 párral, a leghosszabb elem 28 karakter.
+**Nyitva maradt:** a hosszú elemek (28 karakter) álló telefonon, fél szélességű oszlopban tördelődnek, eszközön ellenőrizendő. Hibázás után nincs „helyes megoldás" mutatás, mert a gyerek addig próbálkozik, amíg ki nem jön – lásd D-022.
+**Commit:** `feat: MatchPairs feladatkomponens`
 
 ## 2026-10-12 – `OrderItems` komponens
 
@@ -398,6 +406,13 @@ a másik szóba jöhető opció.
 **Döntés:** Az `OrderItems` nem drag & drop, hanem „érintsd sorban az elemeket" jellegű. A betett elemet érintéssel lehet visszavenni. Húzás csak a `SortIntoGroups`-hoz készül (ott nincs jó érintéses megoldás).
 **Miért:** Az érintés pontosabb gyerekujjnak, nem igényel Gesture Handlert és Reanimated animációt, nincs „félrecsúszó" elem, és elérhetőbb (VoiceOver). A feladat tárgya a sorrend ismerete, nem a mozgatás ügyessége. A CLAUDE.md a komponens módját nem rögzíti.
 **Alternatíva:** Húzással átrendezhető lista. Elvetve: több kód és több hibalehetőség ugyanazért a tanulási eredményért. Ha Kira unalmasnak találja, később cserélhető, a szerződés (`exercise`, `onAnswer`) nem változik.
+**Visszavonható?** Igen.
+
+## D-022 – Párosításnál a hibázás nem zár, csak számít
+**Dátum:** 2026-10-12
+**Döntés:** A `MatchPairs` rossz párosításnál nem fejezi be a feladatot és nem mutatja meg a megoldást: a gyerek újra próbálhat. A Leitner-motornak adott eredmény `mistakes === 0`, tehát egy rossz próbálkozás is „hibásnak" számít, és a feladat visszakerül az 1. dobozba.
+**Miért:** Párosításnál a kizárásos módszer eleve működik (az utolsó pár adott), ezért egy hibázás utáni „vége, itt a megoldás" csak büntetne. A Leitner-jelzés ugyanakkor őszinte marad: amit elsőre nem tudott, azt gyakorolnia kell.
+**Alternatíva:** Az első hibánál lezárni és mutatni a helyes párosítást (mint a többi típusnál). Elvetve: frusztráló egy 5 párosnál, és nem tanít többet.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

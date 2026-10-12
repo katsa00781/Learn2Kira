@@ -1,7 +1,7 @@
 import { Pressable, Text } from "react-native";
 import { softShadow } from "@/constants/shadows";
 
-export type AnswerState = "idle" | "correct" | "wrong";
+export type AnswerState = "idle" | "selected" | "correct" | "wrong";
 
 type Props = {
   label: string;
@@ -14,6 +14,7 @@ type Props = {
 
 const containerByState: Record<AnswerState, string> = {
   idle: "border-secondary/40 bg-surface",
+  selected: "border-primary bg-primary/10",
   correct: "border-success bg-success/20",
   wrong: "border-error bg-error/20",
 };
