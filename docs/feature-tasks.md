@@ -44,7 +44,7 @@
 ### Feladattípus komponensek
 - [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
 - [x] `components/exercise/NumericInput.tsx` + `NumberPad` — 756 feladat, a legtöbbet használt
-- [ ] `components/exercise/MissingLetter.tsx` — 70 feladat
+- [x] `components/exercise/MissingLetter.tsx` — 70 feladat
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
 - [ ] `components/exercise/OrderItems.tsx` — 42 feladat
 - [ ] `components/exercise/MatchPairs.tsx` — 32 feladat
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `MissingLetter` komponens
+
+**Mit:** Hiányzó betűs feladat: nagy (48pt) szó, a hiányzó rész helyén szaggatott keretű rés, ahová a választott betű kerül. A rés zöld/terrakotta lesz, a gombok ugyanúgy jelzik a helyes választ, mint a `MultipleChoice`-nál. A `hint` mind a 70 feladatnál van, és kitalálós nyom (pl. „Ezen mész be az udvarra."), ezért a feladat mellett már válasz előtt látszik, halványan. Fekvő iPaden bal oldalt a szó, jobb oldalt a két betű; álló módban egymás alatt.
+**Fájlok:** `components/exercise/MissingLetter.tsx`, `app/index.tsx` (próbaoldal)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg. Adat: 70 feladat, mind pontosan 2 opcióval, a szó legfeljebb 6 betűs.
+**Nyitva maradt:** A többbetűs opciók (`ly`, `yu`) elférnek a résben, de a 48pt-os szó hosszabb szavaknál tördelődhet álló telefonon, eszközön ellenőrizendő. A próbaoldal „Majdnem! Nézd meg így:" szövege ideiglenes, a gyakorló képernyő adja a végleges visszajelzést.
+**Commit:** `feat: MissingLetter feladatkomponens`
 
 ## 2026-10-12 – `NumericInput` és `NumberPad`
 
