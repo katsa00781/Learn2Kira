@@ -9,7 +9,8 @@
     "validate": "tsx --tsconfig tsconfig.content.json scripts/validate.ts",
     "typecheck:content": "tsc --noEmit -p tsconfig.content.json",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "tsx --test lib/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -20,7 +20,7 @@
 - [ ] Push GitHub-ra
 
 ### Alapok
-- [ ] `lib/leitner.ts` – `nextBox()`, `dueDate()`, `selectSessionExercises()` + unit tesztek
+- [x] `lib/leitner.ts` – `nextBox()`, `dueDate()`, `selectSessionExercises()` + unit tesztek
 - [ ] `store/progressStore.ts` – XP, streak, jelvények, AsyncStorage perzisztencia
 - [ ] `store/reviewStore.ts` – Leitner kártyaállapotok, perzisztencia
 - [ ] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Leitner-ismétlés (`lib/leitner.ts`)
+
+**Mit:** Tiszta függvények: `nextBox()`, `dueDate()`, `selectSessionExercises()`, plusz a `answerCard()` (a kártya új állapota egy válasz után) és a `toDay()` (helyi nap szövegként). 17 unit teszt `node:test`-tel. Új `npm test` script.
+**Fájlok:** `lib/leitner.ts`, `lib/leitner.test.ts`, `package.json`
+**Tesztelve:** `npm test` 17/17, `typecheck`, `lint` tiszta. Határesetek: hónap-/évhatár, nyári időszámítás, 5. doboz plafon, rontás bárhonnan az 1. dobozba, kör mérete, nem esedékes kártya nem számít újnak, bemenet nem módosul.
+**Nyitva maradt:** A `reviewStore` még nincs megírva (a következő sor). D-017 még nyitott: az `expo-audio` jóváhagyva ("mehet"), de nincs telepítve (a hangfeladatnál jön); a Nunito forrásáról még nem döntöttél.
+**Commit:** `feat: Leitner-ismétlés unit tesztekkel`
 
 ## 2026-10-12 – Projekt setup (Expo SDK 57 + NativeWind)
 
@@ -295,6 +303,13 @@ a másik szóba jöhető opció.
 **Döntés:** `react-dom@19.2.3` devDependency-ként rögzítve, `typescript@~6.0.3` (az Expo ezt várja).
 **Miért:** Pin nélkül az npm `react-dom@19.3`-at próbált húzni, ami `react@19.3`-at kér, és minden további `npm i` ERESOLVE hibával elhasalt. Nem fő függőség (nem számít a 10-es limitbe), az app nem használ webet.
 **Alternatíva:** `legacy-peer-deps` az `.npmrc`-ben. Elvetve: elfedne valódi konfliktusokat is.
+**Visszavonható?** Igen.
+
+## D-019 – Leitner: `node:test`, helyi nap szövegként, átadott „ma"
+**Dátum:** 2026-10-12
+**Döntés:** A tesztek `node:test`-tel futnak `tsx` alatt (nincs új függőség). A `dueAt` és a „ma" helyi nap, "ÉÉÉÉ-HH-NN" szövegként; a függvények a mát paraméterként kapják, nem hívják a `new Date()`-et. A dobozok típusa `Box = 1|2|3|4|5`. Az 1. doboz intervalluma 0 nap, tehát a rontott feladat még aznap (következő körben) visszajöhet. Az új feladatok keverése `random` paraméterrel cserélhető.
+**Miért:** A CLAUDE.md szerint a modul tiszta, UI és storage nélkül; a dátum átadásával determinisztikusan tesztelhető. A szöveges nap AsyncStorage-ban JSON-barát és időzónaproblémát nem okoz (a Date-alapú dueAt éjfél körül elcsúszna). A `jest` Expo-s beállítása több függőség és konfiguráció egyetlen tiszta modulért.
+**Alternatíva:** `jest` + `jest-expo`. Elvetve a fenti okból; ha később komponenseket is tesztelünk, érdemes újragondolni.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
