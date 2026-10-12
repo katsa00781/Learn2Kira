@@ -1,0 +1,19 @@
+{
+  "name": "learn2kira",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo run:ios",
+    "validate": "tsx --tsconfig tsconfig.content.json scripts/validate.ts",
+    "typecheck:content": "tsc --noEmit -p tsconfig.content.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "~5.8.3"
+  }
+}
