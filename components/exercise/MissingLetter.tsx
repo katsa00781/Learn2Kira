@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { AnswerButton, type AnswerState } from "@/components/ui/AnswerButton";
-import { Card } from "@/components/ui/Card";
+import { HintButton } from "@/components/ui/HintButton";
+import { ExerciseCard } from "./ExerciseCard";
 import type { ExerciseProps } from "./types";
 
 export function MissingLetter({ exercise, onAnswer }: ExerciseProps<"missing-letter">) {
@@ -23,24 +24,27 @@ export function MissingLetter({ exercise, onAnswer }: ExerciseProps<"missing-let
   };
 
   const gapStyle =
-    picked === null ? "border-dashed border-primary bg-background" : correct ? "border-success bg-success/20" : "border-error bg-error/20";
+    picked === null ? "border-dashed border-accent bg-accent/25" : correct ? "border-success bg-success/20" : "border-error bg-error/20";
 
   return (
-    <View className={`w-full gap-6 ${landscape ? "flex-row items-start" : ""}`}>
-      <Card className={`items-center gap-4 ${landscape ? "flex-1 self-stretch justify-center" : "w-full"}`}>
-        <View className="flex-row flex-wrap items-center justify-center">
-          <Text className="font-title text-[48px] text-text">{exercise.before}</Text>
-          <View className={`mx-1 h-[68px] min-w-[64px] items-center justify-center rounded-2xl border-2 px-2 ${gapStyle}`}>
-            <Text className="font-title text-[48px] text-text">{picked ?? ""}</Text>
+    <View className={`w-full gap-6 ${landscape ? "flex-row items-stretch" : ""}`}>
+      <ExerciseCard className={`${landscape ? "flex-1" : "w-full"}`}>
+        <Text className="text-center font-task text-[20px] text-textMuted">Egészítsd ki a hiányzó betűket!</Text>
+        <View className="flex-1 items-center justify-center py-4">
+          <View className="flex-row flex-wrap items-center justify-center">
+            <Text className="font-title text-[72px] leading-[88px] text-text">{exercise.before}</Text>
+            <View className={`mx-1 h-[88px] min-w-[96px] items-center justify-center rounded-2xl border-2 px-2 ${gapStyle}`}>
+              <Text className="font-title text-[64px] leading-[76px] text-text">{picked ?? ""}</Text>
+            </View>
+            <Text className="font-title text-[72px] leading-[88px] text-text">{exercise.after}</Text>
           </View>
-          <Text className="font-title text-[48px] text-text">{exercise.after}</Text>
         </View>
-        {exercise.hint && <Text className="text-center font-body text-[20px] text-textMuted">{exercise.hint}</Text>}
-      </Card>
-      <View className={`gap-3 ${landscape ? "flex-1" : "w-full"}`}>
+      </ExerciseCard>
+      <View className={`gap-4 ${landscape ? "flex-1 justify-center" : "w-full"}`}>
         {exercise.options.map((option) => (
-          <AnswerButton key={option} label={option} state={stateOf(option)} disabled={picked !== null} onPress={() => pick(option)} />
+          <AnswerButton key={option} large tall label={option} state={stateOf(option)} disabled={picked !== null} onPress={() => pick(option)} />
         ))}
+        <HintButton hint={exercise.hint} />
       </View>
     </View>
   );

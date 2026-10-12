@@ -10,23 +10,25 @@ type Props = {
   disabled?: boolean;
   /** Nagy felirat rövid jelekhez (írásjel, betű). */
   large?: boolean;
+  /** Magas gomb kevés lehetőségnél (pl. betűválasztás). */
+  tall?: boolean;
 };
 
 const containerByState: Record<AnswerState, string> = {
-  idle: "border-secondary/40 bg-surface",
+  idle: "border-primary bg-surface",
   selected: "border-primary bg-primary/10",
   correct: "border-success bg-success/20",
   wrong: "border-error bg-error/20",
 };
 
-export function AnswerButton({ label, onPress, state = "idle", disabled = false, large = false }: Props) {
+export function AnswerButton({ label, onPress, state = "idle", disabled = false, large = false, tall = false }: Props) {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
-      className={`min-h-[60px] justify-center rounded-card border-2 px-6 py-4 ${containerByState[state]}`}
+      className={`justify-center rounded-card border-[3px] px-6 py-4 ${tall ? "min-h-[110px]" : "min-h-[60px]"} ${containerByState[state]}`}
       style={({ pressed }) => [softShadow, { transform: [{ scale: pressed ? 0.97 : 1 }] }]}
     >
       <Text className={`text-center text-text ${large ? "font-title text-[44px] leading-[52px]" : "font-task text-[22px]"}`}>{label}</Text>

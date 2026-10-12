@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { AnswerButton, type AnswerState } from "@/components/ui/AnswerButton";
-import { Card } from "@/components/ui/Card";
+import { ExerciseCard } from "./ExerciseCard";
 import type { ExerciseProps } from "./types";
 
 export function MultipleChoice({ exercise, onAnswer }: ExerciseProps<"multiple-choice">) {
@@ -23,9 +23,9 @@ export function MultipleChoice({ exercise, onAnswer }: ExerciseProps<"multiple-c
 
   return (
     <View className={`w-full gap-6 ${landscape ? "flex-row items-start" : ""}`}>
-      <Card className={landscape ? "flex-1 justify-center self-stretch" : "w-full"}>
+      <ExerciseCard className={landscape ? "flex-1 justify-center self-stretch" : "w-full"}>
         <Text className="font-task text-[26px] leading-9 text-text">{exercise.question}</Text>
-      </Card>
+      </ExerciseCard>
       <View className={`gap-3 ${landscape ? "flex-1" : "w-full"}`}>
         {exercise.options.map((option, index) => (
           <AnswerButton

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
-import { Card } from "@/components/ui/Card";
 import { NumberPad } from "@/components/ui/NumberPad";
 import { isNumericCorrect } from "@/lib/answers";
+import { ExerciseCard } from "./ExerciseCard";
 import type { ExerciseProps } from "./types";
 
 const MAX_DIGITS = 5;
@@ -32,7 +32,7 @@ export function NumericInput({ exercise, onAnswer }: ExerciseProps<"numeric-inpu
 
   return (
     <View className={`w-full gap-6 ${landscape ? "flex-row items-start" : ""}`}>
-      <Card className={`gap-6 ${landscape ? "flex-1 self-stretch justify-center" : "w-full"}`}>
+      <ExerciseCard className={`gap-6 ${landscape ? "flex-1 self-stretch justify-center" : "w-full"}`}>
         <Text className="font-task text-[26px] leading-9 text-text">{exercise.question}</Text>
         <View className={`min-h-[72px] flex-row items-center justify-center rounded-card border-2 px-6 py-3 ${displayStyle}`}>
           <Text className={`font-title text-[36px] ${value === "" ? "text-textMuted" : "text-text"}`}>
@@ -46,7 +46,7 @@ export function NumericInput({ exercise, onAnswer }: ExerciseProps<"numeric-inpu
             {unit}
           </Text>
         )}
-      </Card>
+      </ExerciseCard>
       <View className={landscape ? "flex-1 items-center" : "w-full items-center"}>
         <NumberPad
           disabled={answered}

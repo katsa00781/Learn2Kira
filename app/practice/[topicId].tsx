@@ -1,16 +1,21 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ExerciseMascotContext } from "@/components/exercise/ExerciseCard";
 import { ExerciseRenderer } from "@/components/exercise/ExerciseRenderer";
 import { Mascot, type MascotState } from "@/components/mascot/Mascot";
+import { CloseIcon } from "@/components/ui/Icons";
 import { Card } from "@/components/ui/Card";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { SegmentedProgress } from "@/components/ui/SegmentedProgress";
 import { colors } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
 import { usePracticeSession } from "@/hooks/usePracticeSession";
 
 // A SafeAreaView nem NativeWind-os, ezért StyleSheet-jellegű stílust kap
 const screen = { flex: 1, backgroundColor: colors.background };
+
+// Ezeken a típusokon a maskot a kártyán kívül (alul) áll, mert a kártya maga a kezelőfelület
+const MASCOT_IN_BAR = ["match-pairs", "order-items"];
 
 const PRAISE = ["Ügyes vagy, Kira!", "Szuper!", "Pontosan!", "Úgy van!"];
 
@@ -73,28 +78,37 @@ export default function PracticeScreen() {
       ? (PRAISE[practice.index % PRAISE.length] ?? "Ügyes vagy, Kira!")
       : "Majdnem! Nézd meg így:";
   const isLast = practice.index === practice.total - 1;
+  const mascotInBar = MASCOT_IN_BAR.includes(exercise.type);
+  const showBar = practice.answered || mascotInBar;
 
   return (
     <SafeAreaView style={screen}>
-      <View className="flex-row items-center gap-4 px-6 pb-2 pt-3">
-        <Pressable accessibilityRole="button" accessibilityLabel="Kilépés" onPress={leave} className="h-[48px] w-[48px] items-center justify-center rounded-full bg-surface">
-          <Text className="font-title text-[22px] text-textMuted">✕</Text>
+      <View className="flex-row items-center gap-5 px-6 pb-2 pt-3">
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Kilépés"
+          onPress={leave}
+          className="h-[52px] w-[52px] items-center justify-center rounded-full bg-surface"
+          style={softShadow}
+        >
+          <CloseIcon size={22} color={colors.text} />
         </Pressable>
-        <ProgressBar className="flex-1" value={(practice.index + (practice.answered ? 1 : 0)) / practice.total} />
-        <Text className="font-task text-[18px] text-textMuted">
-          {practice.index + 1}/{practice.total}
-        </Text>
+        <SegmentedProgress className="flex-1" total={practice.total} current={practice.index} />
       </View>
 
-      <ScrollView className="flex-1" contentContainerClassName="items-center p-6">
-        <ExerciseRenderer key={exercise.id} exercise={exercise} onAnswer={practice.answer} />
+      <ScrollView className="flex-1" contentContainerClassName="w-full max-w-[1100px] items-center self-center p-6">
+        <ExerciseMascotContext.Provider value={mascotInBar ? null : mascot}>
+          <ExerciseRenderer key={exercise.id} exercise={exercise} onAnswer={practice.answer} />
+        </ExerciseMascotContext.Provider>
       </ScrollView>
 
-      <View className="flex-row items-center gap-4 rounded-t-card bg-surface px-6 py-3" style={softShadow}>
-        <Mascot state={mascot} size={88} />
-        <Text className={`flex-1 font-title text-[24px] ${practice.answered && !practice.lastCorrect ? "text-error" : "text-text"}`}>{message}</Text>
-        {practice.answered && <PrimaryButton label={isLast ? "Befejezés" : "Tovább"} onPress={practice.next} />}
-      </View>
+      {showBar && (
+        <View className="flex-row items-center gap-4 rounded-t-card bg-surface px-6 py-3" style={softShadow}>
+          {mascotInBar && <Mascot state={mascot} size={88} />}
+          <Text className={`flex-1 font-title text-[24px] ${practice.answered && !practice.lastCorrect ? "text-error" : "text-text"}`}>{message}</Text>
+          {practice.answered && <PrimaryButton label={isLast ? "Befejezés" : "Tovább"} onPress={practice.next} />}
+        </View>
+      )}
     </SafeAreaView>
   );
 }

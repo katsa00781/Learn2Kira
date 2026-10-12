@@ -72,7 +72,7 @@
 - [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
 - [x] Tantárgyválasztó igazítása a PDF-hez
 - [x] Témaválasztó igazítása a PDF-hez
-- [ ] Gyakorló képernyő igazítása a PDF-hez
+- [x] Gyakorló képernyő igazítása a PDF-hez
 - [ ] `design-prompts.md` 2. promptjának átírása: 3 kártya egy sorban → 4 kártya rácsban
 - [ ] Maskot `thinking`, `celebrate`, `encourage` állapotok generálása a `base` referenciával
 - [ ] Füzetes mód képernyőjéhez prompt (nyugodt, váró hangulat)
@@ -109,6 +109,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – Gyakorló képernyő igazítása a PDF-hez
+
+**Mit:** Felül kerek ✕ gomb és **szakaszos haladássáv** (feladatonként egy szakasz: kész zöld, jelenlegi rózsa, hátralévő halvány) a számláló helyett. A kérdéskártya bal alsó sarkában áll a maskot (`thinking` → `celebrate` / `encourage`), a kártya fekvőben magasabb. A „Hiányzó betű" a PDF szerint: kis útmutató felül („Egészítsd ki a hiányzó betűket!"), 72pt-os szó, barackszínű szaggatott rés, két magas (110pt) válaszgomb rózsaszín kerettel a kártya mellett függőlegesen középen. A válaszgombok alapkerete mostantól rózsaszín (3pt) minden típusnál. Új „Tipp" gomb (villanykörte): a tipp csak érintésre jelenik meg (MissingLetter, Punctuation). Az alsó sáv („Tovább") csak válasz után jön elő.
+**Fájlok:** `app/practice/[topicId].tsx`, `components/exercise/ExerciseCard.tsx` (új), `components/exercise/{MissingLetter,MultipleChoice,NumericInput,Punctuation}.tsx`, `components/ui/{SegmentedProgress,HintButton,AnswerButton,Icons}.tsx`
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Képernyőképes összevetés NEM történt (nincs iPad-szimulátor), a kártyán belüli maskot és a magas kártya fekvőben eszközön ellenőrizendő, főleg `NumericInput` (a számbillentyűs kártya magasabb a maskotnál?).
+**Nyitva maradt:** a `MatchPairs` és `OrderItems` kártyája maga a kezelőfelület, ott a maskot az alsó sávban marad (D-028). A `MultipleChoice` és `NumericInput` nem mutat tippet (eddig sem mutatott). Válasz után a sáv megjelenése eltolja a görgethető területet.
+**Commit:** `feat: gyakorló képernyő igazítása a PDF mockuphoz`
 
 ## 2026-10-12 – Témaválasztó igazítása a PDF-hez
 
@@ -516,6 +524,13 @@ a másik szóba jöhető opció.
 **Döntés:** A `constants/colors.ts`-ben külön `darkTones` (primary, secondary, accent, success sötétebb változata) szerepel, szövegekhez halvány kör- vagy sávhátteren (pl. a „0%" felirat, később a témakör-körök betűi).
 **Miért:** A PDF-ben a százalékok és a körökben lévő jelek a tokenszínek sötétebb árnyalatai; a tokenszín (pl. #7FB069) fehér/halvány háttéren olvashatatlanul világos lenne, a gyerek pedig nehezen olvas. Nem kerültek a Tailwind témába, hogy a fő tokenlista változatlan maradjon.
 **Alternatíva:** Csak a tokenszínek használata (rosszabb kontraszt); átlátszóság-trükk (nem ad sötétebb színt).
+**Visszavonható?** Igen.
+
+## D-028 – A maskot a kérdéskártyában áll, kontextuson át
+**Dátum:** 2026-10-12
+**Döntés:** A PDF szerint a maskot a kérdéskártya bal alsó sarkában van. A gyakorló képernyő egy `ExerciseMascotContext`-en adja át az állapotot, az `ExerciseCard` (a négy kártyás típus kérdéskártyája) ebből rajzolja ki. A `MatchPairs` és `OrderItems` típusnál, ahol a kártya a kezelőfelületet is tartalmazza, a maskot az alsó sávban marad (`MASCOT_IN_BAR`).
+**Miért:** A D-020 szerint a maskot a szülő dolga, a komponensek ne ismerjék; a kontextus ezt megtartja, és nem kell mind a hét komponensnek `mascot` propot kapnia. A két interaktív típusnál a sarokban álló maskot az elemekre lógna.
+**Alternatíva:** `mascot` prop minden feladatkomponensnek (sok átadás); a maskot abszolút pozícióval a képernyőn (a kártya magassága típusonként más, ráfedne a tartalomra).
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
