@@ -111,6 +111,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-12 – Dependency-limit szabálya
+
+**Mit:** A CLAUDE.md „Maximum 10 fő dependency" sora kiegészült: az Expo-csomagok (`expo`, `expo-*`, `@expo-google-fonts/*`) nem számítanak, a `devDependencies` sem. A tényleges állapot is bekerült: 23 fő dependency, ebből 10 Expo, **13 nem Expo-s**, tehát a limit így is túllépve. A tizenhármat felsorolja a CLAUDE.md. A `react-native-gesture-handler` kódban sehol nincs használva (a `SortIntoGroups` érintéses lett, D-032).
+**Fájlok:** `CLAUDE.md`, `docs/feature-tasks.md`
+**Tesztelve:** nem kódváltozás; a számot a `package.json`-ból számoltam.
+**Nyitva maradt:** döntés kell, hogyan kerüljön 10 alá (D-034).
+**Commit:** `docs: dependency-limit szabálya`
+
 ## 2026-10-12 – Dokumentáció naprakésszé tétele
 
 **Mit:** Átnéztem az összes doksit az aktuális állapottal szemben. `CLAUDE.md`: a hangkönyvtár `expo-audio` (D-017, az `expo-av` helyett) és a Nunito-csomag a tech stackben; a mappastruktúra (`subjects.tsx`, `constants/`, `lib/`, `hooks/`, `store/`); a store-ok (`practiceDays`, `resultStore`); a tantárgyválasztó-megjegyzés; új szabály a mockup-PDF-ről és arról, hogy eltérésnél a CLAUDE.md a mérvadó. `SETUP.md`: teljesen átírva (még azt állította, hogy az Expo projekt nincs inicializálva, `expo-av`-t telepíttetett, a mappákat üresnek írta): indítás, parancsok, a típusos útvonalak újragenerálása. `README.md`: builderek (`ni`, `nip`), a „Matek, környezetismeret nincs kész" sor, a már bekötött `validate` script. `docs/design-prompts.md`: a 2. prompt négy kártyás rács, és a fejlécben a PDF a jóváhagyott mockup. `docs/feature-tasks.md`: két elavult pipa (a 2. prompt átírása, a maskot-állapotok megvannak). A `docs/Learning2Kira.pdf` is bekerült a repóba, mert a doksik hivatkoznak rá.
@@ -640,5 +648,12 @@ a másik szóba jöhető opció.
 **Miért:** A képek valódi pixelként tartalmazták az átlátszóság-mintát, a kör alakú jelvényhez a körvágás a legegyszerűbb tiszta megoldás, és nem torzít. A 512 px 108pt-nél 4,7×-es (3x kijelzőn is bőven éles), és fájlonként 6×-kisebb, így a bundle ~3,3 MB, nem ~20 MB. A típus-kapcsolat miatt új jelvény képe nélkül a fordító hibát ad.
 **Alternatíva:** Eredeti 1254 px-es képek (20 MB az appban, a minta kivágása nélkül szürke négyzetekkel); a háttér színalapú kivágása (a minta és a kép színei keverednének, szálkás szél); külön szürke képek a zároltakhoz (felesleges asset).
 **Visszavonható?** Igen: a képek cserélhetők, a térkép egy blokk.
+
+## D-034 – Dependency-limit: az Expo-csomagok nem számítanak
+**Dátum:** 2026-10-12
+**Döntés:** A „maximum 10 fő dependency" limitbe nem számítanak bele az Expo-csomagok (`expo`, `expo-*`, `@expo-google-fonts/*`) és a `devDependencies`. Így is 13 nem Expo-s csomag van, a limit túllépve; a feloldás még nyitott.
+**Miért:** Az Expo-csomagok az SDK-val együtt frissülnek, egy Expo-projekt eleve tucatnyit tartalmaz, és nem a mi választásunk; a limit célja, hogy a saját, karbantartandó függőségek száma kicsi maradjon.
+**Alternatíva:** Mindent számolni (23, a limit értelmetlen); a React/React Native alapot és az Expo Router kötelező társait (`safe-area-context`, `screens`, `worklets`) is kivenni a számolásból (8); a nem használt `gesture-handler` eltávolítása (12-re csökkenti).
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->
