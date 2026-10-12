@@ -110,6 +110,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-12 – Javítás: a statisztika-pirulák számai kilógtak
+
+**Mit:** A `StatPill` számának sormagassága (32pt) kisebb volt a 28pt-os Nunito természetes sormagasságánál, ezért iOS-en a szám felfelé kilógott a kártyából. A sormagasság 38pt-ra, a címkéé 20pt-ra nőtt, a kártya függőleges belső tere 12→16pt.
+**Fájlok:** `components/ui/StatPill.tsx`
+**Tesztelve:** `typecheck`, `lint`. Eszközön NEM ellenőriztem (nincs iPad-szimulátor), a javítás a sormagasság-hiba okán alapul.
+**Nyitva maradt:** ugyanez a hiba máshol is előfordulhat, ahol nagy Nunito szöveg szűk `leading`-gel áll (pl. témakörkártya 20/24, `NumberPad`); eszközön érdemes végignézni.
+**Commit:** `fix: statisztika-pirulák számainak sormagassága`
+
 ## 2026-10-12 – Gyakorló képernyő igazítása a PDF-hez
 
 **Mit:** Felül kerek ✕ gomb és **szakaszos haladássáv** (feladatonként egy szakasz: kész zöld, jelenlegi rózsa, hátralévő halvány) a számláló helyett. A kérdéskártya bal alsó sarkában áll a maskot (`thinking` → `celebrate` / `encourage`), a kártya fekvőben magasabb. A „Hiányzó betű" a PDF szerint: kis útmutató felül („Egészítsd ki a hiányzó betűket!"), 72pt-os szó, barackszínű szaggatott rés, két magas (110pt) válaszgomb rózsaszín kerettel a kártya mellett függőlegesen középen. A válaszgombok alapkerete mostantól rózsaszín (3pt) minden típusnál. Új „Tipp" gomb (villanykörte): a tipp csak érintésre jelenik meg (MissingLetter, Punctuation). Az alsó sáv („Tovább") csak válasz után jön elő.
