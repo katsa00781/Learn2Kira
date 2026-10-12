@@ -46,23 +46,30 @@ Minden prompt elé a közös stílusblokk kerül.
 
 A számok (3, 7, 14, 30) a képben maradnak: az ikon részei, nem feliratok.
 
-## Bekötés
+## Feldolgozás és bekötés
 
-A `BadgeCard` most SVG ikonokat rajzol (`icon` mező). Ha megvannak a képek,
-a `constants/images.ts`-be kerül egy térkép, és a `BadgeCard` az ikon helyett
-ezt rajzolja (zárolt állapotban grayscale + opacity):
+A generált képek gyakran nem valódi átlátszóak: a „sakktábla" minta valódi
+pixelekként benne van. Ezért minden új képet körbe kell vágni és kicsinyíteni
+(ImageMagick, a `<forrás>` a generált fájl, az `<id>` a jelvény azonosítója;
+a kimenet **másik fájl**, hogy az eredeti megmaradjon):
 
-```ts
-export const badgeImages: Record<string, number> = {
-  "first-lesson": require("@/assets/images/badges/first-lesson.png"),
-  "perfect-round": require("@/assets/images/badges/perfect-round.png"),
-  "streak-3": require("@/assets/images/badges/streak-3.png"),
-  "streak-7": require("@/assets/images/badges/streak-7.png"),
-  "streak-14": require("@/assets/images/badges/streak-14.png"),
-  "streak-30": require("@/assets/images/badges/streak-30.png"),
-  "topic-nyelvtan": require("@/assets/images/badges/topic-nyelvtan.png"),
-  "topic-helyesiras": require("@/assets/images/badges/topic-helyesiras.png"),
-  "topic-matek": require("@/assets/images/badges/topic-matek.png"),
-  "topic-kornyezet": require("@/assets/images/badges/topic-kornyezet.png"),
-};
+```bash
+magick <forrás>.png \( -size 1254x1254 xc:black -fill white -draw "circle 627,627 627,31" -blur 0x1 \) \
+  -alpha off -compose copy_opacity -composite -resize 512x512 -strip assets/images/badges/<id>.png
 ```
+
+(A kör közepe és sugara a 1254 px-es képekre van méretezve; más méretnél igazítsd.)
+Ha a kép már alfa-csatornás és nem kör alakú (pl. kilógó elemekkel), elég a
+`-resize 512x512 -strip`. Ellenőrzés: krémszínű (`#FAF7F5`) háttéren nézd meg.
+
+Az app a képeket a `constants/images.ts` `badgeImages` térképéből veszi, a
+jelvény-azonosító a kulcs. A `Badge.id` típusa ennek a kulcsa, ezért **új
+jelvényhez előbb a kép és a térkép-sor kell**, különben nem fordul:
+
+1. a kép: `assets/images/badges/<id>.png`
+2. `constants/images.ts`: `import` + sor a `badgeImages`-ben
+3. `constants/badges.ts`: a jelvény (`id`, `title`, `description`)
+4. `lib/badges.ts`: a feloldás szabálya + teszt
+
+A `BadgeCard` ugyanazt a képet rajzolja zárolva is: halványítva és szürkítve
+(`opacity` + `filter: grayscale`), lakat-jellel.

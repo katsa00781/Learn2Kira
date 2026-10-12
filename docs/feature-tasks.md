@@ -111,6 +111,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-12 – Jelvényképek bekötésének leírása
+
+**Mit:** A `docs/badge-prompts.md` „Bekötés" szakasza elavult volt (`require`-térképet és SVG-ikonról való váltást írt). Átírva a tényleges állapotra: a körbevágás és kicsinyítés parancsa (a generált képekben a sakktábla minta valódi pixel), a `badgeImages` térkép, és az új jelvény négy lépése (kép, térkép, jegyzék, szabály + teszt).
+**Fájlok:** `docs/badge-prompts.md`
+**Tesztelve:** nem kódváltozás; a leírt parancs ugyanaz, amellyel a tíz kép készült.
+**Nyitva maradt:** semmi.
+**Commit:** `docs: jelvényképek bekötésének leírása`
+
 ## 2026-10-12 – Jelvényképek bekötése
 
 **Mit:** A tíz jelvénykép (PNG) bekerült az appba. A `BadgeCard` az SVG-ikon helyett a képet rajzolja (zárolt állapotban halvány és szürkített, lakattal), ugyanez látszik az Eredmény képernyő „Új jelvényt szereztél!" sorában. A képek a `constants/images.ts`-ben vannak (`badgeImages`, a jelvény-azonosítók szerint); a `constants/badges.ts` jegyzékéből kikerült az `icon` és a `color` mező, a `Badge.id` típusa a képek kulcsa (új jelvény kép nélkül nem fordul). A felesleges SVG-ikonok (zászló, villám, korona, könyv, ceruza, célkereszt) törölve. A sorrend: első kör, sorozatok, hibátlan kör, tantárgyak. A kapott képek átnézése: a tíz kép egységes stílusú, de **kilenc nem volt átlátszó**: a „sakktábla" átlátszóság-minta valódi pixelekként volt a kör körül, ami az app krémszínű hátterén szürke négyzetekként látszott volna. Ezért körbevágtam őket (a kör szélén 1px-es lágy éllel), és 512×512 pontra kicsinyítettem (~330 KB/db, az eredeti ~2 MB), a megjelenítési méret (108pt, 3x = 324 px) így is bőven fedett. D-033.
