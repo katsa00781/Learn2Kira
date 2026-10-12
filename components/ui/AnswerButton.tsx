@@ -8,6 +8,8 @@ type Props = {
   onPress: () => void;
   state?: AnswerState;
   disabled?: boolean;
+  /** Nagy felirat rövid jelekhez (írásjel, betű). */
+  large?: boolean;
 };
 
 const containerByState: Record<AnswerState, string> = {
@@ -16,7 +18,7 @@ const containerByState: Record<AnswerState, string> = {
   wrong: "border-error bg-error/20",
 };
 
-export function AnswerButton({ label, onPress, state = "idle", disabled = false }: Props) {
+export function AnswerButton({ label, onPress, state = "idle", disabled = false, large = false }: Props) {
   return (
     <Pressable
       accessibilityRole="button"
@@ -26,7 +28,7 @@ export function AnswerButton({ label, onPress, state = "idle", disabled = false 
       className={`min-h-[60px] justify-center rounded-card border-2 px-6 py-4 ${containerByState[state]}`}
       style={({ pressed }) => [softShadow, { transform: [{ scale: pressed ? 0.97 : 1 }] }]}
     >
-      <Text className="text-center font-task text-[22px] text-text">{label}</Text>
+      <Text className={`text-center text-text ${large ? "font-title text-[44px] leading-[52px]" : "font-task text-[22px]"}`}>{label}</Text>
     </Pressable>
   );
 }

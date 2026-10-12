@@ -48,7 +48,7 @@
 - [ ] `components/exercise/SortIntoGroups.tsx` (drag & drop, Reanimated + Gesture Handler) — 96 feladat
 - [ ] `components/exercise/OrderItems.tsx` — 42 feladat
 - [ ] `components/exercise/MatchPairs.tsx` — 32 feladat
-- [ ] `components/exercise/Punctuation.tsx` — 15 feladat
+- [x] `components/exercise/Punctuation.tsx` — 15 feladat
 - [ ] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
 - [ ] **Füzetes mód** (`paper: true`): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
 
@@ -105,6 +105,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-12 – `Punctuation` komponens
+
+**Mit:** Mondatvégi írásjel: a mondat után szaggatott keretű rés, a három írásjel (`.` `?` `!`) egy sorban, nagy (44pt) gombokon. Válasz után a rés és a gombok zöld/terrakotta jelzést kapnak. Az `AnswerButton` új, opcionális `large` propot kapott a rövid jelekhez (a meglévő használat nem változik).
+**Fájlok:** `components/exercise/Punctuation.tsx`, `components/ui/AnswerButton.tsx`, `app/index.tsx` (próbaoldal)
+**Tesztelve:** `typecheck`, `lint`, `expo export --platform ios`. Eszközön NEM néztem meg. Adat: 15 feladat, mind `. ? !` opcióval, a mondat legfeljebb 31 karakter.
+**Nyitva maradt:** a felirat („Milyen írásjel kerül a mondat végére?") a komponensben van, ha a gyakorló képernyő saját utasítássort kap, innen kivehető.
+**Commit:** `feat: Punctuation feladatkomponens`
 
 ## 2026-10-12 – `MissingLetter` komponens
 
