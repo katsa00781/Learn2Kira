@@ -1,13 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ExerciseMascotContext } from "@/components/exercise/ExerciseCard";
 import { ExerciseRenderer } from "@/components/exercise/ExerciseRenderer";
+import { PaperIntro } from "@/components/exercise/PaperIntro";
 import { Mascot, type MascotState } from "@/components/mascot/Mascot";
-import { CloseIcon } from "@/components/ui/Icons";
+import { CloseIcon, NotebookIcon } from "@/components/ui/Icons";
 import { SegmentedProgress } from "@/components/ui/SegmentedProgress";
-import { colors } from "@/constants/colors";
+import { colors, darkTones } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
 import { usePracticeSession } from "@/hooks/usePracticeSession";
 
@@ -32,6 +33,9 @@ export default function PracticeScreen() {
   const router = useRouter();
   const practice = usePracticeSession(topicId);
   const leave = () => router.back();
+
+  // Füzetes feladatok sorozatának elején jön a bevezető; a sorozat további feladatainál már nem
+  const [paperReadyAt, setPaperReadyAt] = useState<number | null>(null);
 
   useEffect(() => {
     if (practice.finished) router.replace("/result");
@@ -59,9 +63,20 @@ export default function PracticeScreen() {
   const { exercise } = practice;
   if (!exercise) return null;
 
-  const mascot: MascotState = !practice.answered ? "thinking" : practice.lastCorrect ? "celebrate" : "encourage";
+  if (exercise.paper && !practice.previousPaper && paperReadyAt !== practice.index) {
+    return (
+      <SafeAreaView style={screen}>
+        <PaperIntro onReady={() => setPaperReadyAt(practice.index)} />
+      </SafeAreaView>
+    );
+  }
+
+  // Füzetes feladatnál a maskot vár, nem sürget
+  const waiting: MascotState = exercise.paper ? "base" : "thinking";
+  const waitingMessage = exercise.paper ? "Számolj nyugodtan a füzetedben!" : "Gondolkodj nyugodtan!";
+  const mascot: MascotState = !practice.answered ? waiting : practice.lastCorrect ? "celebrate" : "encourage";
   const message = !practice.answered
-    ? "Gondolkodj nyugodtan!"
+    ? waitingMessage
     : practice.lastCorrect
       ? (PRAISE[practice.index % PRAISE.length] ?? "Ügyes vagy, Kira!")
       : "Majdnem! Nézd meg így:";
@@ -85,6 +100,14 @@ export default function PracticeScreen() {
       </View>
 
       <ScrollView className="flex-1" contentContainerClassName="w-full max-w-[1100px] items-center self-center p-6">
+        {exercise.paper && (
+          <View className="mb-4 flex-row items-center gap-2 self-start rounded-full bg-secondary/25 px-4 py-2">
+            <NotebookIcon size={22} color={darkTones.secondary} />
+            <Text className="font-title text-[18px]" style={{ color: darkTones.secondary }}>
+              Füzetes feladat
+            </Text>
+          </View>
+        )}
         <ExerciseMascotContext.Provider value={mascotInBar ? null : mascot}>
           <ExerciseRenderer key={exercise.id} exercise={exercise} onAnswer={practice.answer} />
         </ExerciseMascotContext.Provider>

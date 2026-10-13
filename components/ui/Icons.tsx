@@ -108,3 +108,12 @@ export function LockIcon({ size = 24, color }: IconProps) {
     </Svg>
   );
 }
+
+export function NotebookIcon({ size = 24, color }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <Path fill={color} fillOpacity={0.2} stroke={color} strokeWidth={1.8} strokeLinejoin="round" d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+      <Path stroke={color} strokeWidth={1.8} strokeLinecap="round" d="M9 3v18M12 8h4M12 12h4" />
+    </Svg>
+  );
+}

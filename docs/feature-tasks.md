@@ -50,7 +50,7 @@
 - [x] `components/exercise/MatchPairs.tsx` — 32 feladat
 - [x] `components/exercise/Punctuation.tsx` — 15 feladat
 - [x] `components/exercise/ExerciseRenderer.tsx` – típus alapján választ komponenst
-- [ ] **Füzetes mód** (`paper: true`): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
+- [x] **Füzetes mód** (`paper: true`, lásd D-035): külön képernyő, nincs időnyomás, „Vedd elő a füzeted!" jelzés, a maskot vár
 
 ### Képernyők (sorrendben)
 - [x] Kezdőlap – üdvözlés Kirának, streak, XP, „Kezdjük!" gomb, maskot
@@ -110,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-13 – Füzetes mód (`paper: true`)
+
+**Mit:** A füzetes feladatok (133 db, mind `numeric-input`) külön bevezető képernyőt kapnak („Vedd elő a füzeted!", „Előkészítettem" gomb), a sorozat további feladatainál már nem. A feladat fölött „Füzetes feladat" jelzés, a maskot `base` állapotban vár, az üzenet „Számolj nyugodtan a füzetedben!". Időnyomás eddig sem volt az appban, így ott nincs mit kikapcsolni.
+**Fájlok:** `components/exercise/PaperIntro.tsx` (új), `components/ui/Icons.tsx` (`NotebookIcon`), `app/practice/[topicId].tsx`, `hooks/usePracticeSession.ts` (`previousPaper`), `docs/feature-tasks.md`
+**Tesztelve:** `tsc --noEmit`, `npm run lint`, `npm test`, `npm run validate` hibátlan. Szimulátoron/iPaden nem próbáltam.
+**Nyitva maradt:** a „váró" maskot külön képe (lásd Design: füzetes mód prompt); addig a `base` áll helyette.
+**Commit:** feat: füzetes mód
 
 ## 2026-10-12 – Dependency-limit: a platformalap sem számít
 
@@ -663,5 +671,12 @@ a másik szóba jöhető opció.
 **Miért:** Ezek nem a mi választásaink: az Expo-csomagok az SDK-val együtt frissülnek, a platformalapot és a társait az Expo Router és a Reanimated kéri. A limit célja, hogy a saját, karbantartandó függőségek száma kicsi maradjon.
 **Alternatíva:** Mindent számolni (23, a limit értelmetlen); csak az Expo-csomagokat kivenni (13, így is túllépve); a nem használt `gesture-handler` eltávolítása (vele 7).
 **Visszavonható?** Igen. A `gesture-handler` eltávolítása külön, később eldöntendő.
+
+## D-035 – Füzetes mód: bevezető képernyő sorozatonként, `base` maskot
+**Dátum:** 2026-10-13
+**Döntés:** A `paper: true` feladat előtt teljes képernyős bevezető jön, de csak a füzetes feladatok sorozatának elején (ha az előző feladat nem volt füzetes). A feladat alatt a maskot `base` állapotú, nem `thinking`.
+**Miért:** A CLAUDE.md „más képernyőt" kér, de a 133 füzetes feladat jellemzően egymás után jön; minden feladat előtti bevezető idegesítő lenne, és szakítaná a ritmust. A `thinking` arc a gyors gondolkodást sugallja, a `base` nyugodt, váró. Külön „váró" kép nincs.
+**Alternatíva:** Bevezető minden feladat előtt; csak egy jelzősáv bevezető nélkül. Elvetve: az első zavaró, a második nem „külön képernyő".
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

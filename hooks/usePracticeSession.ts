@@ -76,6 +76,7 @@ export function usePracticeSession(topicId: string) {
     ready,
     exercise,
     index: session.index,
+    previousPaper: session.exercises[session.index - 1]?.paper === true,
     total,
     answered,
     lastCorrect: answered ? session.results[session.index] === true : null,
