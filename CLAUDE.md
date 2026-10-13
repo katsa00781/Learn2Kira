@@ -50,7 +50,7 @@ A **digitális kultúra** harmadikban önálló tantárgy, de nincs a scope-ban:
 - AsyncStorage (perzisztencia)
 - react-native-reanimated (animációk)
 - expo-haptics (haptikus visszajelzés)
-- expo-audio (hangeffektek; az `expo-av` helyett, lásd D-017; a hangfeladatnál kerül telepítésre)
+- expo-audio (hangeffektek; az `expo-av` helyett, lásd D-017; telepítve, lásd D-040)
 - Nunito betűtípus (`@expo-google-fonts/nunito`, lásd D-017)
 - react-native-svg + react-native-svg-transformer (vektoros illusztrációk)
 - **Auth:** nincs

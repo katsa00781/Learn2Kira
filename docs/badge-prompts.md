@@ -46,6 +46,45 @@ Minden prompt elé a közös stílusblokk kerül.
 
 A számok (3, 7, 14, 30) a képben maradnak: az ikon részei, nem feliratok.
 
+## 2. kör – bővítés (D-038)
+
+15 új kép. A szintezett családok (pl. Szorgalmas 10/25/50/100 nap) **egy közös
+képet** kapnak, a szintet a `BadgeCard` rajzolja rá kódból (1–4 kis csillag a
+kép alján, bronz/ezüst/arany színben). Ezért ezekbe a képekbe **ne kerüljön
+szám**. A tantárgyi szintek a meglévő `topic-*.png` képeket használják, ahhoz
+nem kell új kép.
+
+Referenciának csatold a már elkészült jelvények közül legalább hármat
+(pl. `first-session.png`, `perfect-session.png`, `subject-matek.png`), hogy a
+stílus egyezzen. Minden prompt elé ugyanaz a közös stílusblokk kerül.
+
+| Fájl | Jelvény(ek) | Prompt |
+|---|---|---|
+| `all-subjects.png` | Mindenes | The monkey mascot from the attached reference happily juggling four small objects: a wooden alphabet block, a pink pencil, a teal counting cube and a green leaf. Peach glow disc. |
+| `days.png` | Szorgalmas (10/25/50/100 nap) | A small sprouting plant with three fresh leaves growing in a peach flowerpot, a teal watering can tilted beside it with a few water drops. Sage green glow disc. |
+| `comeback.png` | Visszatértem | The monkey mascot stepping through a rounded open door, waving hello with a big smile, a small pink heart floating above. Pink glow disc. |
+| `weekend.png` | Hétvégi gyakorló | A colorful diamond kite in dusty rose and teal flying high with a curly tail, a small open notebook resting on a green hill below. Light teal glow disc. |
+| `xp.png` | XP-gyűjtő (500/1000/2500/5000) | A round glass jar filled with glowing golden stars, the lid tilted open with a few stars floating out. Golden glow disc. |
+| `level.png` | Szintlépő (5./10./20. szint) | Three rounded steps rising like a small staircase, a little pennant flag on the top step, a sparkle on each step. Peach glow disc. |
+| `explorer.png` | Kalandor (100/500/1000 feladat) | A partly unrolled treasure map with a dotted path leading to a golden star, a small teal compass lying beside it. Peach glow disc. |
+| `master-szorzotabla.png` | Szorzótábla-mester | A big rounded "×" sign made of glossy dusty rose tiles, surrounded by small tiles showing dot patterns (no digits), a tiny golden crown on top of the "×". Golden glow disc. |
+| `master-j-ly.png` | j/ly-detektív | Two wooden letter blocks showing the lowercase letters "j" and "ly", a small brown detective cap resting on top of them. Teal glow disc. |
+| `master-maradekos-osztas.png` | Osztásmester | Three small round plates, each holding two colorful candies, and one single candy left over in front, glowing softly. Peach glow disc. |
+| `master-beturend.png` | Betűrend-bajnok | A cute little toy train with an engine and three wagons, the wagons carrying wooden letter blocks "A", "B", "C" in order. Teal glow disc. |
+| `perfect-many.png` | Hibátlan hős (3/10/25 kör) | Three golden trophies of increasing size standing side by side on a small dusty rose podium, a star on each trophy. Sage green glow disc. |
+| `no-hint.png` | Segítség nélkül | A small flying superhero cape in dusty rose with a golden star emblem, motion lines behind it. Pink glow disc. |
+| `never-give-up.png` | Nem adom fel | A friendly rounded green mountain with a winding dotted path to the top, a small flag with a golden star planted on the summit. Sage green glow disc. |
+| `paper-hero.png` | Füzetes hős | A teal school backpack with a notebook and a pink pencil peeking out of the top, a gold star patch on the front flap. Light teal glow disc. |
+
+**Betűs képek:** a `master-j-ly` és a `master-beturend` kivétel a „NO text, NO
+letters" szabály alól. A közös blokkból ennél a kettőnél töröld ezt a sort, és
+a promptba írd be: *"The only letters in the image are the ones on the blocks."*
+A generátorok gyakran elrontják a betűket, ezért ezeket nézd át: a „ly"
+egyetlen kockán legyen, ne „Iy" vagy „ty".
+
+**Kicsiben is nézd meg (120 px):** a `master-maradekos-osztas` és a
+`perfect-many` több apró elemből áll, ezek könnyen zajossá válnak.
+
 ## Feldolgozás és bekötés
 
 A generált képek gyakran nem valódi átlátszóak: a „sakktábla" minta valódi
@@ -70,6 +109,9 @@ jelvényhez előbb a kép és a térkép-sor kell**, különben nem fordul:
 2. `constants/images.ts`: `import` + sor a `badgeImages`-ben
 3. `constants/badges.ts`: a jelvény (`id`, `title`, `description`)
 4. `lib/badges.ts`: a feloldás szabálya + teszt
+
+Szintezett családnál több azonosító mutat ugyanarra az importra (pl.
+`"days-10": badgeDays, "days-25": badgeDays`), a szintet a `Badge.tier` adja.
 
 A `BadgeCard` ugyanazt a képet rajzolja zárolva is: halványítva és szürkítve
 (`opacity` + `filter: grayscale`), lakat-jellel.
