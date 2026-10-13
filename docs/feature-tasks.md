@@ -26,14 +26,14 @@
 - [x] `components/ui/` – `AnswerButton`, `Card`, `ProgressBar` alapkomponensek
 
 ### Tartalom – KÉSZ (2026-10-12)
-**1574 feladat, 66 témakör, négy tantárgy.** A négy tankönyv fejezetei szerint,
+**1594 feladat, 67 témakör, négy tantárgy.** A négy tankönyv fejezetei szerint,
 `Topic.book` oldalszámmal, validátorral.
 
 - [x] `types/exercise.ts` – Topic, Exercise (7 típus), SubjectId, SZOCSOPORT, `paper`
 - [x] `data/builders.ts` – ml, mc, sg, oi, pu, mp, ni, nip
 - [x] `data/index.ts` – subjects, allTopics, allExercises, lekérdezők
 - [x] `scripts/validate.ts` – integritás-ellenőrző + számtani kiértékelő
-- [x] Nyelvtan: 16 témakör, 330 feladat (OH-MNY03TB fejezetei)
+- [x] Nyelvtan: 17 témakör, 350 feladat (OH-MNY03TB fejezetei)
 - [x] Helyesírás: 3 témakör, 90 feladat (hangok, elválasztás, j/ly)
 - [x] Matek: 28 témakör, 895 feladat (OH-MAT03TB fejezetei)
 - [x] Környezet: 19 témakör, 259 feladat (OH-KOR03TA 29 leckéje)
