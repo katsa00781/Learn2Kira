@@ -8,3 +8,8 @@ declare module "*.png" {
   const source: ImageSourcePropType;
   export default source;
 }
+
+declare module "*.wav" {
+  const source: number;
+  export default source;
+}

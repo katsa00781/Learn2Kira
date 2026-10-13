@@ -39,7 +39,7 @@
 - [x] Környezet: 19 témakör, 259 feladat (OH-KOR03TA 29 leckéje)
 
 ### Tartalom – hátralévő
-- [x] Közmondások, szólások (`match-pairs`) – Szövegalkotás 3., 23. oldal (lásd D-038)
+- [x] Közmondások, szólások (`match-pairs`) – Szövegalkotás 3., 23. oldal (lásd D-039)
 
 ### Feladattípus komponensek
 - [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
@@ -63,11 +63,46 @@
 ### Motivációs réteg
 - [x] Maskot komponens 4 állapottal, válaszra reagál
 - [x] Haptika bekötése (helyes / hibás)
-- [ ] Hangeffektek + kikapcsolási lehetőség
+- [x] Hangeffektek + kikapcsolási lehetőség (lásd D-040)
 - [x] Streak logika + „mentőöv" nap havonta (lásd D-036)
 - [x] Jelvényrendszer: első kör, 3/7/14/30 napos sorozat, 100% egy körben (min. 8 feladat), téma befejezése
 - [x] Jelvényképek (10 db) bekötése a Jutalmak képernyőre és az Eredmény képernyőre
 - [x] Napi cél megjelenítése és teljesítés visszajelzése (lásd D-037)
+
+### Jelvények – 2. kör (D-038)
+35 új jelvény, összesen 45. A képek promptjai: `docs/badge-prompts.md` „2. kör".
+A képeket Zsolt generálja. Amíg nincsenek meg, ideiglenesen a legközelebbi meglévő
+kép álljon a helyükön (`TODO` kommenttel a `badgeImages`-ben), hogy a fordítás
+és a tesztek ne várjanak rájuk.
+
+- [ ] **Alap:** `Badge` kapjon `category` és `tier?: 1 | 2 | 3 | 4` mezőt. A `BadgeCard` a szintet 1–4 kis csillaggal rajzolja a kép aljára (bronz → ezüst → arany, a színek a design tokenekhez igazodjanak). A meglévő `topic-*` jelvények `tier: 1`-et kapnak.
+- [ ] **Kiértékelés átalakítása:** a `newBadges` ne csak a kör adatait kapja, hanem egy állapot-pillanatképet (`progressStore` + `reviewStore` + a kör adatai), és abból számoljon. Tiszta függvény maradjon, tesztekkel. Így a már meglévő haladás alapján (XP, napok, látott feladatok) a következő kör végén visszamenőleg is megjönnek a jelvények.
+- [ ] **Tantárgyi szintek** (képük a meglévő `topic-<tantárgy>.png`):
+  - `topic-<tantárgy>-half` „Ezüst …" – a tantárgy témaköreinek fele kész (felfelé kerekítve; az `allTopics`-ból számolva, ne beégetve: most nyelvtan 8, helyesírás 2, matek 14, környezet 10)
+  - `topic-<tantárgy>-all` „Arany …" – a tantárgy összes témaköre kész
+  - „kész" = D-026 (minden feladatát legalább egyszer megválaszolta). Ugyanígy számolja a már meglévő `topic-<tantárgy>` is, ne csak az aktuális kör témakörét nézze.
+  - `all-subjects` „Mindenes" – mind a négy tantárgyban kész legalább egy témakör
+- [ ] **Kitartás:**
+  - `days-10`, `days-25`, `days-50`, `days-100` „Szorgalmas" (tier 1–4) – összes gyakorlónap (`practiceDays.length`), nem kell egymás utáninak lennie
+  - `comeback` „Visszatértem" – kör legalább 3 kimaradt nap után. A `lastPracticeDate` **a `completeSession` előtti** értékét kell nézni.
+  - `weekend` „Hétvégi gyakorló" – ugyanazon a hétvégén szombaton és vasárnap is gyakorolt
+- [ ] **Gyűjtés:**
+  - `xp-500`, `xp-1000`, `xp-2500`, `xp-5000` „XP-gyűjtő" (tier 1–4)
+  - `level-5`, `level-10`, `level-20` „Szintlépő" (tier 1–3) – `levelOf(xp).level`
+  - `seen-100`, `seen-500`, `seen-1000` „Kalandor" (tier 1–3) – a `reviewStore.cards` kulcsainak száma. (Nem „Felfedező", mert az ütközne a Nyelvtan-felfedezővel.)
+- [ ] **Mesterségek** – a felsorolt témakörök **minden** feladata legalább a 3. Leitner-dobozban van (ez szigorúbb, mint a D-026 „kész"):
+  - `master-szorzotabla` „Szorzótábla-mester" – a hat `matek-szorzotabla-*` témakör együtt
+  - `master-j-ly` „j/ly-detektív" – `helyesiras-j-ly`
+  - `master-maradekos-osztas` „Osztásmester" – `matek-maradekos-osztas`
+  - `master-beturend` „Betűrend-bajnok" – `nyelvtan-beturend`
+- [ ] **Minőség** (új számlálók a `progressStore`-ban, régi mentésnél `?? 0`, migráció nélkül, mint a D-036-nál):
+  - `perfect-3`, `perfect-10`, `perfect-25` „Hibátlan hős" (tier 1–3) – hibátlan körök száma (`perfectRounds`, a `PERFECT_ROUND_MIN` szabállyal). A számláló nulláról indul, régi körök nem számítanak.
+  - `no-hint` „Segítség nélkül" – hibátlan kör (`PERFECT_ROUND_MIN`) úgy, hogy a körben egyszer sem nyitotta meg a súgót. A `sessionStore` jegyezze, ha a súgó megnyílt.
+  - `never-give-up` „Nem adom fel" – helyes válasz egy korábban elrontott feladatra. A Leitner `Card` kapjon egy `missed?: boolean` mezőt, ami az első hibás válasznál `true` lesz, és utána az is marad.
+  - `paper-hero` „Füzetes hős" – 10 helyesen megoldott `paper: true` feladat (`paperSolved` számláló)
+- [ ] **Jutalmak képernyő:** 45 jelvénynél a rács kategóriánként szakaszokra bomoljon, fejléccel és „N / M" számlálóval: Kezdés és sorozat · Kitartás · Tantárgyak · Mesterségek · Gyűjtés · Minőség.
+- [ ] **Eredmény képernyő:** egy körben sok jelvény jöhet egyszerre, főleg az első kör után a frissítéskor (visszamenőleges feloldás). Ha 3-nál több, az első 3 látszik, utána „és még N jelvény", ami a Jutalmak képernyőre visz.
+- [ ] Képek bekötése, amikor megvannak: körbevágás és kicsinyítés a `docs/badge-prompts.md` szerint (D-033), a `TODO` helyettesítők cseréje.
 
 ### Design
 - [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
@@ -111,6 +146,22 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-13 – Hangeffektek
+
+**Mit:** Helyes válasznál rövid, emelkedő csengő (`correct`), hibásnál lágy, meleg kéthangú „biztató” hang (`encourage`) szól a haptika mellett. A kezdőlap jobb felső sarkában hangszóró-gomb kapcsolja ki/be a hangot; a beállítás perzisztált, a haptika nem kapcsolható ki. Telepítve az `expo-audio` (D-017 jóváhagyta). A két hangot Pythonnal szintetizáltam (szinusz + felhang, lágy felfutás és lecsengés), nincs külső forrás vagy licenc.
+**Fájlok:** `assets/sounds/correct.wav`, `assets/sounds/encourage.wav`, `constants/sounds.ts`, `store/settingsStore.ts`, `hooks/playSound.ts`, `hooks/usePracticeSession.ts`, `app/(tabs)/index.tsx`, `components/ui/Icons.tsx` (`SoundIcon`), `app-env.d.ts` (`*.wav`), `app.json` (`expo-audio` plugin), `package.json`, `package-lock.json`
+**Tesztelve:** `tsc`, lint, `npm test`, `expo export --platform ios` lefut (a hangok a csomagban). Hallgatni és eszközön próbálni nem tudtam: a hangok minőségét füllel kell eldönteni.
+**Nyitva maradt:** a kör végi (XP/jelvény) hang kimaradt; a szintetizált hangok cserélhetők szebb, kézzel készített fájlokra azonos névvel. A kikapcsoló csak a kezdőlapon van, a gyakorlás közben nem.
+**Commit:** feat: hangeffektek és kikapcsolás
+
+## 2026-10-13 – Jelvények 2. körének terve
+
+**Mit:** A jelvényrendszer bővítésének specifikációja: 35 új jelvény (szintezett tantárgyi, kitartás, gyűjtés, mesterség és minőség jelvények), feladatokra bontva a Motivációs réteg alatt („Jelvények – 2. kör"). A 15 új kép promptja bekerült a `docs/badge-prompts.md`-be. D-038.
+**Fájlok:** `docs/feature-tasks.md`, `docs/badge-prompts.md`
+**Tesztelve:** —, csak dokumentáció.
+**Nyitva maradt:** a teljes implementáció és a képek generálása.
+**Commit:** `docs: jelvények 2. körének terve és képpromptjai`
+
 ## 2026-10-13 – Közmondások, szólások (tartalom)
 
 **Mit:** Új nyelvtan témakör, „Közmondások, szólások”, 20 feladattal: 8 közmondás-párosítás (eleje–vége, 32 közmondás), 4 szólás–jelentés párosítás, 8 jelentés-felismerő feleletválasztós. A nyelvtan 17 témakörös, 350 feladatos; összesen 1594 feladat, 67 témakör (a CLAUDE.md táblázata frissítve).
@@ -118,6 +169,7 @@ Sablon:
 **Tesztelve:** `npm run validate` hibátlan, `tsc`, lint.
 **Nyitva maradt:** a Szövegalkotás 3. kötete nincs a repóban, ezért a feladatok közismert közmondásokból és szólásokból készültek, nem a 23. oldalról. Érdemes Kirával vagy a tankönyv alapján átnézni, hogy az iskolában tanult közmondásokat fedik-e; a hiányzókat egy-egy `mp` sorral lehet pótolni.
 **Commit:** content: közmondások és szólások
+**Megjegyzés:** a commit üzenete (154f0d7) még D-038-ra hivatkozik; ez azóta a jelvény-döntés száma, a közmondások döntése D-039.
 
 ## 2026-10-13 – Napi cél megjelenítése és visszajelzése
 
@@ -725,11 +777,25 @@ a másik szóba jöhető opció.
 **Alternatíva:** Több körös cél százalékkal (60%); erősebb ütközés a sorozat szabályával és több állapot.
 **Visszavonható?** Igen.
 
-## D-038 – Közmondások a nyelvtanban, `book` nélkül, a lista végén
+## D-038 – Jelvények 2. köre: 45 jelvény, szintek kódból rajzolva
+**Dátum:** 2026-10-13
+**Döntés:** 35 új jelvény öt csoportban: szintezett tantárgyi (ezüst = a témakörök fele, arany = mind), kitartás (összes gyakorlónap, visszatérés, hétvége), gyűjtés (XP, szint, látott feladatok), mesterség (konkrét témakörök a 3. dobozig) és minőség (hibátlan körök száma, súgó nélkül, korábbi hiba javítása, füzetes feladatok). A szintezett családok egy közös képet kapnak, a szintet a `BadgeCard` csillagokkal rajzolja rá. A kiértékelés állapot-pillanatképből számol, így a meglévő haladás alapján visszamenőleg is feloldódnak a jelvények.
+**Miért:** A 10 jelvény néhány hét alatt elfogy, utána a Jutalmak képernyőn nincs mit megszerezni. A sorozattól független jelvények (összes nap, visszatérés) azért kellenek, mert a megszakadt sorozat lelombozza a gyereket, ezek pedig a kimaradás után is jutalmaznak. A konkrét témakörös jelvények kézzelfoghatóak egy 3. osztályosnak („megtanultam a szorzótáblát"). A közös kép 35 helyett 15 generálást jelent, és egy családon belül egységes marad a stílus. A „fele" küszöb tantárgyanként arányos, mert a helyesírásnak csak 3 témaköre van, így egy fix „5 témakör" ott elérhetetlen lenne.
+**Alternatíva:** Külön kép minden szinthez (35 kép, a családon belüli eltérések zavaróak); fix témakör-számú küszöbök (a helyesírásnál elérhetetlen). Szándékosan kimaradt: gyorsasági jelvények (tippelésre ösztönöznek, és ütköznek a füzetes mód „nincs időnyomás" szabályával), és a napi többkörös gyakorlás jutalmazása (a cél a napi 5–10 perc). Az XP- és a szintjelvények átfednek (500 XP = 6. szint), ez tudatos: a szint a kezdőlapon látszik, az XP a körök végén.
+**Visszavonható?** Igen: a jegyzék és a szabályok egy-egy fájlban vannak, a számlálók új mezők migráció nélkül.
+
+## D-039 – Közmondások a nyelvtanban, `book` nélkül, a lista végén
 **Dátum:** 2026-10-13
 **Döntés:** A közmondások a nyelvtan 17. témaköre (`nyelvtan-kozmondasok`), `book` mező nélkül, a lista végén. A tartalom közismert közmondásokból készült, nem a tankönyvből.
 **Miért:** A D-009 kivételként engedte a közmondásokat. Önálló tantárgykártya túl kevés anyagra lenne, a nyelvtan a magyar tantárgy része. Az oldalszám a másik kötetből (Szövegalkotás) való, a nyelvtankönyv sorrendjébe nem illik, és a validátor a `book` mezőből ellenőrzi a sorrendet. A kötet hiányában nem tudtam a konkrét közmondásokat egyeztetni.
 **Alternatíva:** A helyesírás tantárgy alatt; vagy a 23. oldal szövegének bemásolása (nem áll rendelkezésre).
 **Visszavonható?** Igen: egy fájl és két sor az `index.ts`-ben.
+
+## D-040 – Hang: szintetizált WAV, kapcsoló a kezdőlapon, `hooks/playSound.ts`
+**Dátum:** 2026-10-13
+**Döntés:** Két hang (helyes, biztató) saját szintézissel készült WAV-ban. A kikapcsolás a kezdőlapon van, a `settingsStore` őrzi. A lejátszó a `hooks/`-ban él (`playSound`), nem a `lib/`-ben, mert az utóbbi tiszta függvényeké. A némakapcsolót (iOS) a hang tiszteletben tartja, nem írja felül. A hibás válasz hangja szándékosan nem lefelé ugró „vesztes” hang, hanem két közeli, meleg hang (D-006).
+**Miért:** Nincs jogtiszta hangforrás a repóban; szintézisből nincs licenckérdés, és a fájl kicsi (~60 KB). Kézzel kell hozzá hallgatni, de cserélhető egy fájl felülírásával. A kezdőlap a legkisebb változtatás egy meglévő képernyőn; a gyakorlásban nem kell kapcsoló, amit véletlenül meg lehet érinteni.
+**Alternatíva:** Letöltött hangcsomag (licenc és forrásellenőrzés); a kapcsoló a gyakorlás fejlécében (zsúfoltabb, véletlen érintés); `lib/sound.ts` (megsérti a „tiszta függvények” szabályt).
+**Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

@@ -1,6 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { useEffect, useMemo } from "react";
 import { exercisesByTopic, topicById } from "@/data";
+import { playSound } from "@/hooks/playSound";
 import { useStoresHydrated } from "@/hooks/useStoresHydrated";
 import { newBadges } from "@/lib/badges";
 import { selectSessionExercises, toDay } from "@/lib/leitner";
@@ -39,6 +40,7 @@ export function usePracticeSession(topicId: string) {
     Haptics.notificationAsync(
       correct ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Warning,
     );
+    playSound(correct ? "correct" : "encourage");
   };
 
   const next = () => {

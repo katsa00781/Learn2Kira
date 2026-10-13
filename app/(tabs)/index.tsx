@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Mascot } from "@/components/mascot/Mascot";
-import { ArrowRightIcon, CheckIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, CheckIcon, FlameIcon, SoundIcon, StarIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatPill } from "@/components/ui/StatPill";
 import { colors, darkTones } from "@/constants/colors";
@@ -12,6 +12,7 @@ import { useStoresHydrated } from "@/hooks/useStoresHydrated";
 import { toDay } from "@/lib/leitner";
 import { currentStreak } from "@/lib/streak";
 import { useProgressStore } from "@/store/progressStore";
+import { useSettingsStore } from "@/store/settingsStore";
 
 const screen = { flex: 1, backgroundColor: colors.background };
 const startShadow = { ...softShadow, shadowColor: colors.primary, shadowOpacity: 0.3, shadowOffset: { width: 0, height: 8 }, shadowRadius: 16 };
@@ -22,6 +23,7 @@ export default function HomeScreen() {
   const landscape = width > height && width >= 700;
   const hydrated = useStoresHydrated();
   const { xp, streak, lastPracticeDate, savedDays } = useProgressStore();
+  const soundOn = useSettingsStore((s) => s.soundOn);
   const today = toDay(new Date());
   // A nap vége után a tárolt jelző elavulhat, ezért a mai dátumból számoljuk
   const dailyGoalDone = lastPracticeDate === today;
@@ -92,6 +94,18 @@ export default function HomeScreen() {
     </View>
   );
 
+  const soundButton = (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={soundOn ? "Hang kikapcsolása" : "Hang bekapcsolása"}
+      onPress={() => useSettingsStore.getState().toggleSound()}
+      className="absolute right-6 top-4 z-10 h-[52px] w-[52px] items-center justify-center rounded-full bg-surface"
+      style={softShadow}
+    >
+      <SoundIcon size={26} color={colors.text} muted={!soundOn} />
+    </Pressable>
+  );
+
   const start = (
     <Pressable
       accessibilityRole="button"
@@ -107,6 +121,7 @@ export default function HomeScreen() {
   if (landscape) {
     return (
       <SafeAreaView style={screen}>
+        {soundButton}
         <ScrollView contentContainerClassName="flex-grow flex-row items-center justify-center gap-10 p-8">
           {mascot}
           <View className="w-full max-w-[460px] flex-1 gap-6">
@@ -122,6 +137,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={screen}>
+      {soundButton}
       <ScrollView contentContainerClassName="flex-grow justify-between gap-5 p-6">
         <View className="gap-2">
           {greeting}
