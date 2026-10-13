@@ -146,6 +146,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-13 – Kör végi hang
+
+**Mit:** Az Eredmény képernyőn megnyíláskor, az XP-csempe beúszásával együtt (300 ms késleltetéssel) szól egy rövid, vidám fanfár (`finish`, C–E–G–C, kitartott akkorddal). Ugyanúgy szintetizált, mint a másik kettő, és a hangkapcsoló rá is vonatkozik. Ezzel a D-040 „kör végi hang kimaradt” megjegyzése megszűnt.
+**Fájlok:** `assets/sounds/finish.wav` (új), `constants/sounds.ts`, `app/result.tsx`, `docs/feature-tasks.md`
+**Tesztelve:** `tsc`, lint. Hallgatni nem tudtam.
+**Nyitva maradt:** külön hang a jelvény megszerzésére nincs; a fanfár jelvénynél is ugyanaz.
+**Commit:** feat: kör végi hang
+
 ## 2026-10-13 – Hangeffektek
 
 **Mit:** Helyes válasznál rövid, emelkedő csengő (`correct`), hibásnál lágy, meleg kéthangú „biztató” hang (`encourage`) szól a haptika mellett. A kezdőlap jobb felső sarkában hangszóró-gomb kapcsolja ki/be a hangot; a beállítás perzisztált, a haptika nem kapcsolható ki. Telepítve az `expo-audio` (D-017 jóváhagyta). A két hangot Pythonnal szintetizáltam (szinusz + felhang, lágy felfutás és lecsengés), nincs külső forrás vagy licenc.

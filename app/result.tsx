@@ -11,6 +11,7 @@ import { ResultStat } from "@/components/ui/ResultStat";
 import { badges } from "@/constants/badges";
 import { colors, darkTones } from "@/constants/colors";
 import { softShadow } from "@/constants/shadows";
+import { playSound } from "@/hooks/playSound";
 import { toDay } from "@/lib/leitner";
 import { levelBar } from "@/lib/level";
 import { reviewOutlook } from "@/lib/progress";
@@ -38,6 +39,13 @@ export default function ResultScreen() {
   useEffect(() => {
     pop.value = withDelay(300, withSpring(1, { damping: 8 }));
   }, [pop]);
+  // A hang az XP-csempe beúszásával együtt szól
+  const hasResult = last !== null;
+  useEffect(() => {
+    if (!hasResult) return;
+    const timer = setTimeout(() => playSound("finish"), 300);
+    return () => clearTimeout(timer);
+  }, [hasResult]);
   const popStyle = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
 
   if (!last) return <Redirect href="/" />;
