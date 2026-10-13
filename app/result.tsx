@@ -4,7 +4,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Mascot } from "@/components/mascot/Mascot";
-import { ClockIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
+import { CheckIcon, ClockIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
 import { BadgeCard } from "@/components/ui/BadgeCard";
 import { LevelBar } from "@/components/ui/LevelBar";
 import { ResultStat } from "@/components/ui/ResultStat";
@@ -62,6 +62,15 @@ export default function ResultScreen() {
             </Animated.View>
             <ResultStat value={String(streak)} label="napos sorozat" icon={<FlameIcon size={30} color={colors.error} outline />} />
           </View>
+
+          {last.goalReached && (
+            <View className="w-full flex-row items-center gap-3 rounded-card border-l-[6px] border-success bg-success/15 px-5 py-4">
+              <CheckIcon size={26} color={darkTones.success} />
+              <Text className="flex-1 font-title text-[20px]" style={{ color: darkTones.success }}>
+                Mai cél teljesítve!
+              </Text>
+            </View>
+          )}
 
           {earnedBadges.length > 0 && (
             <View className="w-full gap-3">

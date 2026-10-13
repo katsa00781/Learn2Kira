@@ -67,7 +67,7 @@
 - [x] Streak logika + „mentőöv" nap havonta (lásd D-036)
 - [x] Jelvényrendszer: első kör, 3/7/14/30 napos sorozat, 100% egy körben (min. 8 feladat), téma befejezése
 - [x] Jelvényképek (10 db) bekötése a Jutalmak képernyőre és az Eredmény képernyőre
-- [ ] Napi cél megjelenítése és teljesítés visszajelzése
+- [x] Napi cél megjelenítése és teljesítés visszajelzése (lásd D-037)
 
 ### Design
 - [x] Kezdőlap igazítása a `Learning2Kira.pdf` mockuphoz
@@ -110,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-13 – Napi cél megjelenítése és visszajelzése
+
+**Mit:** A kezdőlapi „Mai cél” kártya kiírja a célt („Egy gyakorlókör ma.”), teljesítve pipával: „Kész! Ma már gyakoroltál, Kira.” A teljesítést a mai dátumból számolja (`lastPracticeDate === ma`), nem a tárolt jelzőből, így éjfél után sem marad elavult. Az Eredmény képernyőn az aznapi első kör után zöld sáv: „Mai cél teljesítve!”.
+**Fájlok:** `app/(tabs)/index.tsx`, `app/result.tsx`, `store/resultStore.ts` (`goalReached`), `hooks/usePracticeSession.ts`, `docs/feature-tasks.md`
+**Tesztelve:** `tsc`, lint, `npm test`. Eszközön nem próbáltam.
+**Nyitva maradt:** a `progressStore.dailyGoalDone` és a `startDay` már nincs használva a kezdőlapon (csak a store őrzi); törlésük külön, kis takarítás.
+**Commit:** feat: napi cél megjelenítése
 
 ## 2026-10-13 – Streak „mentőöv"
 
@@ -700,6 +708,13 @@ a másik szóba jöhető opció.
 **Döntés:** A mentőöv magától érvényesül (nincs gomb), és csak pontosan egy kimaradt napot véd; a kimaradt nap hónapja számít. A megmentett nap nem ad +1-et, csak a sorozatot tartja meg. A `savedDays: string[]` új mező a `progressStore`-ban; a régi mentésben hiányzó mezőt `?? []` kezeli, migráció nélkül.
 **Miért:** A cél, hogy egy elmaradt nap ne vegye el Kira kedvét; a manuális beváltás extra képernyőt és döntést kérne egy gyerektől. Az egynapos korlát miatt nem lehet vele „kihagyni a hetet". A lista egyszerűbb, mint egy „utolsó használat" dátum, és a naptár is használja.
 **Alternatíva:** Kézi beváltás gombbal; több napos védelem. Elvetve: bonyolultabb, és kevésbé őszinte sorozatot ad.
+**Visszavonható?** Igen.
+
+## D-037 – Napi cél = egy gyakorlókör, a teljesítés a dátumból számolt
+**Dátum:** 2026-10-13
+**Döntés:** A napi cél egy befejezett kör (0% vagy 100%), nem a PDF 60%-a. A „kész” állapot `lastPracticeDate === ma`, nem a `dailyGoalDone` jelző.
+**Miért:** A CLAUDE.md a 60%-ot eltérésnek jelöli és magát mondja mérvadónak; a „napi 5-10 perc” egy körrel egyezik, részcél pedig a sorozat szabályával (egy kör = nap) ütközne. A tárolt jelzőt csak a kezdőlap nyitása nullázta, így éjfél után nyitva hagyott appban hamisan „kész” maradt volna.
+**Alternatíva:** Több körös cél százalékkal (60%); erősebb ütközés a sorozat szabályával és több állapot.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

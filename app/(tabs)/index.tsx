@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Mascot } from "@/components/mascot/Mascot";
-import { ArrowRightIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, CheckIcon, FlameIcon, StarIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatPill } from "@/components/ui/StatPill";
 import { colors, darkTones } from "@/constants/colors";
@@ -21,8 +21,10 @@ export default function HomeScreen() {
   const { width, height } = useWindowDimensions();
   const landscape = width > height && width >= 700;
   const hydrated = useStoresHydrated();
-  const { xp, streak, lastPracticeDate, savedDays, dailyGoalDone } = useProgressStore();
+  const { xp, streak, lastPracticeDate, savedDays } = useProgressStore();
   const today = toDay(new Date());
+  // A nap vége után a tárolt jelző elavulhat, ezért a mai dátumból számoljuk
+  const dailyGoalDone = lastPracticeDate === today;
 
   // Új napon a napi cél újra nyitott
   useEffect(() => {
@@ -78,6 +80,12 @@ export default function HomeScreen() {
         <Text className="font-title text-[20px] text-text">Mai cél</Text>
         <Text className="font-title text-[20px]" style={{ color: darkTones.success }}>
           {dailyGoalDone ? "100%" : "0%"}
+        </Text>
+      </View>
+      <View className="flex-row items-center gap-2">
+        {dailyGoalDone && <CheckIcon size={20} color={darkTones.success} />}
+        <Text className="font-task text-[18px]" style={{ color: dailyGoalDone ? darkTones.success : colors.textMuted }}>
+          {dailyGoalDone ? "Kész! Ma már gyakoroltál, Kira." : "Egy gyakorlókör ma."}
         </Text>
       </View>
       <ProgressBar tone="success" size="lg" value={dailyGoalDone ? 1 : 0} />

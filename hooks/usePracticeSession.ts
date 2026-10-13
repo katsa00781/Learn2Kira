@@ -47,6 +47,7 @@ export function usePracticeSession(topicId: string) {
       const xpEarned = correctCount * XP_PER_CORRECT;
       const progress = useProgressStore.getState();
       const xpBefore = progress.xp;
+      const goalReached = progress.lastPracticeDate !== today;
       progress.completeSession(xpEarned, today);
 
       // A kör utolsó válasza már a reviewStore-ban van, így a témakör „kész” állapota friss
@@ -67,6 +68,7 @@ export function usePracticeSession(topicId: string) {
         xpBefore,
         exerciseIds: session.exercises.map((e) => e.id),
         newBadges: earned,
+        goalReached,
       });
     }
     session.next();

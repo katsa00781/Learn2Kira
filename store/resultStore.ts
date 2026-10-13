@@ -10,6 +10,8 @@ export type LastResult = {
   exerciseIds: string[];
   /** A körben most megszerzett jelvények azonosítói. */
   newBadges: string[];
+  /** Ez a kör teljesítette a napi célt (az első kör aznap). */
+  goalReached: boolean;
 };
 
 type ResultState = {
