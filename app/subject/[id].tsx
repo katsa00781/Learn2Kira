@@ -57,7 +57,7 @@ export default function SubjectScreen() {
           {wide && <Text className="font-title text-[18px]" style={{ color: darkTones.primary }}>{Math.round(percent * 100)}%</Text>}
         </View>
 
-        {chunk(topics, 2).map((row) => (
+        {chunk(topics, wide ? 2 : 1).map((row) => (
           <View key={row.map((t) => t.topic.id).join()} className="flex-row gap-4">
             {row.map(({ topic, number, progress, due }) => (
               <TopicCard
@@ -69,7 +69,7 @@ export default function SubjectScreen() {
                 onPress={() => router.push({ pathname: "/practice/[topicId]", params: { topicId: topic.id } })}
               />
             ))}
-            {row.length === 1 && <View className="flex-1" />}
+            {wide && row.length === 1 && <View className="flex-1" />}
           </View>
         ))}
       </ScrollView>

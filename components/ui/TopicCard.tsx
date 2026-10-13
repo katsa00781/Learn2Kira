@@ -57,7 +57,7 @@ export function TopicCard({ number, title, progress, due, onPress }: Props) {
           {number}
         </Text>
       </View>
-      <View className="flex-1 gap-2">
+      <View className="min-w-0 flex-1 gap-2">
         <Text className="font-title text-[20px] leading-6 text-text">{title}</Text>
         <ProgressBar tone={progress >= 1 ? "success" : "primary"} value={progress} />
       </View>

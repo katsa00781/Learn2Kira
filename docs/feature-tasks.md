@@ -111,6 +111,14 @@ Sablon:
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
 
+## 2026-10-13 – Javítás: témakör-kártyák keskeny kijelzőn
+
+**Mit:** A témaválasztón a kártyák keskeny (<700 pt) kijelzőn is két oszlopban álltak, a cím alig kapott helyet és betűnként tört. Most keskenyen egy oszlop, iPaden marad kettő; a cím oszlopa `min-w-0`.
+**Fájlok:** `app/subject/[id].tsx`, `components/ui/TopicCard.tsx`
+**Tesztelve:** `tsc`, lint. Eszközön nem próbáltam.
+**Nyitva maradt:** ha iPaden is szűk a cím, a kártya 2 oszlopos elrendezését kell áttekinteni.
+**Commit:** fix: témakör-kártyák egy oszlopban keskeny kijelzőn
+
 ## 2026-10-13 – Füzetes mód (`paper: true`)
 
 **Mit:** A füzetes feladatok (133 db, mind `numeric-input`) külön bevezető képernyőt kapnak („Vedd elő a füzeted!", „Előkészítettem" gomb), a sorozat további feladatainál már nem. A feladat fölött „Füzetes feladat" jelzés, a maskot `base` állapotban vár, az üzenet „Számolj nyugodtan a füzetedben!". Időnyomás eddig sem volt az appban, így ott nincs mit kikapcsolni.
