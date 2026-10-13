@@ -39,7 +39,7 @@
 - [x] Környezet: 19 témakör, 259 feladat (OH-KOR03TA 29 leckéje)
 
 ### Tartalom – hátralévő
-- [ ] Közmondások, szólások (`match-pairs`) – Szövegalkotás 3., 23. oldal
+- [x] Közmondások, szólások (`match-pairs`) – Szövegalkotás 3., 23. oldal (lásd D-038)
 
 ### Feladattípus komponensek
 - [x] `components/exercise/MultipleChoice.tsx` — 563 feladat, ez a leggyakoribb
@@ -110,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-13 – Közmondások, szólások (tartalom)
+
+**Mit:** Új nyelvtan témakör, „Közmondások, szólások”, 20 feladattal: 8 közmondás-párosítás (eleje–vége, 32 közmondás), 4 szólás–jelentés párosítás, 8 jelentés-felismerő feleletválasztós. A nyelvtan 17 témakörös, 350 feladatos; összesen 1594 feladat, 67 témakör (a CLAUDE.md táblázata frissítve).
+**Fájlok:** `data/nyelvtan/kozmondasok.ts` (új), `data/nyelvtan/index.ts`, `CLAUDE.md`, `docs/feature-tasks.md`
+**Tesztelve:** `npm run validate` hibátlan, `tsc`, lint.
+**Nyitva maradt:** a Szövegalkotás 3. kötete nincs a repóban, ezért a feladatok közismert közmondásokból és szólásokból készültek, nem a 23. oldalról. Érdemes Kirával vagy a tankönyv alapján átnézni, hogy az iskolában tanult közmondásokat fedik-e; a hiányzókat egy-egy `mp` sorral lehet pótolni.
+**Commit:** content: közmondások és szólások
 
 ## 2026-10-13 – Napi cél megjelenítése és visszajelzése
 
@@ -716,5 +724,12 @@ a másik szóba jöhető opció.
 **Miért:** A CLAUDE.md a 60%-ot eltérésnek jelöli és magát mondja mérvadónak; a „napi 5-10 perc” egy körrel egyezik, részcél pedig a sorozat szabályával (egy kör = nap) ütközne. A tárolt jelzőt csak a kezdőlap nyitása nullázta, így éjfél után nyitva hagyott appban hamisan „kész” maradt volna.
 **Alternatíva:** Több körös cél százalékkal (60%); erősebb ütközés a sorozat szabályával és több állapot.
 **Visszavonható?** Igen.
+
+## D-038 – Közmondások a nyelvtanban, `book` nélkül, a lista végén
+**Dátum:** 2026-10-13
+**Döntés:** A közmondások a nyelvtan 17. témaköre (`nyelvtan-kozmondasok`), `book` mező nélkül, a lista végén. A tartalom közismert közmondásokból készült, nem a tankönyvből.
+**Miért:** A D-009 kivételként engedte a közmondásokat. Önálló tantárgykártya túl kevés anyagra lenne, a nyelvtan a magyar tantárgy része. Az oldalszám a másik kötetből (Szövegalkotás) való, a nyelvtankönyv sorrendjébe nem illik, és a validátor a `book` mezőből ellenőrzi a sorrendet. A kötet hiányában nem tudtam a konkrét közmondásokat egyeztetni.
+**Alternatíva:** A helyesírás tantárgy alatt; vagy a 23. oldal szövegének bemásolása (nem áll rendelkezésre).
+**Visszavonható?** Igen: egy fájl és két sor az `index.ts`-ben.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

@@ -28,12 +28,12 @@ Négy tantárgykártya van, ebben a sorrendben. **Mind a négy élesben van**, a
 
 | Tantárgy | `SubjectId` | Témakör | Feladat |
 |---|---|---|---|
-| Nyelvtan | `nyelvtan` | 16 | 330 |
+| Nyelvtan | `nyelvtan` | 17 | 350 |
 | Helyesírás | `helyesiras` | 3 | 90 |
 | Matek | `matek` | 28 | 895 |
 | Környezet | `kornyezet` | 19 | 259 |
 
-Összesen 1574 feladat, 66 témakör.
+Összesen 1594 feladat, 67 témakör.
 
 A tantárgyválasztó **rácsban** rendezi a kártyákat, nem egy sorban. A `design-prompts.md` 2. promptja is négy kártyás rácsot ír. A `docs/Learning2Kira.pdf` mockupján még három kártya van (Matek és Természet „Coming soon" állapotban); a kód a négy éles kártyát követi.
 

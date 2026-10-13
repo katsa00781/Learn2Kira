@@ -16,6 +16,7 @@ import { igeidokExercises } from './igeidok';
 import { tulajdonsagSzavakExercises } from './tulajdonsag-szavak';
 import { fokozasExercises } from './fokozas';
 import { mennyisegSzavakExercises } from './mennyiseg-szavak';
+import { kozmondasokExercises } from './kozmondasok';
 
 /**
  * A témakörök sorrendje a Nyelvtan és helyesírás 3. (OH-MNY03TB)
@@ -39,6 +40,8 @@ export const nyelvtanTopics: Topic[] = [
   { id: 'nyelvtan-tulajdonsag-szavak', subject: 'nyelvtan', title: 'Tulajdonságot kifejező szavak', order: 14, book: 87 },
   { id: 'nyelvtan-fokozas', subject: 'nyelvtan', title: 'Fokozás', order: 15, book: 92 },
   { id: 'nyelvtan-mennyiseg-szavak', subject: 'nyelvtan', title: 'Mennyiséget kifejező szavak', order: 16, book: 101 },
+  // Szövegalkotás 3. (OH-MNY03MB) témája: nincs nyelvtankönyvi oldalszám, ezért a lista végén áll
+  { id: 'nyelvtan-kozmondasok', subject: 'nyelvtan', title: 'Közmondások, szólások', order: 17 },
 ];
 
 export const nyelvtanExercises: Exercise[] = [
@@ -58,4 +61,5 @@ export const nyelvtanExercises: Exercise[] = [
   ...tulajdonsagSzavakExercises,
   ...fokozasExercises,
   ...mennyisegSzavakExercises,
+  ...kozmondasokExercises,
 ];
