@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { nextStreak } from "@/lib/streak";
+import { addDays } from "@/lib/leitner";
+import { lifelineApplies, nextStreak } from "@/lib/streak";
 
 type ProgressState = {
   xp: number;
@@ -11,6 +12,8 @@ type ProgressState = {
   dailyGoalDone: boolean;
   /** A gyakorlással töltött napok ("ÉÉÉÉ-HH-NN"), a jutalmak naptárához. */
   practiceDays: string[];
+  /** A mentőövvel megmentett napok ("ÉÉÉÉ-HH-NN"), havonta legfeljebb egy. */
+  savedDays: string[];
   /** Kör végén: XP jóváírás, sorozat és napi cél frissítése. */
   completeSession: (xpGained: number, today: string) => void;
   /** Új napon a napi cél újra nyitott. Induláskor hívandó. */
@@ -27,11 +30,13 @@ export const useProgressStore = create<ProgressState>()(
       unlockedBadges: [],
       dailyGoalDone: false,
       practiceDays: [],
+      savedDays: [],
 
       completeSession: (xpGained, today) =>
         set((s) => ({
           xp: s.xp + xpGained,
-          streak: nextStreak(s.streak, s.lastPracticeDate, today),
+          streak: nextStreak(s.streak, s.lastPracticeDate, today, s.savedDays ?? []),
+          savedDays: lifelineApplies(s.lastPracticeDate, today, s.savedDays ?? []) ? [...(s.savedDays ?? []), addDays(today, -1)] : (s.savedDays ?? []),
           lastPracticeDate: today,
           dailyGoalDone: true,
           practiceDays: s.practiceDays.includes(today) ? s.practiceDays : [...s.practiceDays, today],

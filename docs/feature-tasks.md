@@ -64,7 +64,7 @@
 - [x] Maskot komponens 4 állapottal, válaszra reagál
 - [x] Haptika bekötése (helyes / hibás)
 - [ ] Hangeffektek + kikapcsolási lehetőség
-- [ ] Streak logika + „mentőöv" nap havonta
+- [x] Streak logika + „mentőöv" nap havonta (lásd D-036)
 - [x] Jelvényrendszer: első kör, 3/7/14/30 napos sorozat, 100% egy körben (min. 8 feladat), téma befejezése
 - [x] Jelvényképek (10 db) bekötése a Jutalmak képernyőre és az Eredmény képernyőre
 - [ ] Napi cél megjelenítése és teljesítés visszajelzése
@@ -110,6 +110,14 @@ Sablon:
 ```
 
 <!-- ÚJ BEJEGYZÉSEK IDE, LEGFELÜLRE -->
+
+## 2026-10-13 – Streak „mentőöv"
+
+**Mit:** Havonta egy kimaradt nap nem szakítja meg a sorozatot. Ha Kira tegnapelőtt gyakorolt, tegnap kimaradt, és abban a hónapban még nem használt mentőövet, a mai kör folytatja a sorozatot (+1), a kimaradt nap bekerül a `savedDays`-be. A kezdőlap és a jutalmak a sorozatot élőnek mutatja már a kör előtt is. A naptárban a megmentett nap barack színű.
+**Fájlok:** `lib/streak.ts` (+ teszt), `lib/calendar.ts`, `store/progressStore.ts` (`savedDays`), `components/ui/StreakCalendar.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/rewards.tsx`, `docs/feature-tasks.md`
+**Tesztelve:** `tsc`, lint, `npm test` (új tesztek: mentőöv, hónapváltás, kétnapos kimaradás). Eszközön nem próbáltam.
+**Nyitva maradt:** nincs külön üzenet Kirának a mentőövről; a naptár `saved` állapotához nincs külön teszt.
+**Commit:** feat: sorozat mentőöv
 
 ## 2026-10-13 – Javítás: témakör-kártyák keskeny kijelzőn
 
@@ -685,6 +693,13 @@ a másik szóba jöhető opció.
 **Döntés:** A `paper: true` feladat előtt teljes képernyős bevezető jön, de csak a füzetes feladatok sorozatának elején (ha az előző feladat nem volt füzetes). A feladat alatt a maskot `base` állapotú, nem `thinking`.
 **Miért:** A CLAUDE.md „más képernyőt" kér, de a 133 füzetes feladat jellemzően egymás után jön; minden feladat előtti bevezető idegesítő lenne, és szakítaná a ritmust. A `thinking` arc a gyors gondolkodást sugallja, a `base` nyugodt, váró. Külön „váró" kép nincs.
 **Alternatíva:** Bevezető minden feladat előtt; csak egy jelzősáv bevezető nélkül. Elvetve: az első zavaró, a második nem „külön képernyő".
+**Visszavonható?** Igen.
+
+## D-036 – Mentőöv: automatikus, csak egynapos kimaradásra, hónaponként egy
+**Dátum:** 2026-10-13
+**Döntés:** A mentőöv magától érvényesül (nincs gomb), és csak pontosan egy kimaradt napot véd; a kimaradt nap hónapja számít. A megmentett nap nem ad +1-et, csak a sorozatot tartja meg. A `savedDays: string[]` új mező a `progressStore`-ban; a régi mentésben hiányzó mezőt `?? []` kezeli, migráció nélkül.
+**Miért:** A cél, hogy egy elmaradt nap ne vegye el Kira kedvét; a manuális beváltás extra képernyőt és döntést kérne egy gyerektől. Az egynapos korlát miatt nem lehet vele „kihagyni a hetet". A lista egyszerűbb, mint egy „utolsó használat" dátum, és a naptár is használja.
+**Alternatíva:** Kézi beváltás gombbal; több napos védelem. Elvetve: bonyolultabb, és kevésbé őszinte sorozatot ad.
 **Visszavonható?** Igen.
 
 <!-- ÚJ DÖNTÉSEK IDE, ALULRA, NÖVEKVŐ SORSZÁMMAL -->

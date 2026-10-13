@@ -8,7 +8,7 @@ const WEEKDAYS = ["H", "K", "Sz", "Cs", "P", "Sz", "V"];
 
 function Day({ cell }: { cell: CalendarCell }) {
   const style =
-    cell.state === "done" ? "bg-success" : cell.state === "missed" ? "bg-text/10" : "border-2 border-text/10 bg-surface";
+    cell.state === "done" ? "bg-success" : cell.state === "saved" ? "bg-accent/40" : cell.state === "missed" ? "bg-text/10" : "border-2 border-text/10 bg-surface";
   return (
     <View
       className={`aspect-square flex-1 items-center justify-center rounded-xl ${style} ${cell.today ? "border-[3px] border-primary" : ""}`}
@@ -22,10 +22,10 @@ function Day({ cell }: { cell: CalendarCell }) {
   );
 }
 
-type Props = { streak: number; today: string; practiceDays: string[] };
+type Props = { streak: number; today: string; practiceDays: string[]; savedDays: string[] };
 
 /** A sorozat száma és az aktuális hónap naptára a gyakorolt napokkal. */
-export function StreakCalendar({ streak, today, practiceDays }: Props) {
+export function StreakCalendar({ streak, today, practiceDays, savedDays }: Props) {
   const month = MONTH_NAMES[Number(today.split("-")[1]) - 1];
   return (
     <View className="gap-4 rounded-card bg-surface p-6" style={softShadow}>
@@ -43,7 +43,7 @@ export function StreakCalendar({ streak, today, practiceDays }: Props) {
             </Text>
           ))}
         </View>
-        {monthGrid(today, practiceDays).map((week, w) => (
+        {monthGrid(today, practiceDays, savedDays).map((week, w) => (
           <View key={w} className="flex-row gap-2">
             {week.map((cell, d) => (cell ? <Day key={cell.date} cell={cell} /> : <View key={`e${d}`} className="flex-1" />))}
           </View>

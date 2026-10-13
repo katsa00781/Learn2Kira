@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const { width, height } = useWindowDimensions();
   const landscape = width > height && width >= 700;
   const hydrated = useStoresHydrated();
-  const { xp, streak, lastPracticeDate, dailyGoalDone } = useProgressStore();
+  const { xp, streak, lastPracticeDate, savedDays, dailyGoalDone } = useProgressStore();
   const today = toDay(new Date());
 
   // Új napon a napi cél újra nyitott
@@ -65,7 +65,7 @@ export default function HomeScreen() {
       <StatPill
         className={landscape ? "" : "flex-1"}
         icon={<FlameIcon size={30} color={colors.error} outline />}
-        value={currentStreak(streak, lastPracticeDate, today)}
+        value={currentStreak(streak, lastPracticeDate, today, savedDays ?? [])}
         label="napos sorozat"
       />
       <StatPill className={landscape ? "" : "flex-1"} icon={<StarIcon size={30} color={colors.accent} outline />} value={xp} label="XP" />

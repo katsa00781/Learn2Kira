@@ -17,10 +17,10 @@ const screen = { flex: 1, backgroundColor: colors.background };
 export default function RewardsScreen() {
   const { width, height } = useWindowDimensions();
   const landscape = width > height && width >= 700;
-  const { streak, lastPracticeDate, practiceDays, unlockedBadges } = useProgressStore();
+  const { streak, lastPracticeDate, practiceDays, savedDays, unlockedBadges } = useProgressStore();
   const today = toDay(new Date());
 
-  const calendar = <StreakCalendar streak={currentStreak(streak, lastPracticeDate, today)} today={today} practiceDays={practiceDays} />;
+  const calendar = <StreakCalendar streak={currentStreak(streak, lastPracticeDate, today, savedDays ?? [])} today={today} practiceDays={practiceDays} savedDays={savedDays ?? []} />;
   const grid = (
     <View className="gap-4">
       {chunk(badges, BADGE_COLUMNS).map((row) => (

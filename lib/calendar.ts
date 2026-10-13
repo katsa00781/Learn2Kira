@@ -2,8 +2,8 @@ export type CalendarCell = {
   day: number;
   /** "ÉÉÉÉ-HH-NN" */
   date: string;
-  /** done: gyakorolt; missed: kimaradt nap az első gyakorlás után; open: még nem jött el, vagy az első gyakorlás előtti. */
-  state: "done" | "missed" | "open";
+  /** done: gyakorolt; saved: a mentőöv megmentette; missed: kimaradt nap az első gyakorlás után; open: még nem jött el, vagy az első gyakorlás előtti. */
+  state: "done" | "saved" | "missed" | "open";
   today: boolean;
 };
 
@@ -16,7 +16,7 @@ export const MONTH_NAMES = [
  * A `today` hónapjának naptára hétfővel kezdődő hetekben; a hónapon kívüli helyek `null`-ok.
  * A `practiced` a gyakorlással töltött napok ("ÉÉÉÉ-HH-NN").
  */
-export function monthGrid(today: string, practiced: string[]): (CalendarCell | null)[][] {
+export function monthGrid(today: string, practiced: string[], saved: string[] = []): (CalendarCell | null)[][] {
   const [y = 0, m = 1] = today.split("-").map(Number);
   const done = new Set(practiced);
   const first = [...practiced].sort()[0];
@@ -26,7 +26,7 @@ export function monthGrid(today: string, practiced: string[]): (CalendarCell | n
   const cells: (CalendarCell | null)[] = Array.from({ length: offset }, () => null);
   for (let day = 1; day <= daysInMonth; day++) {
     const date = `${y}-${String(m).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    const state = done.has(date) ? "done" : first !== undefined && date >= first && date < today ? "missed" : "open";
+    const state = done.has(date) ? "done" : saved.includes(date) ? "saved" : first !== undefined && date >= first && date < today ? "missed" : "open";
     cells.push({ day, date, state, today: date === today });
   }
   while (cells.length % 7 !== 0) cells.push(null);
